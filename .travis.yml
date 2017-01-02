@@ -43,9 +43,9 @@ matrix:
 before_script:
     - export PHPCS_DIR=/tmp/phpcs
     - export SNIFFS_DIR=/tmp/sniffs
-    # Install CodeSniffer for WordPress Coding Standards checks.
+    # Install CodeSniffer for Human Made Coding Standards checks.
     - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
-    # Install WordPress Coding Standards.
+    # Install Human Made Coding Standards.
     - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/humanmade/coding-standards.git $SNIFFS_DIR; fi
     # Install PHP Compatibility sniffs.
     - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/wimg/PHPCompatibility.git $SNIFFS_DIR/PHPCompatibility; fi
@@ -54,14 +54,6 @@ before_script:
     - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs --config-set installed_paths $SNIFFS_DIR; fi
     # After CodeSniffer install you should refresh your path.
     - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
-    # Install JSCS: JavaScript Code Style checker.
-    # @link http://jscs.info/
-    - if [[ "$SNIFF" == "1" ]]; then npm install -g jscs; fi
-    # Install JSHint, a JavaScript Code Quality Tool.
-    # @link http://jshint.com/docs/
-    - if [[ "$SNIFF" == "1" ]]; then npm install -g jshint; fi
-    # Pull in the WP Core jshint rules.
-    - if [[ "$SNIFF" == "1" ]]; then wget https://develop.svn.wordpress.org/trunk/.jshintrc; fi
 
 # Run test script commands.
 # Default is specific to project language.
@@ -69,12 +61,8 @@ before_script:
 script:
     # Search for PHP syntax errors.
     - find -L . -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
-    # Run the theme through JSHint.
-    - if [[ "$SNIFF" == "1" ]]; then jshint .; fi
-    # Run the theme through JavaScript Code Style checker.
-    - if [[ "$SNIFF" == "1" ]]; then jscs .; fi
-    # WordPress Coding Standards.
-    # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+    # Human Made Coding Standards.
+    # @link https://github.com/humanmade/coding-standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
     # -p flag: Show progress of the run.
     # -s flag: Show sniff codes in all reports.
