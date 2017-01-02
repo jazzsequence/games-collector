@@ -87,4 +87,18 @@ function fields() {
 		],
 		'default'    => '10',
 	]);
+
+	$cmb->add_field([
+		'name'       => __( 'Difficulty Level', 'games-collector' ),
+		'id'         => $prefix . 'difficulty',
+		'type'       => 'radio',
+		'desc'       => __( 'How difficult or complex is this game?', 'games-collector' ),
+		'options'    => [
+			'easy'      => __( 'Easy', 'games-collector' ),
+			'moderate'  => __( 'Moderate', 'games-collector' ),
+			'difficult' => __( 'Difficult', 'games-collector' ),
+			'hardcore'  => __( 'Hard Core (experienced gamers only!)', 'games-collector' ),
+		],
+		'default'    => 'easy',
+	]);
 }
