@@ -36,13 +36,13 @@ function register_cpt() {
 function fields() {
 	$prefix = '_gc_';
 
-	$cmb = new_cmb2_box( array(
+	$cmb = new_cmb2_box( [
 		'id'            => $prefix . 'metabox',
 		'title'         => __( 'Game Details', 'games-collector' ),
 		'object_types'  => [ 'gc_game' ],
-	) );
+	]);
 
-	$cmb->add_field( array(
+	$cmb->add_field([
 		'name'       => __( 'Minimum Number of Players', 'games-collector' ),
 		'id'         => $prefix . 'min_players',
 		'type'       => 'text_small',
@@ -50,9 +50,9 @@ function fields() {
 			'type' => 'number',
 		],
 		'default'    => '1',
-	) );
+	]);
 
-	$cmb->add_field( array(
+	$cmb->add_field([
 		'name'       => __( 'Maximum Number of Players', 'games-collector' ),
 		'id'         => $prefix . 'max_players',
 		'type'       => 'text_small',
@@ -60,9 +60,9 @@ function fields() {
 			'type' => 'number',
 		],
 		'default'    => '4',
-	) );
+	]);
 
-	$cmb->add_field( array(
+	$cmb->add_field([
 		'name'       => __( 'Playing Time', 'games-collector' ),
 		'id'         => $prefix . 'time',
 		'type'       => 'text_small',
@@ -70,9 +70,9 @@ function fields() {
 		'attributes' => [
 			'placeholder' => '20-30',
 		],
-	) );
+	]);
 
-	$cmb->add_field( array(
+	$cmb->add_field([
 		'name'       => __( 'Ages', 'games-collector' ),
 		'id'         => $prefix . 'age',
 		'type'       => 'text_small',
@@ -81,5 +81,5 @@ function fields() {
 			'type' => 'number',
 		],
 		'default'    => '10',
-	) );
+	]);
 }
