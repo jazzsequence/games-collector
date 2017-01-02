@@ -3,7 +3,7 @@
 
 
 **Contributors:**      [jazzsequence](https://github.com/jazzsequence)  
-**Donate link:**       https://github.com/jazzsequence/games-collector  
+**Donate link:**       https://www.paypal.me/jazzsequence/  
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      4.7  
