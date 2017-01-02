@@ -1,0 +1,18 @@
+{
+  "generator-hm-plugin": {
+    "client": "GC",
+    "name": "Games Collector",
+    "homepage": "https://github.com/jazzsequence/games-collector",
+    "description": "Catalog all your tabletop (or other) games in your WordPress site and display a list of games in your collection.",
+    "version": "0.1",
+    "author": "Chris Reynolds",
+    "authoremail": "me@chrisreynolds.io",
+    "authorurl": "https://jazzsequence.com",
+    "license": "GPLv3",
+    "slug": "games-collector",
+    "project": "GC",
+    "namespace": "GamesCollector",
+    "year": 2017,
+    "currentVersionWP": "4.7"
+  }
+}
