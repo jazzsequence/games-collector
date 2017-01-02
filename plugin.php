@@ -3,7 +3,7 @@
  * Plugin Name: Games Collector
  * Plugin URI:  https://github.com/jazzsequence/games-collector
  * Description: Catalog all your tabletop (or other) games in your WordPress site and display a list of games in your collection.
- * Version:     0.1
+ * Version:     0.2
  * Author:      Chris Reynolds
  * Author URI:  https://jazzsequence.com
  * Donate link: https://github.com/jazzsequence/games-collector
@@ -13,8 +13,8 @@
  *
  * @link https://github.com/jazzsequence/games-collector
  *
- * @package Games Collector
- * @version 0.1
+ * @package GamesCollector
+ * @version 0.2
  */
 
 /**
