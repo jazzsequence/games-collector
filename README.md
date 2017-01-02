@@ -1,6 +1,9 @@
 # Games Collector #
+[![Build Status](https://travis-ci.org/jazzsequence/games-collector.svg?branch=develop)](https://travis-ci.org/jazzsequence/games-collector) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+
+
 **Contributors:**      [jazzsequence](https://github.com/jazzsequence)  
-**Donate link:**       https://github.com/jazzsequence/games-collector  
+**Donate link:**       https://www.paypal.me/jazzsequence/  
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      4.7  

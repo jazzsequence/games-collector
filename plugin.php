@@ -41,8 +41,12 @@
 
 namespace GC\GamesCollector;
 
-require_once( __DIR__ . '/namespace.php' );
-
+require_once dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php';
+require_once dirname( __FILE__ ) . '/vendor/extended-taxos/extended-taxos.php';
+require_once dirname( __FILE__ ) . '/vendor/cmb2/init.php';
+require_once dirname( __FILE__ ) . '/inc/namespace.php';
+require_once dirname( __FILE__ ) . '/inc/game/namespace.php';
+require_once dirname( __FILE__ ) . '/inc/attributes/namespace.php';
 
 // Kick it off.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
