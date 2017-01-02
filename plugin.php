@@ -42,6 +42,7 @@
 namespace GC\GamesCollector;
 
 require_once dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php';
+require_once dirname( __FILE__ ) . '/vendor/extended-taxos/extended-taxos.php';
 require_once dirname( __FILE__ ) . '/vendor/cmb2/init.php';
 require_once dirname( __FILE__ ) . '/inc/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/game/namespace.php';
