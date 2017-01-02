@@ -52,9 +52,9 @@ function fields() {
 		'id'         => $prefix . 'min_players',
 		'type'       => 'text_small',
 		'attributes' => [
-			'type' => 'number',
+			'type'        => 'number',
+			'placeholder' => '1',
 		],
-		'default'    => '1',
 	]);
 
 	$cmb->add_field([
@@ -62,9 +62,9 @@ function fields() {
 		'id'         => $prefix . 'max_players',
 		'type'       => 'text_small',
 		'attributes' => [
-			'type' => 'number',
+			'type'        => 'number',
+			'placeholder' => '4',
 		],
-		'default'    => '4',
 	]);
 
 	$cmb->add_field([
@@ -83,9 +83,9 @@ function fields() {
 		'type'       => 'text_small',
 		'desc'       => __( 'Recommended minimum age (e.g. 10 would mean the game is best for ages 10+).', 'games-collector' ),
 		'attributes' => [
-			'type' => 'number',
+			'type'        => 'number',
+			'placeholder' => '10',
 		],
-		'default'    => '10',
 	]);
 
 	$cmb->add_field([
