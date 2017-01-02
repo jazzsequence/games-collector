@@ -35,10 +35,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Built using the Human Made plugin generator!
- */
-
 namespace GC\GamesCollector;
 
 require_once dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php';
