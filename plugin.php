@@ -6,7 +6,7 @@
  * Version:     0.2
  * Author:      Chris Reynolds
  * Author URI:  https://jazzsequence.com
- * Donate link: https://github.com/jazzsequence/games-collector
+ * Donate link: https://paypal.me/jazzsequence
  * License:     GPLv3
  * Text Domain: games-collector
  * Domain Path: /languages
