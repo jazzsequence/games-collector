@@ -14,4 +14,6 @@ namespace GC\GamesCollector;
  */
 function bootstrap() {
 	// Add all your plugin hooks here.
+	add_action( 'cmb2_init', __NAMESPACE__ . '\\Game\\fields' );
+	add_action( 'init',      __NAMESPACE__ . '\\Game\\register_cpt' );
 }
