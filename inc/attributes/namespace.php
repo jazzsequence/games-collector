@@ -90,6 +90,11 @@ function meta_box_display() {
 		}
 }
 
+/**
+ * Create some default game attributes.
+ *
+ * @since 0.1
+ */
 function create_default_attributes() {
 	if ( ! term_exists( 'Solo Play' ) ) {
 		wp_insert_term( 'Solo Play', 'gc_attribute', [ 'slug' => 'solo' ] );
@@ -168,3 +173,31 @@ function create_default_attributes() {
 	}
 }
 
+/**
+ * When saving the post, check to see if the taxonomy has been emptied out.
+ * If so, it will not exist in the tax_input array and thus WP won't be aware of it, so we have to take of emptying the terms for the object.
+ *
+ * @since 0.1
+ * @link  https://helen.wordpress.com/2012/01/08/using-chosen-for-a-replacement-taxonomy-metabox/
+ * @link  https://gist.github.com/helen/1573966#file-wp-chosen-tax-metabox-php
+ */
+function save_post( $post_id ) {
+	// verify nonce
+	if ( ! isset( $_POST['chosen_taxonomy_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['chosen_taxonomy_meta_box_nonce'], 'chosen-save-tax-terms' ) ) {
+		return;
+	}
+	// check autosave
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	$post_type = get_post_type( $post_id );
+
+	$input = isset( $_POST['tax_input']['gc_attribute'] ) ? $_POST['tax_input']['gc_attribute'] : '';
+
+	if ( empty( $input ) ) {
+		$taxonomy = get_taxonomy( 'gc_attribute' );
+		if ( $taxonomy && current_user_can( $taxonomy->cap->assign_terms ) ) {
+			wp_set_object_terms( $post_id, '', 'gc_attribute' );
+		}
+	}
+}
