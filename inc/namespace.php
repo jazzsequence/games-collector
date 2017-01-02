@@ -14,4 +14,6 @@ namespace GC\GamesCollector;
  */
 function bootstrap() {
 	// Add all your plugin hooks here.
+	$game = new GC_Game;
+	add_action( 'cmb2_init', [ $game, 'fields' ] );
 }
