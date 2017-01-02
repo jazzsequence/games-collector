@@ -38,7 +38,48 @@ function fields() {
 
 	$cmb = new_cmb2_box( array(
 		'id'            => $prefix . 'metabox',
-		'title'         => __( 'Games Collector Gc_game Meta Box', 'games-collector' ),
-		'object_types'  => array( 'games-collector-gc-game' ),
+		'title'         => __( 'Game Details', 'games-collector' ),
+		'object_types'  => [ 'gc_game' ],
+	) );
+
+	$cmb->add_field( array(
+		'name'       => __( 'Minimum Number of Players', 'games-collector' ),
+		'id'         => $prefix . 'min_players',
+		'type'       => 'text_small',
+		'attributes' => [
+			'type' => 'number',
+		],
+		'default'    => '1',
+	) );
+
+	$cmb->add_field( array(
+		'name'       => __( 'Maximum Number of Players', 'games-collector' ),
+		'id'         => $prefix . 'max_players',
+		'type'       => 'text_small',
+		'attributes' => [
+			'type' => 'number',
+		],
+		'default'    => '4',
+	) );
+
+	$cmb->add_field( array(
+		'name'       => __( 'Playing Time', 'games-collector' ),
+		'id'         => $prefix . 'time',
+		'type'       => 'text_small',
+		'desc'       => __( 'Average time range, in minutes (e.g. 45-90).', 'games-collector' ),
+		'attributes' => [
+			'placeholder' => '20-30',
+		],
+	) );
+
+	$cmb->add_field( array(
+		'name'       => __( 'Ages', 'games-collector' ),
+		'id'         => $prefix . 'age',
+		'type'       => 'text_small',
+		'desc'       => __( 'Recommended minimum age (e.g. 10 would mean the game is best for ages 10+).', 'games-collector' ),
+		'attributes' => [
+			'type' => 'number',
+		],
+		'default'    => '10',
 	) );
 }
