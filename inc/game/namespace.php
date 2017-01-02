@@ -8,6 +8,11 @@
 
 namespace GC\GamesCollector\Game;
 
+/**
+ * Register the Game CPT.
+ *
+ * @since 0.1
+ */
 function register_cpt() {
 	register_extended_post_type( 'gc_game', [
 			'supports'      => [ 'title' ],
