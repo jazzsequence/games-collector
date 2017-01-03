@@ -31,6 +31,9 @@ function register_cpt() {
 					'title'    => __( 'Age', 'games-collector' ),
 					'function' => __NAMESPACE__ . '\\the_age',
 				],
+				'attributes' => [
+					'taxonomy' => 'gc_attribute',
+				],
 				'date'       => [
 					'title' => __( 'Date added', 'games-collector' ),
 				],
