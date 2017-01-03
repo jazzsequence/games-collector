@@ -93,12 +93,33 @@ function fields() {
 		'id'         => $prefix . 'difficulty',
 		'type'       => 'radio',
 		'desc'       => __( 'How difficult or complex is this game?', 'games-collector' ),
-		'options'    => [
-			'easy'      => __( 'Easy', 'games-collector' ),
-			'moderate'  => __( 'Moderate', 'games-collector' ),
-			'difficult' => __( 'Difficult', 'games-collector' ),
-			'hardcore'  => __( 'Hard Core (experienced gamers only!)', 'games-collector' ),
-		],
+		'options'    => get_difficulties(),
 		'default'    => 'easy',
 	]);
+}
+
+/**
+ * Returns an array of difficulties or a single difficulty if a valid difficulty is passed.
+ *
+ * @since 0.2
+ * @param  string $difficulty A valid difficulty to match. If none is passed, will return all the difficulties.
+ * @return array The array of game difficulties.
+ */
+function get_difficulties( $difficulty = '' ) {
+	$difficulties = [
+		'easy'      => __( 'Easy', 'games-collector' ),
+		'moderate'  => __( 'Moderate', 'games-collector' ),
+		'difficult' => __( 'Difficult', 'games-collector' ),
+		'hardcore'  => __( 'Hard Core (experienced gamers only!)', 'games-collector' ),
+	];
+
+	if ( '' === $difficulty ) {
+		return $difficulties;
+	}
+
+	if ( isset( $difficulties[ $difficulty ] ) ) {
+		return $difficulties[ $difficulty ];
+	}
+
+	return __( 'Invalid difficulty given.', 'games-collector' );
 }
