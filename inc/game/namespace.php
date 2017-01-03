@@ -27,6 +27,10 @@ function register_cpt() {
 					'title'    => __( 'Playing Time', 'games-collector' ),
 					'meta_key' => '_gc_time',
 				],
+				'age'        => [
+					'title'    => __( 'Age', 'games-collector' ),
+					'function' => __NAMESPACE__ . '\\the_age',
+				],
 				'date'       => [
 					'title' => __( 'Date added', 'games-collector' ),
 				],
@@ -140,6 +144,39 @@ function the_number_of_players() {
 	global $post;
 	echo esc_html( get_number_of_players( $post->ID ) );
 }
+
+/**
+ * Returns the age range (e.g. 11+) for a game.
+ *
+ * @since 0.2
+ * @param int $post_id The Post ID to retrieve the minimum age for.
+ * @return string      The age range for the game.
+ */
+function get_age( $post_id = 0 ) {
+	if ( 0 === $post_id ) {
+		global $post;
+		$post_id = $post->ID;
+	}
+
+	$age = get_post_meta( $post_id, '_gc_age', true );
+
+	if ( $age ) {
+		return sprintf( '%s+', $age );
+	}
+
+	return;
+}
+
+/**
+ * Echoes the age range (e.g. 11+) for the current game.
+ *
+ * @since 0.2
+ */
+function the_age() {
+	global $post;
+	echo esc_html( get_age( $post->ID ) );
+}
+
  * Returns an array of difficulties or a single difficulty if a valid difficulty is passed.
  *
  * @since 0.2
