@@ -143,16 +143,32 @@ function get_number_of_players( $post_id = 0 ) {
 		$post_id = $post->ID;
 	}
 
-	$players_min_max = [
-		'min' => get_post_meta( $post_id, '_gc_min_players', true ),
-		'max' => get_post_meta( $post_id, '_gc_max_players', true ),
-	];
+	$players_min_max = get_players_min_max( $post_id );
 
 	if ( isset( $players_min_max['min'] ) && isset( $players_min_max['max'] ) ) {
 		return sprintf( '%1$s - %2$s', $players_min_max['min'], $players_min_max['max'] );
 	}
 
 	return;
+}
+
+/**
+ * Get the min and max number of players for a game.
+ *
+ * @since  0.2
+ * @param  integer $post_id The ID of the game to get the number of players from.
+ * @return array            An array containing the minimum and maximum number of players for the game.
+ */
+function get_players_min_max( $post_id = 0 ) {
+	if ( 0 === $post_id ) {
+		global $post;
+		$post_id = $post->ID;
+	}
+
+	return [
+		'min' => get_post_meta( $post_id, '_gc_min_players', true ),
+		'max' => get_post_meta( $post_id, '_gc_max_players', true ),
+	];
 }
 
 /**
