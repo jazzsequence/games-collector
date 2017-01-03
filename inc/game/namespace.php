@@ -23,6 +23,10 @@ function register_cpt() {
 					'title'    => __( '# of Players', 'games-collector' ),
 					'function' => __NAMESPACE__ . '\\the_number_of_players',
 				],
+				'time'       => [
+					'title'    => __( 'Playing Time', 'games-collector' ),
+					'meta_key' => '_gc_time',
+				],
 				'date'       => [
 					'title' => __( 'Date added', 'games-collector' ),
 				],
