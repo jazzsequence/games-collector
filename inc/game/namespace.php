@@ -118,6 +118,16 @@ function fields() {
 		'options'    => get_difficulties(),
 		'default'    => 'easy',
 	]);
+
+	$cmb->add_field( array(
+		'name'       => __( 'More Info Link', 'games-collector' ),
+		'id'         => $prefix . 'link',
+		'type'       => 'text_url',
+		'desc'       => __( 'Link to more information for the game (e.g. Amazon, Wikipedia or Board Game Geek link).', 'games-collector' ),
+		'attributes' => [
+			'placeholder' => 'https://boardgamegeek.com/boardgame/random',
+		],
+	) );
 }
 
 /**
