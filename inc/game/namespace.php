@@ -31,6 +31,10 @@ function register_cpt() {
 					'title'    => __( 'Age', 'games-collector' ),
 					'function' => __NAMESPACE__ . '\\the_age',
 				],
+				'difficulty' => [
+					'title'    => __( 'Difficulty', 'games-collector' ),
+					'function' => __NAMESPACE__ . '\\the_difficulty',
+				],
 				'attributes' => [
 					'taxonomy' => 'gc_attribute',
 				],
@@ -180,6 +184,34 @@ function the_age() {
 	echo esc_html( get_age( $post->ID ) );
 }
 
+/**
+ * Returns the difficulty for a game.
+ *
+ * @since  0.2
+ * @param  integer $post_id The ID for the game to get the difficulty for.
+ * @return string           The human-readable difficulty level (not the meta value saved).
+ */
+function get_difficulty( $post_id = 0 ) {
+	if ( 0 === $post_id ) {
+		global $post;
+		$post_id = $post->ID;
+	}
+
+	$difficulty = get_post_meta( $post_id, '_gc_difficulty', true );
+	return get_difficulties( $difficulty );
+}
+
+/**
+ * Echoes the difficulty for the current game.
+ *
+ * @since 0.2
+ */
+function the_difficulty() {
+	global $post;
+	echo esc_html( get_difficulty( $post->ID ) );
+}
+
+/**
  * Returns an array of difficulties or a single difficulty if a valid difficulty is passed.
  *
  * @since 0.2
