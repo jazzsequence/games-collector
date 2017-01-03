@@ -67,3 +67,14 @@ function gc_get_number_of_players( $post_id = 0 ) {
 function gc_the_number_of_players() {
 	echo esc_html( \GC\GamesCollector\Game\get_number_of_players() );
 }
+
+/**
+ * Get the min and max number of players for a game.
+ *
+ * @since  0.2
+ * @param  integer $post_id The ID of the game to get the number of players from.
+ * @return array            An array containing the minimum and maximum number of players for the game.
+ */
+function gc_get_players_min_max( $post_id = 0 ) {
+	return \GC\GamesCollector\Game\get_players_min_max( $post_id );
+}
