@@ -133,7 +133,7 @@ function fields() {
 /**
  * Returns the number of players (min to max) for a game.
  *
- * @since 0.2
+ * @since  0.2
  * @param  int $post_id The Post ID to retrieve the number of players for.
  * @return string       The number of players for the game.
  */
@@ -168,8 +168,8 @@ function the_number_of_players() {
 /**
  * Returns the age range (e.g. 11+) for a game.
  *
- * @since 0.2
- * @param int $post_id The Post ID to retrieve the minimum age for.
+ * @since  0.2
+ * @param  int $post_id The Post ID to retrieve the minimum age for.
  * @return string      The age range for the game.
  */
 function get_age( $post_id = 0 ) {
