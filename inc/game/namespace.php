@@ -303,7 +303,11 @@ function get_game_classes( $classes = '', $post_id = 0 ) {
 	}
 
 	if ( $age ) {
-		$classes .= " $age-and-up";
+		if ( absint( $age ) >= 13 ) {
+			$classes .= ' mature';
+		} else {
+			$classes .= " $age-and-up";
+		}
 	}
 
 	if ( $difficulty ) {
