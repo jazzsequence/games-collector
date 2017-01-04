@@ -58,7 +58,7 @@ function shortcode() {
 	</div>
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
-			<div <?php post_class( 'game-single', $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
+			<div <?php post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
 				<?php // Output a link if one was saved.
 				if ( $link = get_post_meta( $game->ID, '_gc_link', true ) ) { ?>
 					<a href="<?php echo esc_url( $link ); ?>">
