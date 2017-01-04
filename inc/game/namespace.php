@@ -266,3 +266,74 @@ function get_difficulties( $difficulty = '' ) {
 
 	return __( 'Invalid difficulty given.', 'games-collector' );
 }
+
+/**
+ * Returns the game classes based on meta.
+ *
+ * @since  0.2
+ * @param  string  $classes Any classes you want to pass directly to the game classes.
+ * @param  integer $post_id The post ID of the game.
+ * @return string           The classes for this game.
+ */
+function get_game_classes( $classes = '', $post_id = 0 ) {
+	if ( 0 === $post_id ) {
+		global $post;
+		$post_id = $post->ID;
+	}
+
+	$players    = get_players_min_max( $post_id );
+	$age        = get_post_meta( $post_id, '_gc_age', true );
+	$difficulty = get_post_meta( $post_id, '_gc_difficulty', true );
+	$length     = get_game_length( $post_id );
+
+	if ( isset( $players['max'] ) ) {
+		$classes .= ' up-to-' . $players['max'] . '-players';
+	}
+
+	if ( $age ) {
+		$classes .= " $age-and-up";
+	}
+
+	if ( $difficulty ) {
+		$classes .= " $difficulty";
+	}
+
+	$classes .= ( '' !== $length ) ? ' ' . $length : '';
+
+	return apply_filters( 'gc_filter_game_classes', $classes );
+}
+
+/**
+ * Returns a string based on max game length to determine whether a game is short (less than 15 minutes max) or long (more than an hour).
+ *
+ * @param  integer $post_id The post ID of the game.
+ * @return string           The length of the game (if it's short or long).
+ */
+function get_game_length( $post_id = 0 ) {
+	if ( 0 === $post_id ) {
+		global $post;
+		$post_id = $post->ID;
+	}
+
+	$classes = '';
+
+	$game_time = str_replace( ' ', '', get_post_meta( $post_id, '_gc_time', true ) );
+	$time      = explode( '-', $game_time );
+
+	if ( $game_time ) {
+		switch ( $time[1] ) {
+			case ( absint( $time[1] <= 15 ) ) :
+				$classes .= 'short';
+				break;
+
+			case ( absint( $time[1] ) >= 60 ) :
+				$classes .= 'long';
+				break;
+
+			default :
+				break;
+		}
+	}
+
+	return apply_filters( 'gc_filter_game_length', $classes );
+}
