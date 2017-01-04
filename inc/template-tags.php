@@ -78,3 +78,22 @@ function gc_the_number_of_players() {
 function gc_get_players_min_max( $post_id = 0 ) {
 	return \GC\GamesCollector\Game\get_players_min_max( $post_id );
 }
+
+/**
+ * Returns a list of all games.
+ *
+ * @since  0.2
+ * @return string All the games in formatted HTML.
+ */
+function gc_get_games() {
+	return \GC\GamesCollector\Display\shortcode();
+}
+
+/**
+ * Echoes a list of all games.
+ *
+ * @since 0.2
+ */
+function gc_the_games() {
+	echo \GC\GamesCollector\Display\shortcode(); // WPCS: XSS ok. Already sanitized.
+}
