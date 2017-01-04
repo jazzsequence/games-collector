@@ -25,12 +25,16 @@ window.GamesCollector = {};
 					horizontalAlignment: 0
 				}
 			}),
+			playersFilter: $('.players-filter-select'),
+			difficultyFilter: $('.difficulty-filter-select'),
 		};
 	};
 
 	// Combine all events.
 	plugin.bindEvents = function() {
 		plugin.$c.buttons.on( 'click', 'button', plugin.filter );
+		plugin.$c.playersFilter.on( 'change', plugin.filterDropdown );
+		plugin.$c.difficultyFilter.on( 'change', plugin.filterDropdown );
 	};
 
 	// Do we meet the requirements?
@@ -38,9 +42,14 @@ window.GamesCollector = {};
 		return plugin.$c.list.length;
 	};
 
-
 	plugin.filter = function() {
 		let filterValue = $(this).attr( 'data-filter' );
+		plugin.$c.grid.isotope({ filter: filterValue });
+	}
+
+	plugin.filterDropdown = function() {
+		// get filter value from option value
+		var filterValue = this.value;
 		plugin.$c.grid.isotope({ filter: filterValue });
 	}
 
