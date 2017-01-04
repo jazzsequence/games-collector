@@ -58,10 +58,10 @@ function shortcode() {
 						<span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 					<?php } ?>
 
-
-				</div>
-			</div>
-		<?php } ?>
+					<?php echo get_the_term_list( $game->ID, 'gc_attribute', '', ', ', '' ); ?>
+					</div>
+					</div>
+					<?php } ?>
 	</div>
 
 	<?php $content = ob_get_clean();
