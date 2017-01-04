@@ -6,6 +6,11 @@
  * Licensed under the GPLv3+ license.
  */
 
+.games-filter-group {
+	display: block;
+	padding: 0 0 2em;
+}
+
 .game-title {
     font-size: 1.2em;
 }
