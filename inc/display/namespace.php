@@ -45,11 +45,12 @@ function shortcode() {
 
 				<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
 					<?php if ( isset( $players_min_max['min'] ) ) { ?>
-						<span class="game-min-players" id="game-<?php echo absint( $game->ID ); ?>-min-players"><?php echo absint( $players_min_max['min'] ); ?></span>
-					<?php } ?>
-					<?php if ( isset( $players_min_max['min'] ) && isset( $players_min_max['max'] ) ) { ?>
-						-
-						<span class="game-max-players" id="game-<?php echo absint( $game->ID ); ?>-max-players"><?php echo absint( $players_min_max['max'] ); ?></span>
+						<span class="gc-icon icon-game-players"></span><span class="game-num-players" id="game-<?php echo absint( $game->ID ); ?>-num-players"><?php echo esc_attr( sprintf(
+							// Translators: 1: Minimum number of players, 2: Maximum number of players.
+							__( '%1$d %2$s players', 'games-collector' ),
+							absint( $players_min_max['min'] ),
+							isset( $players_min_max['max'] ) ? sprintf( '- %d', absint( $players_min_max['max'] ) ) : ''
+						) ); ?></span>
 					<?php } ?>
 
 					<?php if ( $playing_time = get_post_meta( $game->ID, '_gc_time', true ) ) { ?>
