@@ -335,14 +335,15 @@ function get_game_length( $post_id = 0 ) {
 
 	$game_time = str_replace( ' ', '', get_post_meta( $post_id, '_gc_time', true ) );
 	$time      = explode( '-', $game_time );
+	$time      = isset( $time[1] ) ? $time[1] : $time[0];
 
 	if ( $game_time ) {
-		switch ( $time[1] ) {
-			case ( absint( $time[1] <= 15 ) ) :
+		switch ( $time ) {
+			case ( absint( $time ) <= 20 ) :
 				$classes .= 'short';
 				break;
 
-			case ( absint( $time[1] ) >= 60 ) :
+			case ( absint( $time ) >= 60 ) :
 				$classes .= 'long';
 				break;
 
