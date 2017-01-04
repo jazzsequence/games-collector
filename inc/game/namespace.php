@@ -167,8 +167,8 @@ function get_players_min_max( $post_id = 0 ) {
 	}
 
 	return [
-		'min' => get_post_meta( $post_id, '_gc_min_players', true ),
-		'max' => get_post_meta( $post_id, '_gc_max_players', true ),
+		'min' => ( $min = get_post_meta( $post_id, '_gc_min_players', true ) ) ? $min : '',
+		'max' => ( $max = get_post_meta( $post_id, '_gc_max_players', true ) ) ? $max : '',
 	];
 }
 
