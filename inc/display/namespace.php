@@ -24,8 +24,16 @@ function shortcode() {
 		'orderby'        => 'title',
 	]);
 
+	$terms = get_terms( 'gc_attribute' );
+
 	ob_start(); ?>
 
+	<div class="games-filter-group">
+		<button data-filter="*"><?php esc_html_e( 'Show All', 'games-collector' ); ?></button>
+		<?php foreach ( $terms as $term ) { ?>
+			<button data-filter=".gc_attribute-<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_attr( $term->name ); ?></button>
+		<?php } ?>
+	</div>
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
 			<div class="game-single <?php echo esc_attr( $game->post_slug ); ?>" id="game-<?php echo absint( $game->ID ); ?>">
