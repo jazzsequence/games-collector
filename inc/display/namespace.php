@@ -75,3 +75,18 @@ function shortcode() {
 	<?php $content = ob_get_clean();
 	return $content;
 }
+
+/**
+ * Enqueue front end styles and scripts.
+ *
+ * @since 0.2
+ */
+function enqueue_scripts() {
+	// Don't load in the admin.
+	if ( is_admin() ) {
+		return;
+	}
+
+	wp_enqueue_style( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/css/games-collector.css', [], '0.2' );
+}
+
