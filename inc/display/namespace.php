@@ -33,6 +33,10 @@ function shortcode() {
 		<?php foreach ( $terms as $term ) { ?>
 			<button data-filter=".gc_attribute-<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_attr( $term->name ); ?></button>
 		<?php } ?>
+		<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
+		<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
+		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up,.10-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
+		<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
 	</div>
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
