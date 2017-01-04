@@ -11,6 +11,12 @@
 namespace GC\GamesCollector\Display;
 use GC\GamesCollector\Game;
 
+/**
+ * Shortcode output. Can also be run as a standalone function to display the list.
+ *
+ * @since  0.2
+ * @return string Displays a list of all games.
+ */
 function shortcode() {
 	$games = get_posts([
 		'posts_per_page' => -1,
