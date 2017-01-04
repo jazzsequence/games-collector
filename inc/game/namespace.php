@@ -286,8 +286,20 @@ function get_game_classes( $classes = '', $post_id = 0 ) {
 	$difficulty = get_post_meta( $post_id, '_gc_difficulty', true );
 	$length     = get_game_length( $post_id );
 
+	if ( isset( $players['min'] ) ) {
+		$classes .= ' min-' . $players['min'] . '-players';
+	}
+
 	if ( isset( $players['max'] ) ) {
-		$classes .= ' up-to-' . $players['max'] . '-players';
+		if ( absint( $players['max'] ) >= 8 ) {
+			$classes .= ' 8-or-more-players';
+		} else {
+			$classes .= ' max-' . $players['max'] . '-players';
+		}
+	}
+
+	if ( isset( $players['min'] ) && ! isset( $players['max'] ) ) {
+		$classes .= ' ' . $players['min'] . '-players';
 	}
 
 	if ( $age ) {
