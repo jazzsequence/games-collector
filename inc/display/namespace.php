@@ -54,18 +54,19 @@ function shortcode() {
 					<?php } ?>
 
 					<?php if ( $playing_time = get_post_meta( $game->ID, '_gc_time', true ) ) { ?>
-						<span class="game-playing-time" id="game-<?php echo absint( $game->ID ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
+						<span class="gc-icon icon-game-time"></span><span class="game-playing-time" id="game-<?php echo absint( $game->ID ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
 					<?php } ?>
 
 					<?php if ( $age = get_post_meta( $game->ID, '_gc_age', true ) ) { ?>
-						<span class="game-age" id="game-<?php echo absint( $game->ID ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
+						<span class="gc-icon icon-game-age"></span><span class="game-age" id="game-<?php echo absint( $game->ID ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
 					<?php } ?>
 
 					<?php if ( $difficulty = get_post_meta( $game->ID, '_gc_difficulty', true ) ) { ?>
-						<span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
+						<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 					<?php } ?>
 
-					<?php echo get_the_term_list( $game->ID, 'gc_attribute', '', ', ', '' ); ?>
+					<?php echo get_the_term_list( $game->ID, 'gc_attribute', '<span class="gc-icon icon-game-attributes"></span>
+					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' ); ?>
 					</div>
 					</div>
 					<?php } ?>
