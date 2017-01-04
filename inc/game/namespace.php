@@ -257,11 +257,11 @@ function get_difficulties( $difficulty = '' ) {
 	];
 
 	if ( '' === $difficulty ) {
-		return $difficulties;
+		return apply_filters( 'gc_filter_all_game_difficulties', $difficulties );
 	}
 
 	if ( isset( $difficulties[ $difficulty ] ) ) {
-		return $difficulties[ $difficulty ];
+		return apply_filters( "gc_filter_$difficulty", $difficulties[ $difficulty ] );
 	}
 
 	return __( 'Invalid difficulty given.', 'games-collector' );
