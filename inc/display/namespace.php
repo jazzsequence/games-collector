@@ -45,6 +45,20 @@ function shortcode() {
 						-
 						<span class="game-max-players" id="game-<?php echo absint( $game->ID ); ?>-max-players"><?php echo absint( $players_min_max['max'] ); ?></span>
 					<?php } ?>
+
+					<?php if ( $playing_time = get_post_meta( $game->ID, '_gc_time', true ) ) { ?>
+						<span class="game-playing-time" id="game-<?php echo absint( $game->ID ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
+					<?php } ?>
+
+					<?php if ( $age = get_post_meta( $game->ID, '_gc_age', true ) ) { ?>
+						<span class="game-age" id="game-<?php echo absint( $game->ID ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
+					<?php } ?>
+
+					<?php if ( $difficulty = get_post_meta( $game->ID, '_gc_difficulty', true ) ) { ?>
+						<span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
+					<?php } ?>
+
+
 				</div>
 			</div>
 		<?php } ?>
