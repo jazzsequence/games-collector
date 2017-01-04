@@ -1,0 +1,27 @@
+/**
+ * Games Collector
+ * https://github.com/jazzsequence/games-collector
+ *
+ * Copyright (c) 2017 Chris Reynolds
+ * Licensed under the GPLv3+ license.
+ */
+
+.game-title {
+    font-size: 1.2em;
+}
+
+.game-single {
+    margin: 0 0 1em;
+}
+
+.game-info {
+    font-size: 0.9em;
+}
+
+.game-info span {
+    padding-right: 0.3em;
+}
+
+.game-info span.game-min-players {
+    padding-right: 0em;
+}
