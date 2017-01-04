@@ -47,6 +47,14 @@ function shortcode() {
 				<option value=".8-players,.min-8-players,.8-or-more-players"><?php esc_html_e( '8+ players', 'games-collector' ); ?></option>
 			</select>
 		</div>
+		<div class="difficulty-filter"><label for="difficulty-filter-select"><?php esc_html_e( 'Difficulty', 'games-collector' ); ?>:</label>
+			<select class="difficulty-filter-select">
+				<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
+				<?php foreach ( Game\get_difficulties() as $key => $value ) {  ?>
+					<option value=".<?php echo esc_html( $key ); ?>"><?php echo esc_html( $value ); ?></option>
+				<?php } ?>
+			</select>
+		</div>
 	</div>
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
