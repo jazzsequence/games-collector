@@ -37,6 +37,16 @@ function shortcode() {
 		<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
 		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up,.10-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
 		<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
+		<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
+			<select class="players-filter-select">
+				<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
+				<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '2+ players', 'games-collector' ); ?></option>
+				<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '4+ players', 'games-collector' ); ?></option>
+				<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '5+ players', 'games-collector' ); ?></option>
+				<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '6+ players', 'games-collector' ); ?></option>
+				<option value=".8-players,.min-8-players,.8-or-more-players"><?php esc_html_e( '8+ players', 'games-collector' ); ?></option>
+			</select>
+		</div>
 	</div>
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
