@@ -90,6 +90,13 @@ function enqueue_scripts() {
 	wp_enqueue_style( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/css/games-collector.css', [], '0.2' );
 }
 
+/**
+ * Get a base64-encoded icon by name.
+ *
+ * @since  0.2
+ * @param  string $name An icon name.
+ * @return string       The base64-encoded svg.
+ */
 function get_svg( $name = '' ) {
 	// Bail if nothing was passed.
 	if ( '' === $name ) {
