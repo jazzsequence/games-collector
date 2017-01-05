@@ -44,6 +44,7 @@ require_once dirname( __FILE__ ) . '/inc/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/game/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/attributes/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/display/namespace.php';
+require_once dirname( __FILE__ ) . '/inc/functions.php';
 
 // Kick it off.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
