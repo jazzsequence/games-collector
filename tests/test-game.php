@@ -58,4 +58,21 @@ class GC_Test_Game extends WP_UnitTestCase {
 			'Test game was not created successfully.'
 		);
 	}
+
+	/**
+	 * Make sure that the number of players saves and returns the right range.
+	 *
+	 * @covers GC\GamesCollector\Game\get_number_of_players
+	 */
+	function test_get_number_of_players() {
+		$post_id = $this->create_post();
+		$this->add_players( $post_id );
+
+		$this->assertEquals(
+			GC\GamesCollector\Game\get_number_of_players( $post_id ),
+			'2 - 4',
+			'Get number of players did not return correct number of players.'
+		);
+	}
+
 }
