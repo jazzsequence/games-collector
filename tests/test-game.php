@@ -5,6 +5,8 @@
  * @package GC\GamesCollector
  */
 
+use GC\GamesCollector\Game;
+
 /**
  * Games Collector Game unit test class.
  */
