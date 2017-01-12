@@ -13,6 +13,10 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure the CPT exists.
 	 */
 	function test_cpt_exists() {
-		$this->assertTrue( post_type_exists( 'gc_game' ) );
+		$this->assertTrue(
+			post_type_exists( 'gc_game' ),
+			'Game post type does not exist.'
+		);
 	}
+
 }
