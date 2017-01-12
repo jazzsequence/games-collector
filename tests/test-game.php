@@ -12,6 +12,29 @@ use GC\GamesCollector\Game;
  */
 class GC_Test_Game extends WP_UnitTestCase {
 	/**
+	 * Creates a test post.
+	 *
+	 * @covers Nothing.
+	 * @return int Test post ID.
+	 */
+	function create_post() {
+		$post_id = $this->factory->post->create( [ 'post_title' => 'Wizard School' ] );
+		return $post_id;
+	}
+
+	/**
+	 * Adds players to test post.
+	 *
+	 * @param  int $post_id Optional. Post ID of the post to add players to.
+	 * @covers Nothing.
+	 */
+	function add_players( $post_id = 0 ) {
+		$post_id = ( 0 === $post_id ) ? $this->create_post() : absint( $post_id );
+		add_post_meta( $post_id, '_gc_min_players', 2 );
+		add_post_meta( $post_id, '_gc_max_players', 4 );
+	}
+
+	/**
 	 * Make sure the CPT exists.
 	 *
 	 * @covers GC\GamesCollector\Game\register_cpt
