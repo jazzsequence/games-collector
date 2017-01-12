@@ -26,7 +26,8 @@ matrix:
     fast_finish: true
 
     include:
-        - php: '5.3'
+        # plugin requires minimum of php 5.4
+        - php: '5.4'
         # aliased to a recent 5.6.x version
         - php: '5.6'
         # aliased to a recent 7.x version
