@@ -14,6 +14,6 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 	 */
 	function test_plugin_loaded() {
 		$this->assertTrue( function_exists( 'gc_the_games' ) );
-		$this->assertEquals( has_action( 'plugins_loaded', 'GC\GamesCollector\bootstrap' ) );
+		$this->assertEquals( has_action( 'plugins_loaded', 'GC\GamesCollector\bootstrap' ), 10 );
 	}
 }
