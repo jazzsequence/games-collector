@@ -11,6 +11,8 @@
 class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure the CPT exists.
+	 *
+	 * @covers GC\GamesCollector\Game\register_cpt
 	 */
 	function test_cpt_exists() {
 		$this->assertTrue(
