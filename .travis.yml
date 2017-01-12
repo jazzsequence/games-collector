@@ -26,9 +26,8 @@ matrix:
     fast_finish: true
 
     include:
-        # Current $required_php_version for WordPress: 5.2.4
-        # aliased to 5.2.17
-        - php: '5.2'
+        # Minimum required php version for WP is 5.2 but 5.2 doesn't like namespaces. Test 5.3 instead.
+        - php: '5.3'
         # aliased to a recent 5.6.x version
         - php: '5.6'
         # aliased to a recent 7.x version
@@ -61,8 +60,13 @@ before_script:
     - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then composer global require "phpunit/phpunit=5.6.*"; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "5.2" ]]; then composer global require "phpunit/phpunit=4.8.*"; fi
+    - |
+      if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then
+        composer global require "phpunit/phpunit=5.6.*"
+      else
+        composer global require "phpunit/phpunit=4.8.*"
+      fi
+  - |
 
 # Run test script commands.
 # Default is specific to project language.
