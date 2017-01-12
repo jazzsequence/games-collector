@@ -26,7 +26,6 @@ matrix:
     fast_finish: true
 
     include:
-        # Minimum required php version for WP is 5.2 but 5.2 doesn't like namespaces. Test 5.3 instead.
         - php: '5.3'
         # aliased to a recent 5.6.x version
         - php: '5.6'
@@ -66,7 +65,7 @@ before_script:
       else
         composer global require "phpunit/phpunit=4.8.*"
       fi
-  - |
+    - |
 
 # Run test script commands.
 # Default is specific to project language.
