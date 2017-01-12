@@ -46,4 +46,16 @@ class GC_Test_Game extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Makes sure a game can be created.
+	 *
+	 * @covers GC\GamesCollector\Game\register_cpt
+	 */
+	function test_game_post() {
+		$post_id = $this->create_post();
+		$this->assertTrue(
+			! is_wp_error( $post_id ),
+			'Test game was not created successfully.'
+		);
+	}
 }
