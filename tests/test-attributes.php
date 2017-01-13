@@ -36,7 +36,7 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 
 		foreach ( $terms as $term ) {
 			$this->assertTrue(
-				term_exists( $term ),
+				! is_null( term_exists( $term ) ),
 				sprintf( 'Game attribute %s did not exist.', $term )
 			);
 		}
