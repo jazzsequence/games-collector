@@ -55,6 +55,16 @@ class GC_Test_Game extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Adds a time range to test post.
+	 *
+	 * @param integer $post_id Optional. Post ID of the post to add player age to.
+	 */
+	function add_time( $post_id = 0 ) {
+		$post_id = ( 0 === $post_id ) ? $this->create_post() : absint( $post_id );
+		add_post_meta( $post_id, '_gc_time', '45 - 60' );
+	}
+
+	/**
 	 * Make sure the CPT exists.
 	 *
 	 * @covers GC\GamesCollector\Game\register_cpt
