@@ -127,4 +127,20 @@ class GC_Test_Game extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Make sure the difficulty matches the translated string.
+	 *
+	 * @covers GC\GamesCollector\Game\get_difficulty
+	 * @covers GC\GamesCollector\Game\get_difficulties
+	 */
+	function test_difficulty() {
+		$post_id = $this->create_post();
+		$this->add_difficulty( $post_id );
+
+		$this->assertEquals(
+			GC\GamesCollector\Game\get_difficulty( $post_id ),
+			'Moderate',
+			'Get difficulty did not match the saved difficulty.'
+		);
+	}
 }
