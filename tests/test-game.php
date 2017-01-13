@@ -95,4 +95,19 @@ class GC_Test_Game extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Make sure that we can get the min/max players back in an array.
+	 *
+	 * @covers GC\GamesCollector\Game\get_players_min_max
+	 */
+	function test_get_players_min_max() {
+		$post_id = $this->create_post();
+		$this->add_players( $post_id );
+
+		$this->assertEquals(
+			GC\GamesCollector\Game\get_players_min_max( $post_id ),
+			[ 'min' => 2, 'max' => 4 ],
+			'Get players min/max did not return the correct number of players.'
+		);
+	}
 }
