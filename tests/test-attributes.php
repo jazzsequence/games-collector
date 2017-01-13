@@ -23,4 +23,19 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Test that the default terms were inserted.
+	 *
+	 * @covers GC\GamesCollector\Attributes\create_default_attributes
+	 */
+	function test_base_terms_exist() {
+		$terms = [ 'Solo Play', 'Cooperative', 'Party Game', 'Easy-to-learn', 'Heavy Strategy', 'Expansion', 'City/Empire Building', 'Fast-paced', 'Card Game', 'Deck Building', 'Dice Game', 'Role-Playing Game', 'Sci-Fi', 'Horror', 'Fantasy', 'Based on a Film/TV Show', 'Mystery', 'Historical', 'Legacy' ];
+
+		foreach ( $terms as $term ) {
+			$this->assertTrue(
+				term_exists( $term ),
+				sprintf( 'Game attribute %s did not exist.', $term )
+			);
+		}
+	}
 }
