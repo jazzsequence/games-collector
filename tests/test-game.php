@@ -2,6 +2,7 @@
 /**
  * Unit tests for Game namespace.
  *
+ * @since   1.0.0
  * @package GC\GamesCollector
  */
 
@@ -9,12 +10,14 @@ use GC\GamesCollector\Game;
 
 /**
  * Games Collector Game unit test class.
+ *
+ * @since 1.0.0
  */
 class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Creates a test post.
 	 *
-	 * @covers Nothing.
+	 * @since  1.0.0
 	 * @return int Test post ID.
 	 */
 	function create_post() {
@@ -25,8 +28,8 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Adds players to test post.
 	 *
+	 * @since  1.0.0
 	 * @param  int $post_id Optional. Post ID of the post to add players to.
-	 * @covers Nothing.
 	 */
 	function add_players( $post_id = 0 ) {
 		$post_id = ( 0 === $post_id ) ? $this->create_post() : absint( $post_id );
@@ -37,6 +40,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Adds an age to test post.
 	 *
+	 * @since 1.0.0
 	 * @param integer $post_id Optional. Post ID of the post to add player age to.
 	 */
 	function add_age( $post_id = 0 ) {
@@ -47,6 +51,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Adds a difficulty to test post.
 	 *
+	 * @since  1.0.0
 	 * @param integer $post_id Optional. Post ID of the post to add player age to.
 	 */
 	function add_difficulty( $post_id = 0 ) {
@@ -57,6 +62,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Adds a time range to test post.
 	 *
+	 * @since  1.0.0
 	 * @param integer $post_id Optional. Post ID of the post to add player age to.
 	 */
 	function add_time( $post_id = 0 ) {
@@ -67,6 +73,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure the CPT exists.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\register_cpt
 	 */
 	function test_cpt_exists() {
@@ -79,6 +86,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Makes sure a game can be created.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\register_cpt
 	 */
 	function test_game_post() {
@@ -92,6 +100,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure that the number of players saves and returns the right range.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\get_number_of_players
 	 */
 	function test_get_number_of_players() {
@@ -108,6 +117,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure that we can get the min/max players back in an array.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\get_players_min_max
 	 */
 	function test_get_players_min_max() {
@@ -124,6 +134,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure that the age range matches what was entered.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\get_age
 	 */
 	function test_get_age() {
@@ -140,6 +151,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure the difficulty matches the translated string.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\get_difficulty
 	 * @covers GC\GamesCollector\Game\get_difficulties
 	 */
@@ -162,6 +174,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	/**
 	 * Make sure game length returns the correct classes.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\Game\get_game_length
 	 */
 	function test_game_length() {

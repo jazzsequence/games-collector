@@ -2,7 +2,8 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Games_Collector
+ * @since   1.0.0
+ * @package GC\GamesCollector
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );

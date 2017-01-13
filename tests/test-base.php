@@ -2,6 +2,7 @@
 /**
  * Unit tests for base Game Collector plugin.
  *
+ * @since   1.0.0
  * @package GC\GamesCollector
  */
 
@@ -12,6 +13,7 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 	/**
 	 * Ensure the plugin is loaded and the callback is registered to 'plugins_loaded'.
 	 *
+	 * @since  1.0.0
 	 * @covers GC\GamesCollector\bootstrap
 	 */
 	function test_plugin_loaded() {

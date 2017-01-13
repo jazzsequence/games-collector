@@ -9,11 +9,14 @@ use GC\GamesCollector\Attributes;
 
 /**
  * Games Collector Attributes unit test class.
+ *
+ * @since 1.0.0
  */
 class GC_Test_Attributes extends WP_UnitTestCase {
 	/**
 	 * Test that the Attribute taxonomy was created.
 	 *
+	 * @since 1.0.0
 	 * @covers GC\GamesCollector\Attributes\register_taxonomy
 	 */
 	function test_attributes_taxonomy_exists() {
@@ -26,6 +29,7 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	/**
 	 * Test that the default terms were inserted.
 	 *
+	 * @since 1.0.0
 	 * @covers GC\GamesCollector\Attributes\create_default_attributes
 	 */
 	function test_base_terms_exist() {
