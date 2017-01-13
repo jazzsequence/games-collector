@@ -137,10 +137,17 @@ class GC_Test_Game extends WP_UnitTestCase {
 		$post_id = $this->create_post();
 		$this->add_difficulty( $post_id );
 
+		$this->assertTrue(
+			is_array( GC\GamesCollector\Game\get_difficulties() ),
+			'Get difficulties did not return an array.'
+		);
+
 		$this->assertEquals(
 			GC\GamesCollector\Game\get_difficulty( $post_id ),
 			'Moderate',
 			'Get difficulty did not match the saved difficulty.'
 		);
 	}
+
+
 }
