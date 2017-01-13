@@ -110,4 +110,21 @@ class GC_Test_Game extends WP_UnitTestCase {
 			'Get players min/max did not return the correct number of players.'
 		);
 	}
+
+	/**
+	 * Make sure that the age range matches what was entered.
+	 *
+	 * @covers GC\GamesCollector\Game\get_age
+	 */
+	function test_get_age() {
+		$post_id = $this->create_post();
+		$this->add_age( $post_id );
+
+		$this->assertEquals(
+			GC\GamesCollector\Game\get_age( $post_id ),
+			'8+',
+			'Get age did not return the correct age range.'
+		);
+	}
+
 }
