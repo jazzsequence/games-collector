@@ -44,6 +44,17 @@ class GC_Test_Game extends WP_UnitTestCase {
 		add_post_meta( $post_id, '_gc_age', 8 );
 	}
 
+	/**
+	 * Adds a difficulty to test post.
+	 *
+	 * @param integer $post_id Optional. Post ID of the post to add player age to.
+	 */
+	function add_difficulty( $post_id = 0 ) {
+		$post_id = ( 0 === $post_id ) ? $this->create_post() : absint( $post_id );
+		add_post_meta( $post_id, '_gc_difficulty', 'moderate' );
+	}
+
+	/**
 	 * Make sure the CPT exists.
 	 *
 	 * @covers GC\GamesCollector\Game\register_cpt
