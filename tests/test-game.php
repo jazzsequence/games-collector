@@ -159,5 +159,20 @@ class GC_Test_Game extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Make sure game length returns the correct classes.
+	 *
+	 * @covers GC\GamesCollector\Game\get_game_length
+	 */
+	function test_game_length() {
+		$post_id = $this->create_post();
+		$this->add_time( $post_id );
+		$game_length = GC\GamesCollector\Game\get_game_length( $post_id );
 
+		$this->assertEquals(
+			$game_length,
+			'long',
+			( '' !== $game_length ) ? sprintf( 'Get game length returned %s instead of "long".', $game_length ) : 'Get game length did not return short or long when "long" was expected.'
+		);
+	}
 }
