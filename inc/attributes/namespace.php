@@ -96,79 +96,79 @@ function meta_box_display() {
  * @since 0.1
  */
 function create_default_attributes() {
-	if ( ! term_exists( 'Solo Play' ) ) {
+	if ( ! term_exists( 'Solo Play', 'gc_attribute' ) ) {
 		wp_insert_term( 'Solo Play', 'gc_attribute', [ 'slug' => 'solo' ] );
 	}
 
-	if ( ! term_exists( 'Cooperative' ) ) {
+	if ( ! term_exists( 'Cooperative', 'gc_attribute' ) ) {
 		wp_insert_term( 'Cooperative', 'gc_attribute', [ 'slug' => 'coop' ] );
 	}
 
-	if ( ! term_exists( 'Party Game' ) ) {
+	if ( ! term_exists( 'Party Game', 'gc_attribute' ) ) {
 		wp_insert_term( 'Party Game', 'gc_attribute', [ 'slug' => 'party' ] );
 	}
 
-	if ( ! term_exists( 'Easy-to-learn' ) ) {
+	if ( ! term_exists( 'Easy-to-learn', 'gc_attribute' ) ) {
 		wp_insert_term( 'Easy-to-learn', 'gc_attribute', [ 'slug' => 'easy-to-learn' ] );
 	}
 
-	if ( ! term_exists( 'Heavy Strategy' ) ) {
+	if ( ! term_exists( 'Heavy Strategy', 'gc_attribute' ) ) {
 		wp_insert_term( 'Heavy Strategy', 'gc_attribute', [ 'slug' => 'strategy' ] );
 	}
 
-	if ( ! term_exists( 'Expansion' ) ) {
+	if ( ! term_exists( 'Expansion', 'gc_attribute' ) ) {
 		wp_insert_term( 'Expansion', 'gc_attribute', [ 'slug' => 'expansion' ] );
 	}
 
-	if ( ! term_exists( 'City/Empire Building' ) ) {
+	if ( ! term_exists( 'City/Empire Building', 'gc_attribute' ) ) {
 		wp_insert_term( 'City/Empire Building', 'gc_attribute', [ 'slug' => 'city-building' ] );
 	}
 
-	if ( ! term_exists( 'Fast-paced' ) ) {
+	if ( ! term_exists( 'Fast-paced', 'gc_attribute' ) ) {
 		wp_insert_term( 'Fast-paced', 'gc_attribute', [ 'slug' => 'fast-paced' ] );
 	}
 
-	if ( ! term_exists( 'Card Game' ) ) {
+	if ( ! term_exists( 'Card Game', 'gc_attribute' ) ) {
 		wp_insert_term( 'Card Game', 'gc_attribute', [ 'slug' => 'card' ] );
 	}
 
-	if ( ! term_exists( 'Deck Building' ) ) {
+	if ( ! term_exists( 'Deck Building', 'gc_attribute' ) ) {
 		wp_insert_term( 'Deck Building', 'gc_attribute', [ 'slug' => 'deck-building' ] );
 	}
 
-	if ( ! term_exists( 'Dice Game' ) ) {
+	if ( ! term_exists( 'Dice Game', 'gc_attribute' ) ) {
 		wp_insert_term( 'Dice Game', 'gc_attribute', [ 'slug' => 'dice' ] );
 	}
 
-	if ( ! term_exists( 'Role-Playing Game' ) ) {
+	if ( ! term_exists( 'Role-Playing Game', 'gc_attribute' ) ) {
 		wp_insert_term( 'Role-Playing Game', 'gc_attribute', [ 'slug' => 'rpg' ] );
 	}
 
-		wp_insert_term( 'Sci-Fi', 'gc_attribute', [ 'slug' => 'scifi' ] );
 	if ( ! term_exists( 'Sci-Fi', 'gc_attribute' ) || ! term_exists( 'Science Fiction', 'gc_attribute' ) ) {
+		wp_insert_term( 'Sci-Fi', 'gc_attribute', [ 'slug' => 'sci-fi' ] );
 	}
 
-	if ( ! term_exists( 'Horror' ) ) {
+	if ( ! term_exists( 'Horror', 'gc_attribute' ) ) {
 		wp_insert_term( 'Horror', 'gc_attribute', [ 'slug' => 'horror' ] );
 	}
 
-	if ( ! term_exists( 'Fantasy' ) ) {
+	if ( ! term_exists( 'Fantasy', 'gc_attribute' ) ) {
 		wp_insert_term( 'Fantasy', 'gc_attribute', [ 'slug' => 'fantasy' ] );
 	}
 
-	if ( ! term_exists( 'Based on a Film/TV Show' ) ) {
+	if ( ! term_exists( 'Based on a Film/TV Show', 'gc_attribute' ) ) {
 		wp_insert_term( 'Based on a Film/TV Show', 'gc_attribute', [ 'slug' => 'based-on-film-tv' ] );
 	}
 
-	if ( ! term_exists( 'Mystery' ) ) {
+	if ( ! term_exists( 'Mystery', 'gc_attribute' ) ) {
 		wp_insert_term( 'Mystery', 'gc_attribute', [ 'slug' => 'mystery' ] );
 	}
 
-	if ( ! term_exists( 'Historical' ) ) {
+	if ( ! term_exists( 'Historical', 'gc_attribute' ) ) {
 		wp_insert_term( 'Historical', 'gc_attribute', [ 'slug' => 'historical' ] );
 	}
 
-	if ( ! term_exists( 'Legacy' ) ) {
+	if ( ! term_exists( 'Legacy', 'gc_attribute' ) ) {
 		wp_insert_term( 'Legacy', 'gc_attribute', [ 'slug' => 'legacy' ] );
 	}
 }
