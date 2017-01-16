@@ -97,7 +97,7 @@ function shortcode() {
 					<?php } ?>
 
 					<?php
-					$attribute_list = GC\GamesCollector\Attributes\get_the_attribute_list( $game->ID, '<span class="gc-icon icon-game-attributes"></span>
+					$attribute_list = Attributes\get_the_attribute_list( $game->ID, '<span class="gc-icon icon-game-attributes"></span>
 					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' );
 					echo $attribute_list; // WPCS: XSS ok, validation ok, already sanitized. ?>
 				</div>
