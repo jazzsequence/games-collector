@@ -97,3 +97,17 @@ function gc_get_games() {
 function gc_the_games() {
 	echo \GC\GamesCollector\Display\shortcode(); // WPCS: XSS ok. Already sanitized.
 }
+
+/**
+ * Get a list of attributes for the given post. Use instead of get_term_list.
+ *
+ * @since  1.0.0
+ * @param  integer $post_id   The post ID. If none is given, will attempt to grab one from the WP_Post object.
+ * @param  string  $before    Anything before the list of attributes.
+ * @param  string  $seperator Seperator between attributes (default is ", ").
+ * @param  string  $after     Anything after the list of attributes.
+ * @return string             The sanitized list of attributes.
+ */
+function gc_get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', $after = '' ) {
+	return \GC\GamesCollector\Attributes\get_the_attribute_list( $post_id, $before, $seperator, $after );
+}
