@@ -23,6 +23,7 @@ function shortcode() {
 		'posts_per_page' => -1,
 		'post_type'      => 'gc_game',
 		'orderby'        => 'title',
+		'order'          => 'ASC',
 	]);
 
 	$terms = get_terms( 'gc_attribute' );
