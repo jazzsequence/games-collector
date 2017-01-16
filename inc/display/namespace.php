@@ -35,7 +35,7 @@ function shortcode() {
 		<?php } ?>
 		<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
 		<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
-		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up,.10-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
+		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
 		<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
 		<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
 			<select class="players-filter-select">
