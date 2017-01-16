@@ -209,3 +209,37 @@ function save_post( $post_id ) {
 		}
 	}
 }
+
+/**
+ * Get a list of attributes for the given post. Use instead of get_term_list.
+ *
+ * @since  1.0.0
+ * @param  integer $post_id   The post ID. If none is given, will attempt to grab one from the WP_Post object.
+ * @param  string  $before    Anything before the list of attributes.
+ * @param  string  $seperator Seperator between attributes (default is ", ").
+ * @param  string  $after     Anything after the list of attributes.
+ * @return string             The sanitized list of attributes.
+ */
+function get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', $after = '' ) {
+	if ( 0 === $post_id ) {
+		global $post;
+		if ( isset( $post->ID ) ) {
+			$post_id = $post->ID;
+		} else {
+			return new WP_Error( 'cannot_get_attribute', esc_html__( 'No post ID given for game. Cannot get attributes.', 'games-collector' ) );
+		}
+	}
+
+	$output = '';
+
+	$attributes = get_the_terms( $game->ID, 'gc_attribute' );
+	if ( ! is_wp_error( $attributes ) ) {
+		$output .= wp_kses_post( $before );
+		foreach ( $attributes as $term ) {
+			$output .= '<span class="attribute-' . sanitize_text_field( $term->slug ) . '">' . sanitize_text_field( $term->name ) . '</span>' . sanitize_text_field( $seperator );
+		}
+		$output .= wp_kses_post( $after );
+	}
+
+	return $output;
+}
