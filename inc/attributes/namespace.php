@@ -234,4 +234,8 @@ function get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', 
 		}
 	}
 
+	// Allow the terms to be filtered.
+	$terms = apply_filters( 'gc_filter_the_terms', $terms );
+
+	return apply_filters( 'gc_filter_the_attribute_list', wp_kses_post( $before ) . $terms . wp_kses_post( $after ) );
 }
