@@ -58,7 +58,7 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 
 		$this->assertEquals(
 			$attribute_list = GC\GamesCollector\Attributes\get_the_attribute_list( $post_id ),
-			$expected_output = '<span class="gc-attribute attribute-card-game>Card Game</span>, <span class="gc-attribute attribute-cooperative">Cooperative</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>',
+			$expected_output = '<span class="gc-attribute attribute-card-game">Card Game</span>, <span class="gc-attribute attribute-cooperative">Cooperative</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>',
 			sprintf( 'Attribute list did not match expected output. Expected %1$s saw %2$s', $expected_output, $attribute_list )
 		);
 	}
