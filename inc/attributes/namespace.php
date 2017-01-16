@@ -222,18 +222,12 @@ function get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', 
 		}
 	}
 
-	$output = '';
-
 	$attributes = get_the_terms( $post_id, 'gc_attribute' );
 	if ( ! is_wp_error( $attributes ) ) {
 		$count    = count( $attributes );
 		$iterator = 1;
-		$output  .= wp_kses_post( $before );
 		foreach ( $attributes as $term ) {
-			$output .= '<span class="attribute-' . sanitize_text_field( $term->slug ) . '">' . sanitize_text_field( $term->name ) . '</span>' . ( $iterator < $count ) ? sanitize_text_field( $seperator ) : '';
 		}
-		$output .= wp_kses_post( $after );
 	}
 
-	return $output;
 }
