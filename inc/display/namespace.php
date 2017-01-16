@@ -10,6 +10,7 @@
 
 namespace GC\GamesCollector\Display;
 use GC\GamesCollector\Game;
+use GC\GamesCollector\Attributes;
 
 /**
  * Shortcode output. Can also be run as a standalone function to display the list.
@@ -95,11 +96,13 @@ function shortcode() {
 						<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 					<?php } ?>
 
-					<?php echo get_the_term_list( $game->ID, 'gc_attribute', '<span class="gc-icon icon-game-attributes"></span>
-					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' ); ?>
-					</div>
-					</div>
-					<?php } ?>
+					<?php
+					$attribute_list = GC\GamesCollector\Attributes\get_the_attribute_list( $game->ID, '<span class="gc-icon icon-game-attributes"></span>
+					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' );
+					echo $attribute_list; // WPCS: XSS ok, validation ok, already sanitized. ?>
+				</div>
+			</div>
+		<?php } ?>
 	</div>
 
 	<?php $content = ob_get_clean();
