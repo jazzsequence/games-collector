@@ -144,8 +144,8 @@ function create_default_attributes() {
 		wp_insert_term( 'Role-Playing Game', 'gc_attribute', [ 'slug' => 'rpg' ] );
 	}
 
-	if ( ! term_exists( 'Sci-Fi' ) ) {
 		wp_insert_term( 'Sci-Fi', 'gc_attribute', [ 'slug' => 'scifi' ] );
+	if ( ! term_exists( 'Sci-Fi', 'gc_attribute' ) || ! term_exists( 'Science Fiction', 'gc_attribute' ) ) {
 	}
 
 	if ( ! term_exists( 'Horror' ) ) {
