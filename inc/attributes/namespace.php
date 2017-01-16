@@ -227,6 +227,7 @@ function get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', 
 		$count    = count( $attributes );
 		$iterator = 1;
 		foreach ( $attributes as $term ) {
+			$iterator++;
 		}
 	}
 
