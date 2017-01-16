@@ -67,7 +67,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 */
 	function add_time( $post_id = 0 ) {
 		$post_id = ( 0 === $post_id ) ? $this->create_post() : absint( $post_id );
-		add_post_meta( $post_id, '_gc_time', '45 - 60' );
+		add_post_meta( $post_id, '_gc_time', '45 - 75' );
 	}
 
 	/**

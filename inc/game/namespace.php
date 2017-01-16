@@ -343,7 +343,7 @@ function get_game_length( $post_id = 0 ) {
 				$classes .= 'short';
 				break;
 
-			case ( absint( $time ) >= 60 ) :
+			case ( absint( $time ) > 60 ) :
 				$classes .= 'long';
 				break;
 

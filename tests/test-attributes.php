@@ -45,4 +45,24 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 			);
 		}
 	}
+
+	/**
+	 * Test that the attribute list is displaying the expected output.
+	 *
+	 * @since  1.0.0
+	 * @covers GC\GamesCollector\Attributes\get_the_attribute_list
+	 */
+	function test_attributes_list() {
+		// Create the attributes.
+		GC\GamesCollector\Attributes\create_default_attributes();
+
+		$post_id = $this->factory->post->create( [ 'post_title' => 'Wizard School' ] );
+		wp_set_object_terms( $post_id, [ 'Card Game', 'Fantasy', 'Cooperative' ], 'gc_attribute' );
+
+		$this->assertEquals(
+			$attribute_list = GC\GamesCollector\Attributes\get_the_attribute_list( $post_id ),
+			$expected_output = '<span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-coop">Cooperative</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>',
+			sprintf( 'Attribute list did not match expected output. Expected %1$s saw %2$s', $expected_output, $attribute_list )
+		);
+	}
 }

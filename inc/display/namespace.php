@@ -10,6 +10,7 @@
 
 namespace GC\GamesCollector\Display;
 use GC\GamesCollector\Game;
+use GC\GamesCollector\Attributes;
 
 /**
  * Shortcode output. Can also be run as a standalone function to display the list.
@@ -22,6 +23,7 @@ function shortcode() {
 		'posts_per_page' => -1,
 		'post_type'      => 'gc_game',
 		'orderby'        => 'title',
+		'order'          => 'ASC',
 	]);
 
 	$terms = get_terms( 'gc_attribute' );
@@ -35,7 +37,7 @@ function shortcode() {
 		<?php } ?>
 		<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
 		<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
-		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up,.10-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
+		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
 		<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
 		<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
 			<select class="players-filter-select">
@@ -95,11 +97,13 @@ function shortcode() {
 						<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 					<?php } ?>
 
-					<?php echo get_the_term_list( $game->ID, 'gc_attribute', '<span class="gc-icon icon-game-attributes"></span>
-					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' ); ?>
-					</div>
-					</div>
-					<?php } ?>
+					<?php
+					$attribute_list = Attributes\get_the_attribute_list( $game->ID, '<span class="gc-icon icon-game-attributes"></span>
+					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' );
+					echo $attribute_list; // WPCS: XSS ok, validation ok, already sanitized. ?>
+				</div>
+			</div>
+		<?php } ?>
 	</div>
 
 	<?php $content = ob_get_clean();
