@@ -53,6 +53,9 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 * @covers GC\GamesCollector\Attributes\get_the_attribute_list
 	 */
 	function test_attributes_list() {
+		// Create the attributes.
+		GC\GamesCollector\Attributes\create_default_attributes();
+
 		$post_id = $this->factory->post->create( [ 'post_title' => 'Wizard School' ] );
 		wp_set_object_terms( $post_id, [ 'card-game', 'fantasy', 'cooperative' ], 'gc_attribute' );
 
