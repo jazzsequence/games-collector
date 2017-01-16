@@ -171,14 +171,6 @@ function create_default_attributes() {
 	if ( ! term_exists( 'Legacy' ) ) {
 		wp_insert_term( 'Legacy', 'gc_attribute', [ 'slug' => 'legacy' ] );
 	}
-
-	if ( ! term_exists( 'Sci-Fi' ) || ! term_exists( 'Science Fiction' ) ) {
-		wp_insert_term( 'Sci-Fi', 'gc_attribute', [ 'slug' => 'sci-fi' ] );
-	}
-
-	if ( ! term_exists( 'Fantasy' ) ) {
-		wp_insert_term( 'Fantasy', 'gc_attribute', [ 'slug' => 'fantasy' ] );
-	}
 }
 
 /**
