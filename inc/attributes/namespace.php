@@ -224,7 +224,7 @@ function get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', 
 
 	$output = '';
 
-	$attributes = get_the_terms( $game->ID, 'gc_attribute' );
+	$attributes = get_the_terms( $post_id, 'gc_attribute' );
 	if ( ! is_wp_error( $attributes ) ) {
 		$count    = count( $attributes );
 		$iterator = 1;
