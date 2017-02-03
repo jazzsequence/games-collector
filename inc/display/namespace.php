@@ -29,26 +29,9 @@ function shortcode() {
 	ob_start(); ?>
 
 	<div class="games-filter-group">
-		<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
-			<select class="players-filter-select">
-				<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
-				<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '2+ players', 'games-collector' ); ?></option>
-				<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '4+ players', 'games-collector' ); ?></option>
-				<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '5+ players', 'games-collector' ); ?></option>
-				<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '6+ players', 'games-collector' ); ?></option>
-				<option value=".8-players,.min-8-players,.8-or-more-players"><?php esc_html_e( '8+ players', 'games-collector' ); ?></option>
-			</select>
-		</div>
-		<div class="difficulty-filter"><label for="difficulty-filter-select"><?php esc_html_e( 'Difficulty', 'games-collector' ); ?>:</label>
-			<select class="difficulty-filter-select">
-				<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
-				<?php foreach ( Game\get_difficulties() as $key => $value ) {  ?>
-					<option value=".<?php echo esc_html( $key ); ?>"><?php echo esc_html( $value ); ?></option>
-				<?php } ?>
-			</select>
-		</div>
 		<?php
 		echo get_buttons(); // WPCS: XSS ok, already sanitized.
+		echo get_filters(); // WPCS: XSS ok, already sanitized.
 		?>
 	</div>
 	<div class="games-collector-list">
@@ -125,6 +108,53 @@ function get_buttons() {
 	<?php $output = ob_get_clean();
 
 	/**
+	 * Allow buttons to be filtered.
+	 *
+	 * @since 1.0.0
+	 * @var   string HTML markup for buttons.
+	 */
+	return apply_filters( 'gc_filter_buttons', $output );
+}
+
+/**
+ * Return the HTML markup for the other game filters.
+ *
+ * @since  1.0.0
+ * @return string Select markup for filters.
+ */
+function get_filters() {
+	ob_start(); ?>
+	<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
+		<select class="players-filter-select">
+			<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
+			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '2+ players', 'games-collector' ); ?></option>
+			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '4+ players', 'games-collector' ); ?></option>
+			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '5+ players', 'games-collector' ); ?></option>
+			<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '6+ players', 'games-collector' ); ?></option>
+			<option value=".8-players,.min-8-players,.8-or-more-players"><?php esc_html_e( '8+ players', 'games-collector' ); ?></option>
+		</select>
+	</div>
+	<div class="difficulty-filter"><label for="difficulty-filter-select"><?php esc_html_e( 'Difficulty', 'games-collector' ); ?>:</label>
+		<select class="difficulty-filter-select">
+			<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
+			<?php foreach ( Game\get_difficulties() as $key => $value ) {  ?>
+				<option value=".<?php echo esc_html( $key ); ?>"><?php echo esc_html( $value ); ?></option>
+			<?php } ?>
+		</select>
+	</div>
+
+	<?php $output = ob_get_clean();
+
+	/**
+	 * Allow the filters to be customized.
+	 *
+	 * @since 1.0.0
+	 * @var   string HTML markup for the filters.
+	 */
+	return apply_filters( 'gc_filter_game_filters', $output );
+}
+
+/**
  * Enqueue front end styles and scripts.
  *
  * @since 0.2
