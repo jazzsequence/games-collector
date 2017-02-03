@@ -102,6 +102,7 @@ function get_game_info( $game_id ) {
 		<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
 			<?php
 			echo get_players( $game->ID );      // WPCS: XSS ok, already sanitized.
+			echo get_playing_time( $game->ID ); // WPCS: XSS ok, already sanitized.
 			?>
 		</div>
 
@@ -229,6 +230,32 @@ function get_players( $game_id ) {
 		 * @uses         Game\get_players_min_max
 		 */
 		return apply_filters( 'gc_filter_players', $output );
+	}
+
+	return false;
+}
+
+/**
+ * Return the game playing time.
+ *
+ * @since  1.0.0
+ * @param  int $game_id The game's post ID.
+ * @return mixed        The HTML markup for playing time or false if not set.
+ */
+function get_playing_time( $game_id ) {
+	if ( $playing_time = get_post_meta( $game_id, '_gc_time', true ) ) {
+		ob_start(); ?>
+		<span class="gc-icon icon-game-time"></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
+
+		<?php $output = ob_get_clean();
+
+		/**
+		 * Allow the playing time output to be filtered (but only if it has been set).
+		 *
+		 * @since 1.0.0
+		 * @var   string The HTML markup for playing time.
+		 */
+		return apply_filters( 'gc_filter_playing_time', $output );
 	}
 
 	return false;
