@@ -7,7 +7,7 @@
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      4.7  
-**Stable tag:**        0.1  
+**Stable tag:**        1.0.0  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
 **Demo:**              https://jazzsequence.com/games/
@@ -32,6 +32,10 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 
 ## Changelog ##
+
+### 1.0.0 ###
+* abstracted display elements into smaller functions and made them filterable
+* added capability of SVGs to be output in base64-encoded or raw svg XML markup
 
 ### 0.2 ###
 * Integrated Travis CI
