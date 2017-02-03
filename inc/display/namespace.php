@@ -100,6 +100,9 @@ function get_game_info( $game_id ) {
 	ob_start(); ?>
 
 		<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
+			<?php
+			echo get_players( $game->ID );      // WPCS: XSS ok, already sanitized.
+			?>
 		</div>
 
 	<?php return ob_get_clean();
@@ -193,6 +196,42 @@ function get_attributes( $game_id ) {
 	 * @uses  Attributes\get_the_attribute_list
 	 */
 	return apply_filters( 'gc_filter_attribute_list', $attribute_list );
+}
+
+/**
+ * Return the number of players.
+ *
+ * @since  1.0.0
+ * @param  int $game_id The game's post ID.
+ * @return mixed        The HTML markup for number of players or false if not set.
+ * @uses                Game\get_players_min_max
+ */
+function get_players( $game_id ) {
+	$players_min_max = Game\get_players_min_max( $game_id );
+
+	if ( isset( $players_min_max['min'] ) ) {
+			ob_start(); ?>
+
+		<span class="gc-icon icon-game-players"></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
+			// Translators: 1: Minimum number of players, 2: Maximum number of players.
+			__( '%1$d %2$s players', 'games-collector' ),
+			absint( $players_min_max['min'] ),
+			isset( $players_min_max['max'] ) ? sprintf( '- %d', absint( $players_min_max['max'] ) ) : ''
+		) ); ?></span><?php
+
+		$output = ob_get_clean();
+
+		/**
+		 * Allow the # of players to be filtered (but only if there actually are players).
+		 *
+		 * @since 1.0.0
+		 * @var   string The HTML markup for # of players.
+		 * @uses         Game\get_players_min_max
+		 */
+		return apply_filters( 'gc_filter_players', $output );
+	}
+
+	return false;
 }
 
 /**
