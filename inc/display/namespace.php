@@ -104,6 +104,7 @@ function get_game_info( $game_id ) {
 			echo get_players( $game->ID );      // WPCS: XSS ok, already sanitized.
 			echo get_playing_time( $game->ID ); // WPCS: XSS ok, already sanitized.
 			echo get_age( $game->ID );          // WPCS: XSS ok, already sanitized.
+			echo get_difficulty( $game->ID );   // WPCS: XSS ok, already sanitized.
 			?>
 		</div>
 
@@ -231,6 +232,34 @@ function get_players( $game_id ) {
 		 * @uses         Game\get_players_min_max
 		 */
 		return apply_filters( 'gc_filter_players', $output );
+	}
+
+	return false;
+}
+
+/**
+ * Return the game difficulty.
+ *
+ * @since  1.0.0
+ * @param  int $game_id The game's post ID.
+ * @return mixed        The HTML markup for difficulty or false if not set.
+ * @uses                Game\get_difficulties
+ */
+function get_difficulty( $game_id ) {
+	if ( $difficulty = get_post_meta( $game_id, '_gc_difficulty', true ) ) {
+		ob_start(); ?>
+		<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
+
+		<?php $output = ob_get_clean();
+
+		/**
+		 * Allow the difficulty output to be filtered (but only if it has been set).
+		 *
+		 * @since 1.0.0
+		 * @var   string The HTML markup for difficulty.
+		 * @uses         Game\get_difficulties
+		 */
+		return apply_filters( 'gc_filter_difficulty', $output );
 	}
 
 	return false;
