@@ -26,19 +26,9 @@ function shortcode() {
 		'order'          => 'ASC',
 	]);
 
-	$terms = get_terms( 'gc_attribute' );
-
 	ob_start(); ?>
 
 	<div class="games-filter-group">
-		<button data-filter="*"><?php esc_html_e( 'Show All', 'games-collector' ); ?></button>
-		<?php foreach ( $terms as $term ) { ?>
-			<button data-filter=".gc_attribute-<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_attr( $term->name ); ?></button>
-		<?php } ?>
-		<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
-		<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
-		<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
-		<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
 		<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
 			<select class="players-filter-select">
 				<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
@@ -57,6 +47,9 @@ function shortcode() {
 				<?php } ?>
 			</select>
 		</div>
+		<?php
+		echo get_buttons(); // WPCS: XSS ok, already sanitized.
+		?>
 	</div>
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
@@ -111,6 +104,27 @@ function shortcode() {
 }
 
 /**
+ * Return the markup for the buttons for filtering game lists.
+ *
+ * @since  1.0.0
+ * @return string The markup for the buttons.
+ */
+function get_buttons() {
+	$terms = get_terms( 'gc_attribute' );
+	ob_start(); ?>
+
+	<button data-filter="*"><?php esc_html_e( 'Show All', 'games-collector' ); ?></button>
+	<?php foreach ( $terms as $term ) { ?>
+		<button data-filter=".gc_attribute-<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_attr( $term->name ); ?></button>
+	<?php } ?>
+	<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
+	<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
+	<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
+	<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
+
+	<?php $output = ob_get_clean();
+
+	/**
  * Enqueue front end styles and scripts.
  *
  * @since 0.2
