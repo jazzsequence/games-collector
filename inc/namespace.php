@@ -20,4 +20,6 @@ function bootstrap() {
 	add_action( 'admin_init',            __NAMESPACE__ . '\\Attributes\\create_default_attributes' );
 	add_action( 'add_meta_boxes',        __NAMESPACE__ . '\\Attributes\\metabox' );
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Attributes\\enqueue_scripts' );
+	add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\\Display\\enqueue_scripts' );
+	add_shortcode( 'games-collector',    __NAMESPACE__ . '\\Display\\shortcode' );
 }

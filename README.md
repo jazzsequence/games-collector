@@ -7,13 +7,16 @@
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      4.7  
-**Stable tag:**        0.1  
+**Stable tag:**        1.0.0  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
+**Demo:**              https://jazzsequence.com/games/
 
 ## Description ##
 
 Catalog all your tabletop (or other) games in your WordPress site and display a list of games in your collection.
+
+You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (with some custom CSS added) [on my blog](https://jazzsequence.com/games/).
 
 ## Installation ##
 
@@ -29,6 +32,21 @@ Catalog all your tabletop (or other) games in your WordPress site and display a 
 
 
 ## Changelog ##
+
+### 1.0.0 ###
+* abstracted display elements into smaller functions and made them filterable
+* added capability of SVGs to be output in base64-encoded or raw svg XML markup
+
+### 0.2 ###
+* Integrated Travis CI
+* Added unit tests
+* Adjusted filters for sorting
+* Changed attribute link in game list
+* Changed ordering of games (alphabetically _ascending_)
+* Changed the post type to remove links to single game entry in admin
+* Added front end styles and SVG icons
+* Added shortcode
+* Added WordPress filters
 
 ### 0.1 ###
 * First release

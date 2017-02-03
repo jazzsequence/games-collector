@@ -3,18 +3,18 @@
  * Plugin Name: Games Collector
  * Plugin URI:  https://github.com/jazzsequence/games-collector
  * Description: Catalog all your tabletop (or other) games in your WordPress site and display a list of games in your collection.
- * Version:     0.1
+ * Version:     1.0.0
  * Author:      Chris Reynolds
  * Author URI:  https://jazzsequence.com
- * Donate link: https://github.com/jazzsequence/games-collector
+ * Donate link: https://paypal.me/jazzsequence
  * License:     GPLv3
  * Text Domain: games-collector
  * Domain Path: /languages
  *
  * @link https://github.com/jazzsequence/games-collector
  *
- * @package Games Collector
- * @version 0.1
+ * @package GamesCollector
+ * @version 1.0.0
  */
 
 /**
@@ -35,10 +35,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Built using the Human Made plugin generator!
- */
-
 namespace GC\GamesCollector;
 
 require_once dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php';
@@ -47,6 +43,8 @@ require_once dirname( __FILE__ ) . '/vendor/cmb2/init.php';
 require_once dirname( __FILE__ ) . '/inc/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/game/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/attributes/namespace.php';
+require_once dirname( __FILE__ ) . '/inc/display/namespace.php';
+require_once dirname( __FILE__ ) . '/inc/functions.php';
 
 // Kick it off.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
