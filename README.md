@@ -22,8 +22,10 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ### Manual Installation ###
 
-1. Upload the entire `/games-collector` directory to the `/wp-content/plugins/` directory.
-2. Activate Games Collector through the 'Plugins' menu in WordPress.
+1. Download the latest version from the Releases page.
+2. Unzip and upload the entire `/games-collector` directory to the `/wp-content/plugins/` directory.
+3. Activate Games Collector through the 'Plugins' menu in WordPress.
+4. Create a new page, name it whatever you like, and add the shortcode to the page content to display your games list: `[games-collector]`.
 
 ## Frequently Asked Questions ##
 
