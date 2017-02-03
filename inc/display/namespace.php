@@ -34,19 +34,10 @@ function shortcode() {
 		echo get_filters(); // WPCS: XSS ok, already sanitized.
 		?>
 	</div>
+
 	<div class="games-collector-list">
 		<?php foreach ( $games as $game ) { ?>
 			<div <?php post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
-				<?php // Output a link if one was saved.
-				if ( $link = get_post_meta( $game->ID, '_gc_link', true ) ) { ?>
-					<a href="<?php echo esc_url( $link ); ?>">
-				<?php } ?>
-
-				<span class="game-title" id="game-<?php echo absint( $game->ID ); ?>-title"><?php echo wp_kses_post( $game->post_title ); ?></span>
-
-				<?php if ( $link ) { ?>
-					</a>
-				<?php }
 
 				$players_min_max = Game\get_players_min_max( $game->ID );
 				// Output game info. ?>
@@ -75,12 +66,53 @@ function shortcode() {
 
 					<?php echo get_attributes( $game->ID ); // WPCS: XSS ok, validation ok, already sanitized. ?>
 				</div>
+				<?php
+				echo get_game_title( $game );    // WPCS: XSS ok, already sanitized.
+				?>
+
 			</div>
 		<?php } ?>
 	</div>
 
 	<?php $content = ob_get_clean();
 	return $content;
+}
+
+/**
+ * Return the game title. With link if a link was saved.
+ *
+ * @since  1.0.0
+ * @param  object $game The game WP_Post object.
+ * @return string       The HTML markup for the game title.
+ */
+function get_game_title( $game ) {
+	$before = '';
+	$after  = '';
+
+	// Output a link if one was saved.
+	if ( $link = get_post_meta( $game->ID, '_gc_link', true ) ) {
+		$before = '<a href="' . esc_url( $link ) . '">';
+		$after  = '</a>';
+	}
+
+	$title = '<span class="game-title" id="game-' . absint( $game->ID ) . '-title">' . wp_kses_post( $game->post_title ) . '</span>';
+
+	// 1: Game ID, 2: Game title, 3: Link <a> tag, 4: Closing </a>.
+	$output = sprintf( '$3%s<span class="game-title" id="game-%2$d-title">%1$s</span>%4$s',
+		absint( $game->ID ),
+		wp_kses_post( $game->post_title ),
+		$before,
+		$after
+	);
+
+	/**
+	 * Allow game title to be filtered.
+	 *
+	 * @since 1.0.0
+	 * @param string $output  The HTML markup for the game title.
+	 * @param int    $game_id The game's post ID.
+	 */
+	return apply_filters( 'gc_filter_game_title', $output, $game_id );
 }
 
 /**
