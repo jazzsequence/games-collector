@@ -33,7 +33,7 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ## Screenshots ##
 ![Games Collector new game screen](https://i1.wp.com/jazzsequence.com/wp-content/uploads/2017/02/Screenshot-2017-02-03-14.48.26.png)
 
-![Games Collector admin](https://jazzsequence.com/wp-content/uploads/2017/02/Screenshot-2017-02-03-14.48.26-1.png)
+![Games Collector admin](https://jazzsequence.com/wp-content/uploads/2017/02/Screenshot-2017-02-03-15.06.17.png)
 
 ## Changelog ##
 
