@@ -73,10 +73,7 @@ function shortcode() {
 						<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 					<?php } ?>
 
-					<?php
-					$attribute_list = Attributes\get_the_attribute_list( $game->ID, '<span class="gc-icon icon-game-attributes"></span>
-					<span class="game-attributes" id="game-' . absint( $game->ID ) . '-attributes">', ', ', '</span>' );
-					echo $attribute_list; // WPCS: XSS ok, validation ok, already sanitized. ?>
+					<?php echo get_attributes( $game->ID ); // WPCS: XSS ok, validation ok, already sanitized. ?>
 				</div>
 			</div>
 		<?php } ?>
@@ -152,6 +149,28 @@ function get_filters() {
 	 * @var   string HTML markup for the filters.
 	 */
 	return apply_filters( 'gc_filter_game_filters', $output );
+}
+
+/**
+ * Return a list of game attributes.
+ *
+ * @since  1.0.0
+ * @param  int $game_id The game's post ID.
+ * @return string       The HTML markup for the game attributes.
+ * @uses                Attributes\get_the_attribute_list
+ */
+function get_attributes( $game_id ) {
+	$attribute_list = Attributes\get_the_attribute_list( $game_id, '<span class="gc-icon icon-game-attributes"></span>
+					<span class="game-attributes" id="game-' . absint( $game_id ) . '-attributes">', ', ', '</span>' );
+
+	/**
+	 * Allow the attribute list to be filtered.
+	 *
+	 * @since 1.0.0
+	 * @var   string The HTML markup for the attribute list.
+	 * @uses  Attributes\get_the_attribute_list
+	 */
+	return apply_filters( 'gc_filter_attribute_list', $attribute_list );
 }
 
 /**
