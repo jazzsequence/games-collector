@@ -105,6 +105,7 @@ function get_game_info( $game_id ) {
 			echo get_playing_time( $game->ID ); // WPCS: XSS ok, already sanitized.
 			echo get_age( $game->ID );          // WPCS: XSS ok, already sanitized.
 			echo get_difficulty( $game->ID );   // WPCS: XSS ok, already sanitized.
+			echo get_attributes( $game->ID );   // WPCS: XSS ok, already sanitized.
 			?>
 		</div>
 
