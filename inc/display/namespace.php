@@ -39,35 +39,9 @@ function shortcode() {
 		<?php foreach ( $games as $game ) { ?>
 			<div <?php post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
 
-				$players_min_max = Game\get_players_min_max( $game->ID );
-				// Output game info. ?>
-
-				<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
-					<?php if ( isset( $players_min_max['min'] ) ) { ?>
-						<span class="gc-icon icon-game-players"></span><span class="game-num-players" id="game-<?php echo absint( $game->ID ); ?>-num-players"><?php echo esc_attr( sprintf(
-							// Translators: 1: Minimum number of players, 2: Maximum number of players.
-							__( '%1$d %2$s players', 'games-collector' ),
-							absint( $players_min_max['min'] ),
-							isset( $players_min_max['max'] ) ? sprintf( '- %d', absint( $players_min_max['max'] ) ) : ''
-						) ); ?></span>
-					<?php } ?>
-
-					<?php if ( $playing_time = get_post_meta( $game->ID, '_gc_time', true ) ) { ?>
-						<span class="gc-icon icon-game-time"></span><span class="game-playing-time" id="game-<?php echo absint( $game->ID ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
-					<?php } ?>
-
-					<?php if ( $age = get_post_meta( $game->ID, '_gc_age', true ) ) { ?>
-						<span class="gc-icon icon-game-age"></span><span class="game-age" id="game-<?php echo absint( $game->ID ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
-					<?php } ?>
-
-					<?php if ( $difficulty = get_post_meta( $game->ID, '_gc_difficulty', true ) ) { ?>
-						<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game->ID ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
-					<?php } ?>
-
-					<?php echo get_attributes( $game->ID ); // WPCS: XSS ok, validation ok, already sanitized. ?>
-				</div>
 				<?php
 				echo get_game_title( $game );    // WPCS: XSS ok, already sanitized.
+				echo get_game_info( $game->ID ); // WPCS: XSS ok, already sanitized.
 				?>
 
 			</div>
@@ -113,6 +87,22 @@ function get_game_title( $game ) {
 	 * @param int    $game_id The game's post ID.
 	 */
 	return apply_filters( 'gc_filter_game_title', $output, $game_id );
+}
+
+/**
+ * Return the game info (post meta and taxonomies).
+ *
+ * @since  1.0.0
+ * @param  int $game_id The game's post ID.
+ * @return string       The HTML markup for the game information.
+ */
+function get_game_info( $game_id ) {
+	ob_start(); ?>
+
+		<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
+		</div>
+
+	<?php return ob_get_clean();
 }
 
 /**
