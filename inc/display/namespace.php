@@ -103,6 +103,7 @@ function get_game_info( $game_id ) {
 			<?php
 			echo get_players( $game->ID );      // WPCS: XSS ok, already sanitized.
 			echo get_playing_time( $game->ID ); // WPCS: XSS ok, already sanitized.
+			echo get_age( $game->ID );          // WPCS: XSS ok, already sanitized.
 			?>
 		</div>
 
@@ -256,6 +257,32 @@ function get_playing_time( $game_id ) {
 		 * @var   string The HTML markup for playing time.
 		 */
 		return apply_filters( 'gc_filter_playing_time', $output );
+	}
+
+	return false;
+}
+
+/**
+ * Return the game age.
+ *
+ * @since  1.0.0
+ * @param  int $game_id The game's post ID.
+ * @return mixed        The HTML markup for age or false if not set.
+ */
+function get_age( $game_id ) {
+	if ( $age = get_post_meta( $game_id, '_gc_age', true ) ) {
+		ob_start(); ?>
+		<span class="gc-icon icon-game-age"></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
+
+		<?php $output = ob_get_clean();
+
+		/**
+		 * Allow the age output to be filtered (but only if it has been set).
+		 *
+		 * @since 1.0.0
+		 * @var   string The HTML markup for age.
+		 */
+		return apply_filters( 'gc_filter_age', $output );
 	}
 
 	return false;
