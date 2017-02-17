@@ -184,7 +184,7 @@ function get_buttons() {
 	$output = $show_all . $terms_buttons . $short_games . $long_games . $kids_games . $adult_games;
 
 	/**
-	 * Allow buttons to be filtered.
+	 * Allow entire output to be filtered.
 	 *
 	 * @since 1.0.0
 	 * @var   string HTML markup for buttons.
