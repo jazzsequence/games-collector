@@ -46,5 +46,8 @@ require_once dirname( __FILE__ ) . '/inc/attributes/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/display/namespace.php';
 require_once dirname( __FILE__ ) . '/inc/functions.php';
 
+// Register activation hook.
+register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
+
 // Kick it off.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
