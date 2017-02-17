@@ -142,6 +142,14 @@ function get_buttons() {
 	$show_all = apply_filters( 'gc_filter_button_show_all', $show_all );
 
 	/**
+	 * Allow the attribute term buttons to be filtered. This will filter _all_ the term buttons. Can be hooked to __return_false to disable term buttons.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for all attribute term buttons.
+	 */
+	$terms_buttons = apply_filters( 'gc_filter_term_buttons', $terms_buttons );
+
+	/**
 	 * Allow Short Games button to be filtered. Can be hooked to __return_false to disable.
 	 *
 	 * @since 1.1.0
