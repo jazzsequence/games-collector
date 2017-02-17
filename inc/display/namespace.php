@@ -266,7 +266,7 @@ function get_filters() {
  * @uses                Attributes\get_the_attribute_list
  */
 function get_attributes( $game_id ) {
-	$attribute_list = Attributes\get_the_attribute_list( $game_id, '<span class="gc-icon icon-game-attributes"></span>
+	$attribute_list = Attributes\get_the_attribute_list( $game_id, '<span class="gc-icon icon-game-attributes">' . get_svg( 'tags', false ) . '</span>
 					<span class="game-attributes" id="game-' . absint( $game_id ) . '-attributes">', ', ', '</span>' );
 
 	/**
@@ -293,7 +293,7 @@ function get_players( $game_id ) {
 	if ( isset( $players_min_max['min'] ) ) {
 			ob_start(); ?>
 
-		<span class="gc-icon icon-game-players"></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
+		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
 			// Translators: 1: Minimum number of players, 2: Maximum number of players.
 			__( '%1$d %2$s players', 'games-collector' ),
 			absint( $players_min_max['min'] ),
@@ -326,7 +326,7 @@ function get_players( $game_id ) {
 function get_difficulty( $game_id ) {
 	if ( $difficulty = get_post_meta( $game_id, '_gc_difficulty', true ) ) {
 		ob_start(); ?>
-		<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
+		<span class="gc-icon icon-game-difficulty"><?php the_svg( 'difficulty', false ); ?></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 
 		<?php $output = ob_get_clean();
 
@@ -353,7 +353,7 @@ function get_difficulty( $game_id ) {
 function get_playing_time( $game_id ) {
 	if ( $playing_time = get_post_meta( $game_id, '_gc_time', true ) ) {
 		ob_start(); ?>
-		<span class="gc-icon icon-game-time"></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
+		<span class="gc-icon icon-game-time"><?php the_svg( 'time', false ); ?></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
 
 		<?php $output = ob_get_clean();
 
@@ -379,7 +379,7 @@ function get_playing_time( $game_id ) {
 function get_age( $game_id ) {
 	if ( $age = get_post_meta( $game_id, '_gc_age', true ) ) {
 		ob_start(); ?>
-		<span class="gc-icon icon-game-age"></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
+		<span class="gc-icon icon-game-age"><?php the_svg( 'age', false ); ?></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
 
 		<?php $output = ob_get_clean();
 
@@ -406,7 +406,7 @@ function enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/css/games-collector.css', [], '0.2' );
+	wp_enqueue_style( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/css/games-collector.css', [], '1.1.0-r2' );
 	wp_enqueue_script( 'isotope', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/js/isotope.pkgd.min.js', [ 'jquery' ], '3.0.1', true );
 	wp_enqueue_script( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/js/games-collector.js', [ 'jquery', 'isotope' ], '0.2' );
 }
