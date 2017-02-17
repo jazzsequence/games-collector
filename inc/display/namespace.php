@@ -481,3 +481,14 @@ function get_svg( $name = '', $encoded = true ) {
 
 	return $icons[ $name ];
 }
+
+/**
+ * Get a SVG icon by name. Wrapper for get_svg.
+ *
+ * @since  1.1.0
+ * @param  string $name    An icon name.
+ * @param  bool   $encoded Whether to return the svg as a base64 encoded image (for background images) or the raw SVG XML.
+ */
+function the_svg( $name = '', $encoded = true ) {
+	echo get_svg( $name, $encoded ); // WPCS: XSS ok.
+}
