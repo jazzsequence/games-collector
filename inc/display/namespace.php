@@ -120,18 +120,60 @@ function get_game_info( $game_id ) {
  */
 function get_buttons() {
 	$terms = get_terms( 'gc_attribute' );
-	ob_start(); ?>
 
-	<button data-filter="*"><?php esc_html_e( 'Show All', 'games-collector' ); ?></button>
-	<?php foreach ( $terms as $term ) { ?>
-		<button data-filter=".gc_attribute-<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_attr( $term->name ); ?></button>
-	<?php } ?>
-	<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
-	<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
-	<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
-	<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
+	$show_all    = '<button data-filter="*">' . esc_html__( 'Show All', 'games-collector' ) . '</button>';
+	$short_games = '<button data-filter=".short">' . esc_html__( 'Short Games', 'games-collector' ) . '</button>';
+	$long_games  = '<button data-filter = ".long">' . esc_html__( 'Long Games', 'games-collector' ) . '</button>';
+	$kids_games  = '<button data-filter = ".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">' . esc_html__( 'Good for Kids', 'games-collector' ) . '</button>';
+	$adult_games = '<button data-filter=".mature">' . esc_html__( 'Adult Games', 'games-collector' ) . '</button>';
 
-	<?php $output = ob_get_clean();
+	// Loop through terms to generate all those buttons. These won't be filterable.
+	$terms_buttons = '';
+	foreach ( $terms as $term ) {
+		$terms_buttons .= '<button data-filter=".gc_attribute-' . esc_attr( $term->slug ) . '">' . esc_attr( $term->name ) . '</button>';
+	}
+
+	/**
+	 * Allow Show All button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Show All button.
+	 */
+	$show_all = apply_filters( 'gc_filter_button_show_all', $show_all );
+
+	/**
+	 * Allow Short Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Short Games button.
+	 */
+	$short_games = apply_filters( 'gc_filter_button_short_games', $short_games );
+
+	/**
+	 * Allow Long Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Long Games button.
+	 */
+	$long_games = apply_filters( 'gc_filter_button_long_games', $long_games );
+
+	/**
+	 * Allow Kids Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Kids Games button.
+	 */
+	$kids_games = apply_filters( 'gc_filter_button_kids_games', $kids_games );
+
+	/**
+	 * Allow Adults Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Adults Games button.
+	 */
+	$adult_games = apply_filters( 'gc_filter_button_adult_games', $adult_games );
+
+	$output = $show_all . $terms_buttons . $short_games . $long_games . $kids_games . $adult_games;
 
 	/**
 	 * Allow buttons to be filtered.
