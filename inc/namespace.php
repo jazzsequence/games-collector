@@ -23,3 +23,22 @@ function bootstrap() {
 	add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\\Display\\enqueue_scripts' );
 	add_shortcode( 'games-collector',    __NAMESPACE__ . '\\Display\\shortcode' );
 }
+
+/**
+ * Create a new page with the games-collector shortcode in it on activation if a Games page doesn't already exist.
+ *
+ * @since  1.1.0
+ * @return int Post ID of new Games page.
+ */
+function activate() {
+	if ( ! get_page_by_title( esc_html__( 'Games', 'games-collector' ) ) ) {
+		$post_id = wp_insert_post([
+			'post_type'    => 'page',
+			'post_title'   => esc_html__( 'Games', 'games-collector' ),
+			'post_content' => '[games-collector]',
+			'post_status'  => 'publish',
+		] );
+	}
+
+	return $post_id;
+}
