@@ -99,13 +99,13 @@ function get_game_title( $game ) {
 function get_game_info( $game_id ) {
 	ob_start(); ?>
 
-		<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
+		<div class="game-info" id="game-<?php echo absint( $game_id ); ?>-info">
 			<?php
-			echo get_players( $game->ID );      // WPCS: XSS ok, already sanitized.
-			echo get_playing_time( $game->ID ); // WPCS: XSS ok, already sanitized.
-			echo get_age( $game->ID );          // WPCS: XSS ok, already sanitized.
-			echo get_difficulty( $game->ID );   // WPCS: XSS ok, already sanitized.
-			echo get_attributes( $game->ID );   // WPCS: XSS ok, already sanitized.
+			echo get_players( $game_id );      // WPCS: XSS ok, already sanitized.
+			echo get_playing_time( $game_id ); // WPCS: XSS ok, already sanitized.
+			echo get_age( $game_id );          // WPCS: XSS ok, already sanitized.
+			echo get_difficulty( $game_id );   // WPCS: XSS ok, already sanitized.
+			echo get_attributes( $game_id );   // WPCS: XSS ok, already sanitized.
 			?>
 		</div>
 
