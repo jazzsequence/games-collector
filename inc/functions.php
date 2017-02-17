@@ -8,6 +8,10 @@
  * @since   0.2
  */
 
+use \GC\GamesCollector\Game;
+use \GC\GamesCollector\Shortcode;
+use \GC\GamesCollector\Attributes;
+
 /**
  * Returns the difficulty for a game.
  *
@@ -16,7 +20,7 @@
  * @return string           The human-readable difficulty level (not the meta value saved).
  */
 function gc_get_difficulty( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_difficulty( $post_id );
+	return Game\get_difficulty( $post_id );
 }
 
 /**
@@ -25,7 +29,7 @@ function gc_get_difficulty( $post_id = 0 ) {
  * @since 0.2
  */
 function gc_the_difficulty() {
-	echo esc_html( \GC\GamesCollector\Game\get_difficulty() );
+	echo esc_html( Game\get_difficulty() );
 }
 
 /**
@@ -36,7 +40,7 @@ function gc_the_difficulty() {
  * @return string      The age range for the game.
  */
 function gc_get_age( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_age( $post_id );
+	return Game\get_age( $post_id );
 }
 
 /**
@@ -45,7 +49,7 @@ function gc_get_age( $post_id = 0 ) {
  * @since 0.2
  */
 function gc_the_age() {
-	echo esc_html( \GC\GamesCollector\Game\get_age() );
+	echo esc_html( Game\get_age() );
 }
 
 /**
@@ -56,7 +60,7 @@ function gc_the_age() {
  * @return string       The number of players for the game.
  */
 function gc_get_number_of_players( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_number_of_players( $post_id );
+	return Game\get_number_of_players( $post_id );
 }
 
 /**
@@ -65,7 +69,7 @@ function gc_get_number_of_players( $post_id = 0 ) {
  * @since 0.2
  */
 function gc_the_number_of_players() {
-	echo esc_html( \GC\GamesCollector\Game\get_number_of_players() );
+	echo esc_html( Game\get_number_of_players() );
 }
 
 /**
@@ -76,7 +80,7 @@ function gc_the_number_of_players() {
  * @return array            An array containing the minimum and maximum number of players for the game.
  */
 function gc_get_players_min_max( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_players_min_max( $post_id );
+	return Game\get_players_min_max( $post_id );
 }
 
 /**
@@ -86,7 +90,7 @@ function gc_get_players_min_max( $post_id = 0 ) {
  * @return string All the games in formatted HTML.
  */
 function gc_get_games() {
-	return \GC\GamesCollector\Shortcode\shortcode();
+	return Shortcode\shortcode();
 }
 
 /**
@@ -95,7 +99,7 @@ function gc_get_games() {
  * @since 0.2
  */
 function gc_the_games() {
-	echo \GC\GamesCollector\Shortcode\shortcode(); // WPCS: XSS ok. Already sanitized.
+	echo Shortcode\shortcode(); // WPCS: XSS ok. Already sanitized.
 }
 
 /**
@@ -109,5 +113,5 @@ function gc_the_games() {
  * @return string             The sanitized list of attributes.
  */
 function gc_get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', $after = '' ) {
-	return \GC\GamesCollector\Attributes\get_the_attribute_list( $post_id, $before, $seperator, $after );
+	return Attributes\get_the_attribute_list( $post_id, $before, $seperator, $after );
 }
