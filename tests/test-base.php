@@ -6,6 +6,8 @@
  * @package GC\GamesCollector
  */
 
+use GC\GamesCollector;
+
 /**
  * Games Collector base unit test class.
  */
@@ -25,6 +27,23 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 			has_action( 'plugins_loaded', 'GC\GamesCollector\bootstrap' ),
 			10,
 			'Bootstrap function not found.'
+		);
+	}
+
+	/**
+	 * Ensure that Games page was created on activation.
+	 *
+	 * @since  1.1.0
+	 * @covers GC\GamesCollector\activate
+	 */
+	function test_games_page_created_on_activation() {
+		// Make sure the activation hook actually runs.
+		GC\GamesCollector\activate();
+
+		$page = get_page_by_title( 'Games' );
+		$this->assertTrue(
+			is_object( $page ),
+			'Games page was not created on activation.'
 		);
 	}
 }
