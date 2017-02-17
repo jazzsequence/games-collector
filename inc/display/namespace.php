@@ -266,8 +266,12 @@ function get_filters() {
  * @uses                Attributes\get_the_attribute_list
  */
 function get_attributes( $game_id ) {
-	$attribute_list = Attributes\get_the_attribute_list( $game_id, '<span class="gc-icon icon-game-attributes">' . get_svg( 'tags', false ) . '</span>
-					<span class="game-attributes" id="game-' . absint( $game_id ) . '-attributes">', ', ', '</span>' );
+	$attribute_list = Attributes\get_the_attribute_list(
+		$game_id,
+		'<div class="game-attributes"><span class="gc-icon icon-game-attributes">' . get_svg( 'tags', false ) . '</span><span class="game-attributes" id="game-' . absint( $game_id ) . '-attributes">', // Before.
+		', ',                                       // Seperator.
+		'</span></div>'                             // After.
+	);
 
 	/**
 	 * Allow the attribute list to be filtered.
