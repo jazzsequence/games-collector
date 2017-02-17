@@ -13,46 +13,6 @@ use GC\GamesCollector\Game;
 use GC\GamesCollector\Attributes;
 
 /**
- * Shortcode output. Can also be run as a standalone function to display the list.
- *
- * @since  0.2
- * @return string Displays a list of all games.
- */
-function shortcode() {
-	$games = get_posts([
-		'posts_per_page' => -1,
-		'post_type'      => 'gc_game',
-		'orderby'        => 'title',
-		'order'          => 'ASC',
-	]);
-
-	ob_start(); ?>
-
-	<div class="games-filter-group">
-		<?php
-		echo get_buttons(); // WPCS: XSS ok, already sanitized.
-		echo get_filters(); // WPCS: XSS ok, already sanitized.
-		?>
-	</div>
-
-	<div class="games-collector-list">
-		<?php foreach ( $games as $game ) { ?>
-			<div <?php post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
-
-				<?php
-				echo get_game_title( $game );    // WPCS: XSS ok, already sanitized.
-				echo get_game_info( $game->ID ); // WPCS: XSS ok, already sanitized.
-				?>
-
-			</div>
-		<?php } ?>
-	</div>
-
-	<?php $content = ob_get_clean();
-	return $content;
-}
-
-/**
  * Return the game title. With link if a link was saved.
  *
  * @since  1.0.0
