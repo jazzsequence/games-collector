@@ -72,7 +72,7 @@ function get_game_title( $game ) {
 	$title = '<span class="game-title" id="game-' . absint( $game->ID ) . '-title">' . wp_kses_post( $game->post_title ) . '</span>';
 
 	// 1: Game ID, 2: Game title, 3: Link <a> tag, 4: Closing </a>.
-	$output = sprintf( '$3%s<span class="game-title" id="game-%2$d-title">%1$s</span>%4$s',
+	$output = sprintf( '%3$s<span class="game-title" id="game-%1$d-title">%2$s</span>%4$s',
 		absint( $game->ID ),
 		wp_kses_post( $game->post_title ),
 		$before,
@@ -86,7 +86,7 @@ function get_game_title( $game ) {
 	 * @param string $output  The HTML markup for the game title.
 	 * @param int    $game_id The game's post ID.
 	 */
-	return apply_filters( 'gc_filter_game_title', $output, $game_id );
+	return apply_filters( 'gc_filter_game_title', $output, $game->ID );
 }
 
 /**
@@ -99,13 +99,13 @@ function get_game_title( $game ) {
 function get_game_info( $game_id ) {
 	ob_start(); ?>
 
-		<div class="game-info" id="game-<?php echo absint( $game->ID ); ?>-info">
+		<div class="game-info" id="game-<?php echo absint( $game_id ); ?>-info">
 			<?php
-			echo get_players( $game->ID );      // WPCS: XSS ok, already sanitized.
-			echo get_playing_time( $game->ID ); // WPCS: XSS ok, already sanitized.
-			echo get_age( $game->ID );          // WPCS: XSS ok, already sanitized.
-			echo get_difficulty( $game->ID );   // WPCS: XSS ok, already sanitized.
-			echo get_attributes( $game->ID );   // WPCS: XSS ok, already sanitized.
+			echo get_players( $game_id );      // WPCS: XSS ok, already sanitized.
+			echo get_playing_time( $game_id ); // WPCS: XSS ok, already sanitized.
+			echo get_age( $game_id );          // WPCS: XSS ok, already sanitized.
+			echo get_difficulty( $game_id );   // WPCS: XSS ok, already sanitized.
+			echo get_attributes( $game_id );   // WPCS: XSS ok, already sanitized.
 			?>
 		</div>
 
