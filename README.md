@@ -40,6 +40,9 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ### 1.1.0 ###
 * Add activation hook that will create a Games page with the shortcode on plugin activation.
 * Fixed some display errors and undefined notices on titles.
+* Added more filters for display output. Now buttons can be filtered individually and therefore disabled.
+* Switched to SVG images for game info icons which required some CSS changes.
+* Cleaned up spacing for game attributes.
 
 ### 1.0.0 ###
 * abstracted display elements into smaller functions and made them filterable
