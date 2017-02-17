@@ -52,3 +52,14 @@ function shortcode() {
 	<?php $content = ob_get_clean();
 	return $content;
 }
+
+function shortcode_ui() {
+	shortcode_ui_register_for_shortcode(
+		'games-collector',
+		[
+			'label' => esc_html__( 'Games', 'games-collector' ),
+			'listItemImage' => '<img src="' . Display\get_svg( 'dice' ) . '" />',
+		]
+	);
+}
+
