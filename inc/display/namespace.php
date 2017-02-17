@@ -86,7 +86,7 @@ function get_game_title( $game ) {
 	 * @param string $output  The HTML markup for the game title.
 	 * @param int    $game_id The game's post ID.
 	 */
-	return apply_filters( 'gc_filter_game_title', $output, $game_id );
+	return apply_filters( 'gc_filter_game_title', $output, $game->ID );
 }
 
 /**
