@@ -412,7 +412,7 @@ function enqueue_scripts() {
 }
 
 /**
- * Get a base64-encoded icon by name.
+ * Get a SVG icon by name.
  *
  * @since  0.2
  * @param  string $name    An icon name.
