@@ -199,27 +199,54 @@ function get_buttons() {
  * @return string Select markup for filters.
  */
 function get_filters() {
-	ob_start(); ?>
-	<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
+	$player_filter     = '<div class="player-filter"><label for="players-filter-select">' . esc_html__( 'How many players?', 'games-collector' ) . ':</label>
 		<select class="players-filter-select">
-			<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
-			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '2+ players', 'games-collector' ); ?></option>
-			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '4+ players', 'games-collector' ); ?></option>
-			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '5+ players', 'games-collector' ); ?></option>
-			<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '6+ players', 'games-collector' ); ?></option>
-			<option value=".8-players,.min-8-players,.8-or-more-players"><?php esc_html_e( '8+ players', 'games-collector' ); ?></option>
+			<option selected>- ' . esc_html__( 'Select one', 'games-collector' ) . ' -</option>
+			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '2+ players', 'games-collector' ) . '</option>
+			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '4+ players', 'games-collector' ) . '</option>
+			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '5+ players', 'games-collector' ) . '</option>
+			<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '6+ players', 'games-collector' ) . '</option>
+			<option value=".8-players,.min-8-players,.8-or-more-players">' . esc_html__( '8+ players', 'games-collector' ) . '</option>
 		</select>
-	</div>
-	<div class="difficulty-filter"><label for="difficulty-filter-select"><?php esc_html_e( 'Difficulty', 'games-collector' ); ?>:</label>
-		<select class="difficulty-filter-select">
-			<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
-			<?php foreach ( Game\get_difficulties() as $key => $value ) {  ?>
-				<option value=".<?php echo esc_html( $key ); ?>"><?php echo esc_html( $value ); ?></option>
-			<?php } ?>
-		</select>
-	</div>
+	</div>';
 
-	<?php $output = ob_get_clean();
+	$game_difficulties = '';
+
+	foreach ( Game\get_difficulties() as $key => $value ) {
+		$game_difficulties = '<option value=".' . esc_html( $key ) . '">' . esc_html( $value ) . '</option>';
+	}
+
+	/**
+	 * Allow game difficulties select options to be filtered.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup of <option> tags for difficulties select input.
+	 */
+	$game_difficulties = apply_filters( 'gc_filter_options_difficulties', $game_difficulties );
+
+	$difficulty_filter = '<div class="difficulty-filter"><label for="difficulty-filter-select">' . esc_html__( 'Difficulty', 'games-collector' ) . ':</label>
+		<select class="difficulty-filter-select">
+			<option selected>- ' . esc_html__( 'Select one', 'games-collector' ) . ' -</option>' . $game_difficulties . '
+		</select>
+	</div>';
+
+	/**
+	 * Allow the player filter to be filtered. Can be disabled entirely by hooking to __return_false.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for player filter.
+	 */
+	$player_filter = apply_filters( 'gc_filter_player_filter', $player_filter );
+
+	/**
+	 * Allow the difficulty filter to be filtered. Can be disabled entirely by hooking to __return_false.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for difficulty filter.
+	 */
+	$difficulty_filter = apply_filters( 'gc_filter_difficulty_filter', $difficulty_filter );
+
+	$output = $player_filter . $difficulty_filter;
 
 	/**
 	 * Allow the filters to be customized.
