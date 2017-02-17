@@ -120,21 +120,71 @@ function get_game_info( $game_id ) {
  */
 function get_buttons() {
 	$terms = get_terms( 'gc_attribute' );
-	ob_start(); ?>
 
-	<button data-filter="*"><?php esc_html_e( 'Show All', 'games-collector' ); ?></button>
-	<?php foreach ( $terms as $term ) { ?>
-		<button data-filter=".gc_attribute-<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_attr( $term->name ); ?></button>
-	<?php } ?>
-	<button data-filter=".short"><?php esc_html_e( 'Short Games', 'games-collector' ); ?></button>
-	<button data-filter=".long"><?php esc_html_e( 'Long Games', 'games-collector' ); ?></button>
-	<button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up"><?php esc_html_e( 'Good for Kids', 'games-collector' ); ?></button>
-	<button data-filter=".mature"><?php esc_html_e( 'Adult Games', 'games-collector' ); ?></button>
+	$show_all    = '<button data-filter="*">' . esc_html__( 'Show All', 'games-collector' ) . '</button>';
+	$short_games = '<button data-filter=".short">' . esc_html__( 'Short Games', 'games-collector' ) . '</button>';
+	$long_games  = '<button data-filter = ".long">' . esc_html__( 'Long Games', 'games-collector' ) . '</button>';
+	$kids_games  = '<button data-filter = ".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">' . esc_html__( 'Good for Kids', 'games-collector' ) . '</button>';
+	$adult_games = '<button data-filter=".mature">' . esc_html__( 'Adult Games', 'games-collector' ) . '</button>';
 
-	<?php $output = ob_get_clean();
+	// Loop through terms to generate all those buttons. These won't be filterable.
+	$terms_buttons = '';
+	foreach ( $terms as $term ) {
+		$terms_buttons .= '<button data-filter=".gc_attribute-' . esc_attr( $term->slug ) . '">' . esc_attr( $term->name ) . '</button>';
+	}
 
 	/**
-	 * Allow buttons to be filtered.
+	 * Allow Show All button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Show All button.
+	 */
+	$show_all = apply_filters( 'gc_filter_button_show_all', $show_all );
+
+	/**
+	 * Allow the attribute term buttons to be filtered. This will filter _all_ the term buttons. Can be hooked to __return_false to disable term buttons.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for all attribute term buttons.
+	 */
+	$terms_buttons = apply_filters( 'gc_filter_term_buttons', $terms_buttons );
+
+	/**
+	 * Allow Short Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Short Games button.
+	 */
+	$short_games = apply_filters( 'gc_filter_button_short_games', $short_games );
+
+	/**
+	 * Allow Long Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Long Games button.
+	 */
+	$long_games = apply_filters( 'gc_filter_button_long_games', $long_games );
+
+	/**
+	 * Allow Kids Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Kids Games button.
+	 */
+	$kids_games = apply_filters( 'gc_filter_button_kids_games', $kids_games );
+
+	/**
+	 * Allow Adults Games button to be filtered. Can be hooked to __return_false to disable.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for Adults Games button.
+	 */
+	$adult_games = apply_filters( 'gc_filter_button_adult_games', $adult_games );
+
+	$output = $show_all . $terms_buttons . $short_games . $long_games . $kids_games . $adult_games;
+
+	/**
+	 * Allow entire output to be filtered.
 	 *
 	 * @since 1.0.0
 	 * @var   string HTML markup for buttons.
@@ -149,27 +199,54 @@ function get_buttons() {
  * @return string Select markup for filters.
  */
 function get_filters() {
-	ob_start(); ?>
-	<div class="player-filter"><label for="players-filter-select"><?php esc_html_e( 'How many players?', 'games-collector' ); ?>:</label>
+	$player_filter     = '<div class="player-filter"><label for="players-filter-select">' . esc_html__( 'How many players?', 'games-collector' ) . ':</label>
 		<select class="players-filter-select">
-			<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
-			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '2+ players', 'games-collector' ); ?></option>
-			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '4+ players', 'games-collector' ); ?></option>
-			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '5+ players', 'games-collector' ); ?></option>
-			<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players"><?php esc_html_e( '6+ players', 'games-collector' ); ?></option>
-			<option value=".8-players,.min-8-players,.8-or-more-players"><?php esc_html_e( '8+ players', 'games-collector' ); ?></option>
+			<option selected>- ' . esc_html__( 'Select one', 'games-collector' ) . ' -</option>
+			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '2+ players', 'games-collector' ) . '</option>
+			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '4+ players', 'games-collector' ) . '</option>
+			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '5+ players', 'games-collector' ) . '</option>
+			<option value=".6-players,.min-6-players,.max-6-players,.max-7-players,.8-or-more-players">' . esc_html__( '6+ players', 'games-collector' ) . '</option>
+			<option value=".8-players,.min-8-players,.8-or-more-players">' . esc_html__( '8+ players', 'games-collector' ) . '</option>
 		</select>
-	</div>
-	<div class="difficulty-filter"><label for="difficulty-filter-select"><?php esc_html_e( 'Difficulty', 'games-collector' ); ?>:</label>
-		<select class="difficulty-filter-select">
-			<option selected>- <?php esc_html_e( 'Select one', 'games-collector' ); ?> -</option>
-			<?php foreach ( Game\get_difficulties() as $key => $value ) {  ?>
-				<option value=".<?php echo esc_html( $key ); ?>"><?php echo esc_html( $value ); ?></option>
-			<?php } ?>
-		</select>
-	</div>
+	</div>';
 
-	<?php $output = ob_get_clean();
+	$game_difficulties = '';
+
+	foreach ( Game\get_difficulties() as $key => $value ) {
+		$game_difficulties = '<option value=".' . esc_html( $key ) . '">' . esc_html( $value ) . '</option>';
+	}
+
+	/**
+	 * Allow game difficulties select options to be filtered.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup of <option> tags for difficulties select input.
+	 */
+	$game_difficulties = apply_filters( 'gc_filter_options_difficulties', $game_difficulties );
+
+	$difficulty_filter = '<div class="difficulty-filter"><label for="difficulty-filter-select">' . esc_html__( 'Difficulty', 'games-collector' ) . ':</label>
+		<select class="difficulty-filter-select">
+			<option selected>- ' . esc_html__( 'Select one', 'games-collector' ) . ' -</option>' . $game_difficulties . '
+		</select>
+	</div>';
+
+	/**
+	 * Allow the player filter to be filtered. Can be disabled entirely by hooking to __return_false.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for player filter.
+	 */
+	$player_filter = apply_filters( 'gc_filter_player_filter', $player_filter );
+
+	/**
+	 * Allow the difficulty filter to be filtered. Can be disabled entirely by hooking to __return_false.
+	 *
+	 * @since 1.1.0
+	 * @var   string HTML markup for difficulty filter.
+	 */
+	$difficulty_filter = apply_filters( 'gc_filter_difficulty_filter', $difficulty_filter );
+
+	$output = $player_filter . $difficulty_filter;
 
 	/**
 	 * Allow the filters to be customized.
@@ -189,8 +266,12 @@ function get_filters() {
  * @uses                Attributes\get_the_attribute_list
  */
 function get_attributes( $game_id ) {
-	$attribute_list = Attributes\get_the_attribute_list( $game_id, '<span class="gc-icon icon-game-attributes"></span>
-					<span class="game-attributes" id="game-' . absint( $game_id ) . '-attributes">', ', ', '</span>' );
+	$attribute_list = Attributes\get_the_attribute_list(
+		$game_id,
+		'<div class="game-attributes"><span class="gc-icon icon-game-attributes">' . get_svg( 'tags', false ) . '</span><span class="game-attributes" id="game-' . absint( $game_id ) . '-attributes">', // Before.
+		', ',                                       // Seperator.
+		'</span></div>'                             // After.
+	);
 
 	/**
 	 * Allow the attribute list to be filtered.
@@ -216,7 +297,7 @@ function get_players( $game_id ) {
 	if ( isset( $players_min_max['min'] ) ) {
 			ob_start(); ?>
 
-		<span class="gc-icon icon-game-players"></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
+		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
 			// Translators: 1: Minimum number of players, 2: Maximum number of players.
 			__( '%1$d %2$s players', 'games-collector' ),
 			absint( $players_min_max['min'] ),
@@ -249,7 +330,7 @@ function get_players( $game_id ) {
 function get_difficulty( $game_id ) {
 	if ( $difficulty = get_post_meta( $game_id, '_gc_difficulty', true ) ) {
 		ob_start(); ?>
-		<span class="gc-icon icon-game-difficulty"></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
+		<span class="gc-icon icon-game-difficulty"><?php the_svg( 'difficulty', false ); ?></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 
 		<?php $output = ob_get_clean();
 
@@ -276,7 +357,7 @@ function get_difficulty( $game_id ) {
 function get_playing_time( $game_id ) {
 	if ( $playing_time = get_post_meta( $game_id, '_gc_time', true ) ) {
 		ob_start(); ?>
-		<span class="gc-icon icon-game-time"></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
+		<span class="gc-icon icon-game-time"><?php the_svg( 'time', false ); ?></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
 
 		<?php $output = ob_get_clean();
 
@@ -302,7 +383,7 @@ function get_playing_time( $game_id ) {
 function get_age( $game_id ) {
 	if ( $age = get_post_meta( $game_id, '_gc_age', true ) ) {
 		ob_start(); ?>
-		<span class="gc-icon icon-game-age"></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
+		<span class="gc-icon icon-game-age"><?php the_svg( 'age', false ); ?></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
 
 		<?php $output = ob_get_clean();
 
@@ -329,13 +410,13 @@ function enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/css/games-collector.css', [], '0.2' );
+	wp_enqueue_style( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/css/games-collector.css', [], '1.1.0-r2' );
 	wp_enqueue_script( 'isotope', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/js/isotope.pkgd.min.js', [ 'jquery' ], '3.0.1', true );
 	wp_enqueue_script( 'games-collector', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) . '/assets/js/games-collector.js', [ 'jquery', 'isotope' ], '0.2' );
 }
 
 /**
- * Get a base64-encoded icon by name.
+ * Get a SVG icon by name.
  *
  * @since  0.2
  * @param  string $name    An icon name.
@@ -399,8 +480,19 @@ function get_svg( $name = '', $encoded = true ) {
 		 *
 		 * @var array
 		 */
-		$icons = apply_filters( 'gc_filter_svg_xml', $icons );
+		$icons = apply_filters( 'gc_filter_svg_xml', Attributes\gc_kses( $icons ) );
 	}
 
 	return $icons[ $name ];
+}
+
+/**
+ * Get a SVG icon by name. Wrapper for get_svg.
+ *
+ * @since  1.1.0
+ * @param  string $name    An icon name.
+ * @param  bool   $encoded Whether to return the svg as a base64 encoded image (for background images) or the raw SVG XML.
+ */
+function the_svg( $name = '', $encoded = true ) {
+	echo get_svg( $name, $encoded ); // WPCS: XSS ok.
 }
