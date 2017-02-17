@@ -29,6 +29,10 @@
     padding-right: 0em;
 }
 
+div.game-attributes {
+	display: block;
+}
+
 svg.gc-icon {
 	height: 1.1em;
 }
