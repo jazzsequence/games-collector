@@ -27,4 +27,18 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 			'Bootstrap function not found.'
 		);
 	}
+
+	/**
+	 * Ensure that Games page was created on activation.
+	 *
+	 * @since  1.1.0
+	 * @covers GC\GamesCollector\activate
+	 */
+	function test_games_page_created_on_activation() {
+		$page = get_page_by_title( 'Games' );
+		$this->assertTrue(
+			is_object( $page ),
+			'Games page was not created on activation.'
+		);
+	}
 }
