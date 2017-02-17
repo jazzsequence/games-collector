@@ -7,7 +7,7 @@
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      4.7  
-**Stable tag:**        1.0.0  
+**Stable tag:**        1.1.0  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
 **Demo:**              https://jazzsequence.com/games/
@@ -36,6 +36,10 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ![Games Collector admin](https://jazzsequence.com/wp-content/uploads/2017/02/Screenshot-2017-02-03-15.06.17.png)
 
 ## Changelog ##
+
+### 1.1.0 ###
+* Add activation hook that will create a Games page with the shortcode on plugin activation.
+* Fixed some display errors and undefined notices on titles.
 
 ### 1.0.0 ###
 * abstracted display elements into smaller functions and made them filterable
