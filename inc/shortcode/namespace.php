@@ -19,13 +19,6 @@ use GC\GamesCollector\Display;
  * @since  0.2
  * @return string Displays a list of all games.
  */
-function shortcode() {
-	$games = get_posts([
-		'posts_per_page' => -1,
-		'post_type'      => 'gc_game',
-		'orderby'        => 'title',
-		'order'          => 'ASC',
-	]);
 function shortcode( $atts ) {
 	$atts = shortcode_atts([
 		'id' => '',
@@ -38,6 +31,7 @@ function shortcode( $atts ) {
 		$post_id = 0;
 	}
 
+	$games = get_games( $post_id );
 	ob_start(); ?>
 
 	<div class="games-filter-group">
