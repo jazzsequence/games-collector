@@ -53,6 +53,11 @@ function shortcode() {
 	return $content;
 }
 
+/**
+ * Register the shortcode with shortcode ui.
+ *
+ * @since 1.1.0
+ */
 function shortcode_ui() {
 	shortcode_ui_register_for_shortcode(
 		'games-collector',
