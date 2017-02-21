@@ -58,7 +58,7 @@ function shortcode_ui() {
 		'games-collector',
 		[
 			'label' => esc_html__( 'Games', 'games-collector' ),
-			'listItemImage' => '<img src="' . Display\get_svg( 'dice' ) . '" />',
+			'listItemImage' => '<img src="' . Display\get_svg( 'dice-alt' ) . '" />',
 		]
 	);
 }
