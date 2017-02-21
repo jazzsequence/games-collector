@@ -21,7 +21,8 @@ function bootstrap() {
 	add_action( 'add_meta_boxes',        __NAMESPACE__ . '\\Attributes\\metabox' );
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Attributes\\enqueue_scripts' );
 	add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\\Display\\enqueue_scripts' );
-	add_action( 'register_shortcode_ui', __NAMESPACE__ . '\\Shortcode\\shortcode_ui' );
+	add_action( 'register_shortcode_ui', __NAMESPACE__ . '\\Shortcode\\register_all_games_shortcode' );
+	add_action( 'register_shortcode_ui', __NAMESPACE__ . '\\Shortcode\\register_individual_games_shortcode' );
 	add_shortcode( 'games-collector',    __NAMESPACE__ . '\\Shortcode\\shortcode' );
 	add_shortcode( 'games-collector-list', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 }
