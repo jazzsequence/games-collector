@@ -62,17 +62,27 @@ function shortcode( $atts ) {
  * Return an array of games. If an ID is passed, will return an array with a single, specific game. Used in the shortcode.
  *
  * @since  1.1.0
- * @param  integer $post_id A game post ID.
+ * @param  mixed $post_ids A game post ID or comma-separated list of IDs.
  * @return array            An array of Game WP_Post objects.
  */
-function get_games( $post_id = 0 ) {
-	$post_id = absint( $post_id );
+function get_games( $post_ids = 0 ) {
+	if ( 0 === $post_ids ) {
+		$post_ids = false;
+	} elseif ( false !== strpos( $post_ids, ',' ) ) {
+		$post_ids = explode( ',', $post_ids );
+	} else {
+		$post_ids = [ absint( $post_ids ) ];
+	}
 
-	if ( 0 !== $post_id ) {
+	if ( $post_ids ) {
+		// If we're only displaying select games, don't show the filters.
+		add_filter( 'gc_filter_buttons',      '__return_null' );
+		add_filter( 'gc_filter_game_filters', '__return_null' );
+
 		return get_posts([
-			'posts_per_page' => 1,
+			'posts_per_page' => count( $post_ids ),
 			'post_type'      => 'gc_game',
-			'ID'             => $post_id,
+			'post__in'       => $post_ids,
 		]);
 	}
 
