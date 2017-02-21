@@ -31,7 +31,7 @@ function shortcode( $atts ) {
 		$post_ids = $atts['gc_game'];
 	}
 
-	$games = get_games( $post_id );
+	$games = get_games( $post_ids );
 	ob_start(); ?>
 
 	<div class="games-filter-group">
