@@ -25,10 +25,10 @@ function shortcode( $atts ) {
 	], $atts );
 
 	// Get the ID from the atts, if one was set, so we can get a single game (or all games).
-	if ( isset( $atts['id'] ) ) {
-		$post_id = absint( $atts['id'] );
+	if ( '' === $atts['gc_game'] ) {
+		$post_ids = 0;
 	} else {
-		$post_id = 0;
+		$post_ids = $atts['gc_game'];
 	}
 
 	$games = get_games( $post_id );
