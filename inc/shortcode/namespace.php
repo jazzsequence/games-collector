@@ -26,6 +26,17 @@ function shortcode() {
 		'orderby'        => 'title',
 		'order'          => 'ASC',
 	]);
+function shortcode( $atts ) {
+	$atts = shortcode_atts([
+		'id' => '',
+	], $atts );
+
+	// Get the ID from the atts, if one was set, so we can get a single game (or all games).
+	if ( isset( $atts['id'] ) ) {
+		$post_id = absint( $atts['id'] );
+	} else {
+		$post_id = 0;
+	}
 
 	ob_start(); ?>
 
