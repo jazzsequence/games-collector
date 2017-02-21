@@ -95,16 +95,41 @@ function get_games( $post_ids = 0 ) {
 }
 
 /**
- * Register the shortcode with shortcode ui.
+ * Register the shortcode to list all games with shortcode ui.
  *
  * @since 1.1.0
  */
-function shortcode_ui() {
+function register_all_games_shortcode() {
 	shortcode_ui_register_for_shortcode(
 		'games-collector',
 		[
-			'label' => esc_html__( 'Games', 'games-collector' ),
+			'label' => esc_html__( 'All Games List', 'games-collector' ),
 			'listItemImage' => '<img src="' . Display\get_svg( 'dice-alt' ) . '" />',
+		]
+	);
+}
+
+/**
+ * Register the shortcode to list select games with shortcode ui.
+ *
+ * @since 1.1.0
+ */
+function register_individual_games_shortcode() {
+	shortcode_ui_register_for_shortcode(
+		'games-collector-list',
+		[
+			'label' => esc_html__( 'Individual Games', 'games-collector' ),
+			'listItemImage' => '<img src="' . Display\get_svg( 'dice-alt' ) . '" />',
+			'attrs' => [
+				[
+					'label' => esc_html__( 'Select Game(s)', 'games-collector' ),
+					'type'  => 'post_select',
+					'attr'  => 'gc_game',
+					'query' => [ 'post_type' => 'gc_game' ],
+					'multiple' => true,
+
+				],
+			],
 		]
 	);
 }
