@@ -21,7 +21,7 @@ use GC\GamesCollector\Display;
  */
 function shortcode( $atts ) {
 	$atts = shortcode_atts([
-		'id' => '',
+		'gc_game' => '',
 	], $atts );
 
 	// Get the ID from the atts, if one was set, so we can get a single game (or all games).
