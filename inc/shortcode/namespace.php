@@ -54,6 +54,32 @@ function shortcode() {
 }
 
 /**
+ * Return an array of games. If an ID is passed, will return an array with a single, specific game. Used in the shortcode.
+ *
+ * @since  1.1.0
+ * @param  integer $post_id A game post ID.
+ * @return array            An array of Game WP_Post objects.
+ */
+function get_games( $post_id = 0 ) {
+	$post_id = absint( $post_id );
+
+	if ( 0 !== $post_id ) {
+		return get_posts([
+			'posts_per_page' => 1,
+			'post_type'      => 'gc_game',
+			'ID'             => $post_id,
+		]);
+	}
+
+	return get_posts([
+		'posts_per_page' => -1,
+		'post_type'      => 'gc_game',
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+	]);
+}
+
+/**
  * Register the shortcode with shortcode ui.
  *
  * @since 1.1.0
