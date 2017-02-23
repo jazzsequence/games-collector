@@ -17,7 +17,8 @@ use GC\GamesCollector\Display;
  * Shortcode output. Can also be run as a standalone function to display the list.
  *
  * @since  0.2
- * @return string Displays a list of all games.
+ * @param  array $atts Array of shortcode attributes.
+ * @return string      Displays a list of all games.
  */
 function shortcode( $atts ) {
 	$atts = shortcode_atts([
