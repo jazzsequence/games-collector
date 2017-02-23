@@ -103,6 +103,39 @@ function gc_the_games() {
 }
 
 /**
+ * Return a game or a list of games.
+ *
+ * @since  1.1.0
+ * @param  mixed $post_ids Can be a valid game post ID, an array of games, or a comma-separated list of games.
+ * @return string          The requested games in formatted HTML.
+ */
+function gc_get_game( $post_ids = '' ) {
+	// If nothing was passed, just use gc_get_games.
+	if ( '' === $post_ids ) {
+		return gc_get_games();
+	}
+
+	// If there's a comma, we'll assume comma-separated values, so deal with normally.
+	if ( false !== strpos( $post_ids, ',' ) ) {
+		return Shortcode\shortcode( $post_ids );
+	}
+
+	// If an integer was passed, and it's a valid, non-zero integer, pass that to the shortcode atts.
+	if ( 0 !== absint( $post_ids ) && is_int( absint( $post_ids ) ) ) {
+		return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
+	}
+
+	// If an array was passed, implode the array and pass a comma-separated list of IDs to the shortcode.
+	if ( is_array( $post_ids ) ) {
+		$ids = implode( ',', $post_ids );
+		return Shortcode\shortcode( [ 'gc_game' => $ids ] );
+	}
+
+	// For all other cases, handle normally. We'll catch the issues later.
+	return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
+}
+
+/**
  * Get a list of attributes for the given post. Use instead of get_term_list.
  *
  * @since  1.0.0
