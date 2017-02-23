@@ -90,7 +90,7 @@ function gc_get_players_min_max( $post_id = 0 ) {
  * @return string All the games in formatted HTML.
  */
 function gc_get_games() {
-	return Shortcode\shortcode();
+	return Shortcode\shortcode( [] );
 }
 
 /**
@@ -99,7 +99,7 @@ function gc_get_games() {
  * @since 0.2
  */
 function gc_the_games() {
-	echo Shortcode\shortcode(); // WPCS: XSS ok. Already sanitized.
+	echo Shortcode\shortcode( [] ); // WPCS: XSS ok. Already sanitized.
 }
 
 /**
