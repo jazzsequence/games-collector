@@ -136,6 +136,16 @@ function gc_get_game( $post_ids = '' ) {
 }
 
 /**
+ * Echoes a game or list of games.
+ *
+ * @since  1.1.0
+ * @param  mixed $post_ids Can be a valid game post ID, an array of games, or a comma-separated list of games.
+ */
+function gc_the_game( $post_ids = '' ) {
+	echo gc_get_game( $post_ids ); // WPCS: XSS ok, already sanitized.
+}
+
+/**
  * Get a list of attributes for the given post. Use instead of get_term_list.
  *
  * @since  1.0.0
