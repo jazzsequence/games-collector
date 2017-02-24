@@ -72,7 +72,15 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	}
 
 	private function games_list_markup() {
-		return '<div class="games-filter-group">
+		$chrononauts = get_page_by_title( 'Chrononauts',          OBJECT, 'gc_game' );
+		$frog_juice  = get_page_by_title( 'Frog Juice',           OBJECT, 'gc_game' );
+		$hanabi      = get_page_by_title( 'Hanabi',               OBJECT, 'gc_game' );
+		$magic       = get_page_by_title( 'Magic: the Gathering', OBJECT, 'gc_game' );
+		$mp_fluxx    = get_page_by_title( 'Monty Python Fluxx',   OBJECT, 'gc_game' );
+		$ramses      = get_page_by_title( 'Ramses Return',        OBJECT, 'gc_game' );
+
+		return '
+	<div class="games-filter-group">
 		<button data-filter="*">Show All</button><button data-filter=".gc_attribute-based-on-film-tv">Based on a Film/TV Show</button><button data-filter=".gc_attribute-card">Card Game</button><button data-filter=".gc_attribute-coop">Cooperative</button><button data-filter=".gc_attribute-deck-building">Deck Building</button><button data-filter=".gc_attribute-dice">Dice Game</button><button data-filter=".gc_attribute-easy-to-learn">Easy-to-learn</button><button data-filter=".gc_attribute-fantasy">Fantasy</button><button data-filter=".gc_attribute-fast-paced">Fast-paced</button><button data-filter=".gc_attribute-strategy">Heavy Strategy</button><button data-filter=".gc_attribute-historical">Historical</button><button data-filter=".gc_attribute-party">Party Game</button><button data-filter=".gc_attribute-scifi">Sci-Fi</button><button data-filter=".gc_attribute-solo">Solo Play</button><button data-filter=".short">Short Games</button><button data-filter=".long">Long Games</button><button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">Good for Kids</button><button data-filter=".mature">Adult Games</button><div class="player-filter"><label for="players-filter-select">How many players?:</label>
 		<select class="players-filter-select">
 			<option selected="">- Select one -</option>
