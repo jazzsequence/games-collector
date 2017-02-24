@@ -6,7 +6,7 @@
  * @package GC\GamesCollector
  */
 
-use GC\GamesCollector\Shortcode;
+use GC\GamesCollector\Shortcode as Shortcode;
 
 /**
  * Games Collector Shortcode unit test class.
