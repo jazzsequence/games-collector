@@ -19,12 +19,12 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 		// Create some games.
-		$chrononauts = $this->factory->post->create( [ 'Chrononauts' ] );
-		$frog_juice  = $this->factory->post->create( [ 'Frog Juice' ] );
-		$hanabi      = $this->factory->post->create( [ 'Hanabi' ] );
-		$magic       = $this->factory->post->create( [ 'Magic: the Gathering' ] );
-		$mp_fluxx    = $this->factory->post->create( [ 'Monty Python Fluxx' ] );
-		$ramses      = $this->factory->post->create( [ 'Ramses Return' ] );
+		$chrononauts = $this->factory->post->create( [ 'post_title' => 'Chrononauts' ] );
+		$frog_juice  = $this->factory->post->create( [ 'post_title' => 'Frog Juice' ] );
+		$hanabi      = $this->factory->post->create( [ 'post_title' => 'Hanabi' ] );
+		$magic       = $this->factory->post->create( [ 'post_title' => 'Magic: the Gathering' ] );
+		$mp_fluxx    = $this->factory->post->create( [ 'post_title' => 'Monty Python Fluxx' ] );
+		$ramses      = $this->factory->post->create( [ 'post_title' => 'Ramses Return' ] );
 
 		// Add the post meta.
 		update_post_meta( $chrononauts, '_gc_min_players', 1 );
