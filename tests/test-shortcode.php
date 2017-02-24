@@ -126,10 +126,10 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		}
 
 		return '
-	<div class="games-filter-group">
-		<button data-filter="*">Show All</button><button data-filter=".gc_attribute-based-on-film-tv">Based on a Film/TV Show</button><button data-filter=".gc_attribute-card">Card Game</button><button data-filter=".gc_attribute-coop">Cooperative</button><button data-filter=".gc_attribute-deck-building">Deck Building</button><button data-filter=".gc_attribute-dice">Dice Game</button><button data-filter=".gc_attribute-easy-to-learn">Easy-to-learn</button><button data-filter=".gc_attribute-fantasy">Fantasy</button><button data-filter=".gc_attribute-fast-paced">Fast-paced</button><button data-filter=".gc_attribute-strategy">Heavy Strategy</button><button data-filter=".gc_attribute-historical">Historical</button><button data-filter=".gc_attribute-party">Party Game</button><button data-filter=".gc_attribute-scifi">Sci-Fi</button><button data-filter=".gc_attribute-solo">Solo Play</button><button data-filter=".short">Short Games</button><button data-filter=".long">Long Games</button><button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">Good for Kids</button><button data-filter=".mature">Adult Games</button><div class="player-filter"><label for="players-filter-select">How many players?:</label>
- 		<select class="players-filter-select">
-			<option>- Select one -</option>
+<div class="games-filter-group">
+		<button data-filter="*">Show All</button><button data-filter=".gc_attribute-based-on-film-tv">based-on-film-tv</button><button data-filter=".gc_attribute-card">card</button><button data-filter=".gc_attribute-coop">coop</button><button data-filter=".gc_attribute-deck-building">deck-building</button><button data-filter=".gc_attribute-dice">dice</button><button data-filter=".gc_attribute-easy-to-learn">easy-to-learn</button><button data-filter=".gc_attribute-fantasy">fantasy</button><button data-filter=".gc_attribute-fast-paced">fast-paced</button><button data-filter=".gc_attribute-historical">historical</button><button data-filter=".gc_attribute-party">party</button><button data-filter=".gc_attribute-scifi">scifi</button><button data-filter=".gc_attribute-solo">solo</button><button data-filter=".gc_attribute-strategy">strategy</button><button data-filter=".short">Short Games</button><button data-filter = ".long">Long Games</button><button data-filter = ".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">Good for Kids</button><button data-filter=".mature">Adult Games</button><div class="player-filter"><label for="players-filter-select">How many players?:</label>
+		<select class="players-filter-select">
+			<option selected>- Select one -</option>
 			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">2+ players</option>
 			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">4+ players</option>
 			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">5+ players</option>
@@ -138,9 +138,10 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		</select>
 	</div><div class="difficulty-filter"><label for="difficulty-filter-select">Difficulty:</label>
 		<select class="difficulty-filter-select">
-			<option>- Select one -</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
+			<option selected>- Select one -</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
 		</select>
 	</div>	</div>
+
 	<div class="games-collector-list">
 					<div class="game-single min-1-players max-6-players 11-and-up easy post-' . $chrononauts->ID . ' gc_game type-gc_game status-publish hentry gc_attribute-card gc_attribute-easy-to-learn gc_attribute-fast-paced gc_attribute-scifi gc_attribute-solo" id="game-' . $chrononauts->ID . '">
 
@@ -168,7 +169,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		<div class="game-attributes"><span class="gc-icon icon-game-attributes"><svg class="gc-icon svg gc-icon-tags" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="28" viewBox="0 0 30 28">
 <title>tags</title>
 <path d="M7 7c0-1.109-0.891-2-2-2s-2 0.891-2 2 0.891 2 2 2 2-0.891 2-2zM23.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578s-1.047-0.219-1.406-0.578l-11.172-11.188c-0.797-0.781-1.422-2.297-1.422-3.406v-6.5c0-1.094 0.906-2 2-2h6.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422zM29.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578-0.812 0-1.219-0.375-1.75-0.922l7.344-7.344c0.359-0.359 0.578-0.875 0.578-1.406s-0.219-1.047-0.578-1.422l-11.172-11.156c-0.797-0.797-2.312-1.422-3.422-1.422h3.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422z"></path>
-</svg></span><span class="game-attributes" id="game-' . $chrononauts->ID . '-attributes"><span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-easy-to-learn">Easy-to-learn</span>, <span class="gc-attribute attribute-fast-paced">Fast-paced</span>, <span class="gc-attribute attribute-scifi">Sci-Fi</span>, <span class="gc-attribute attribute-solo">Solo Play</span></span></div>		</div>
+</svg></span><span class="game-attributes" id="game-' . $chrononauts->ID . '-attributes"><span class="gc-attribute attribute-card">card</span>, <span class="gc-attribute attribute-easy-to-learn">easy-to-learn</span>, <span class="gc-attribute attribute-fast-paced">fast-paced</span>, <span class="gc-attribute attribute-scifi">scifi</span>, <span class="gc-attribute attribute-solo">solo</span></span></div>		</div>
 
 
 			</div>
@@ -198,7 +199,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		<div class="game-attributes"><span class="gc-icon icon-game-attributes"><svg class="gc-icon svg gc-icon-tags" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="28" viewBox="0 0 30 28">
 <title>tags</title>
 <path d="M7 7c0-1.109-0.891-2-2-2s-2 0.891-2 2 0.891 2 2 2 2-0.891 2-2zM23.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578s-1.047-0.219-1.406-0.578l-11.172-11.188c-0.797-0.781-1.422-2.297-1.422-3.406v-6.5c0-1.094 0.906-2 2-2h6.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422zM29.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578-0.812 0-1.219-0.375-1.75-0.922l7.344-7.344c0.359-0.359 0.578-0.875 0.578-1.406s-0.219-1.047-0.578-1.422l-11.172-11.156c-0.797-0.797-2.312-1.422-3.422-1.422h3.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422z"></path>
-</svg></span><span class="game-attributes" id="game-' . $frog_juice->ID . '-attributes"><span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-easy-to-learn">Easy-to-learn</span>, <span class="gc-attribute attribute-party">Party Game</span></span></div>		</div>
+</svg></span><span class="game-attributes" id="game-' . $frog_juice->ID . '-attributes"><span class="gc-attribute attribute-card">card</span>, <span class="gc-attribute attribute-easy-to-learn">easy-to-learn</span>, <span class="gc-attribute attribute-party">party</span></span></div>		</div>
 
 
 			</div>
@@ -228,7 +229,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		<div class="game-attributes"><span class="gc-icon icon-game-attributes"><svg class="gc-icon svg gc-icon-tags" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="28" viewBox="0 0 30 28">
 <title>tags</title>
 <path d="M7 7c0-1.109-0.891-2-2-2s-2 0.891-2 2 0.891 2 2 2 2-0.891 2-2zM23.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578s-1.047-0.219-1.406-0.578l-11.172-11.188c-0.797-0.781-1.422-2.297-1.422-3.406v-6.5c0-1.094 0.906-2 2-2h6.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422zM29.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578-0.812 0-1.219-0.375-1.75-0.922l7.344-7.344c0.359-0.359 0.578-0.875 0.578-1.406s-0.219-1.047-0.578-1.422l-11.172-11.156c-0.797-0.797-2.312-1.422-3.422-1.422h3.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422z"></path>
-</svg></span><span class="game-attributes" id="game-' . $hanabi->ID . '-attributes"><span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-coop">Cooperative</span>, <span class="gc-attribute attribute-easy-to-learn">Easy-to-learn</span></span></div>		</div>
+</svg></span><span class="game-attributes" id="game-' . $hanabi->ID . '-attributes"><span class="gc-attribute attribute-card">card</span>, <span class="gc-attribute attribute-coop">coop</span>, <span class="gc-attribute attribute-easy-to-learn">easy-to-learn</span></span></div>		</div>
 
 
 			</div>
@@ -253,7 +254,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		<div class="game-attributes"><span class="gc-icon icon-game-attributes"><svg class="gc-icon svg gc-icon-tags" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="28" viewBox="0 0 30 28">
 <title>tags</title>
 <path d="M7 7c0-1.109-0.891-2-2-2s-2 0.891-2 2 0.891 2 2 2 2-0.891 2-2zM23.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578s-1.047-0.219-1.406-0.578l-11.172-11.188c-0.797-0.781-1.422-2.297-1.422-3.406v-6.5c0-1.094 0.906-2 2-2h6.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422zM29.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578-0.812 0-1.219-0.375-1.75-0.922l7.344-7.344c0.359-0.359 0.578-0.875 0.578-1.406s-0.219-1.047-0.578-1.422l-11.172-11.156c-0.797-0.797-2.312-1.422-3.422-1.422h3.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422z"></path>
-</svg></span><span class="game-attributes" id="game-' . $magic->ID . '-attributes"><span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-deck-building">Deck Building</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>, <span class="gc-attribute attribute-strategy">Heavy Strategy</span></span></div>		</div>
+</svg></span><span class="game-attributes" id="game-' . $magic->ID . '-attributes"><span class="gc-attribute attribute-card">card</span>, <span class="gc-attribute attribute-deck-building">deck-building</span>, <span class="gc-attribute attribute-fantasy">fantasy</span>, <span class="gc-attribute attribute-strategy">strategy</span></span></div>		</div>
 
 
 			</div>
@@ -283,11 +284,11 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		<div class="game-attributes"><span class="gc-icon icon-game-attributes"><svg class="gc-icon svg gc-icon-tags" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="28" viewBox="0 0 30 28">
 <title>tags</title>
 <path d="M7 7c0-1.109-0.891-2-2-2s-2 0.891-2 2 0.891 2 2 2 2-0.891 2-2zM23.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578s-1.047-0.219-1.406-0.578l-11.172-11.188c-0.797-0.781-1.422-2.297-1.422-3.406v-6.5c0-1.094 0.906-2 2-2h6.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422zM29.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578-0.812 0-1.219-0.375-1.75-0.922l7.344-7.344c0.359-0.359 0.578-0.875 0.578-1.406s-0.219-1.047-0.578-1.422l-11.172-11.156c-0.797-0.797-2.312-1.422-3.422-1.422h3.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422z"></path>
-</svg></span><span class="game-attributes" id="game-' . $mp_fluxx->ID . '-attributes"><span class="gc-attribute attribute-based-on-film-tv">Based on a Film/TV Show</span>, <span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-easy-to-learn">Easy-to-learn</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>, <span class="gc-attribute attribute-fast-paced">Fast-paced</span></span></div>		</div>
+</svg></span><span class="game-attributes" id="game-' . $mp_fluxx->ID . '-attributes"><span class="gc-attribute attribute-based-on-film-tv">based-on-film-tv</span>, <span class="gc-attribute attribute-card">card</span>, <span class="gc-attribute attribute-easy-to-learn">easy-to-learn</span>, <span class="gc-attribute attribute-fantasy">fantasy</span>, <span class="gc-attribute attribute-fast-paced">fast-paced</span></span></div>		</div>
 
 
 			</div>
-					<div class="game-single min-2-players max-4-players 7-and-up easy short post-' . $ramses->ID . ' gc_game type-gc_game status-publish hentry gc_attribute-dice gc_attribute-easy-to-learn gc_attribute-fantasy gc_attribute-historical">
+					<div class="game-single min-2-players max-4-players 7-and-up easy short post-' . $ramses->ID . ' gc_game type-gc_game status-publish hentry gc_attribute-dice gc_attribute-easy-to-learn gc_attribute-fantasy gc_attribute-historical" id="game-' . $ramses->ID . '">
 
 				<span class="game-title" id="game-' . $ramses->ID . '-title">Ramses Return</span>
 		<div class="game-info" id="game-' . $ramses->ID . '-info">
@@ -313,7 +314,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		<div class="game-attributes"><span class="gc-icon icon-game-attributes"><svg class="gc-icon svg gc-icon-tags" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="28" viewBox="0 0 30 28">
 <title>tags</title>
 <path d="M7 7c0-1.109-0.891-2-2-2s-2 0.891-2 2 0.891 2 2 2 2-0.891 2-2zM23.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578s-1.047-0.219-1.406-0.578l-11.172-11.188c-0.797-0.781-1.422-2.297-1.422-3.406v-6.5c0-1.094 0.906-2 2-2h6.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422zM29.672 16c0 0.531-0.219 1.047-0.578 1.406l-7.672 7.688c-0.375 0.359-0.891 0.578-1.422 0.578-0.812 0-1.219-0.375-1.75-0.922l7.344-7.344c0.359-0.359 0.578-0.875 0.578-1.406s-0.219-1.047-0.578-1.422l-11.172-11.156c-0.797-0.797-2.312-1.422-3.422-1.422h3.5c1.109 0 2.625 0.625 3.422 1.422l11.172 11.156c0.359 0.375 0.578 0.891 0.578 1.422z"></path>
-</svg></span><span class="game-attributes" id="game-' . $ramses->ID . '-attributes"><span class="gc-attribute attribute-dice">Dice Game</span>, <span class="gc-attribute attribute-easy-to-learn">Easy-to-learn</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>, <span class="gc-attribute attribute-historical">Historical</span></span></div>		</div>
+</svg></span><span class="game-attributes" id="game-' . $ramses->ID . '-attributes"><span class="gc-attribute attribute-dice">dice</span>, <span class="gc-attribute attribute-easy-to-learn">easy-to-learn</span>, <span class="gc-attribute attribute-fantasy">fantasy</span>, <span class="gc-attribute attribute-historical">historical</span></span></div>		</div>
 
 
 			</div>
