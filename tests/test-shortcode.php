@@ -122,8 +122,6 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 				case 'Ramses Return':
 					$ramses = $game;
 					break;
-				default:
-					break;
 			}
 		}
 
