@@ -265,4 +265,22 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			</div>
 			</div>';
 	}
+
+	public function test_games_list() {
+		$expected = $this->games_list_markup();
+
+		// Test that the wrapper function returns the same thing as the shortcode function.
+		$this->assertSame(
+			Shortcode\shortcode( [] ),
+			gc_get_games(),
+			'The shortcode function output didn\'t match the wrapper function output'
+		);
+
+		// Test that the wrapper function (which we know now should be identical to the shortcode), matches the expected output.
+		$this->assertSame(
+			$expected,
+			gc_get_games(),
+			'Shortcode output didn\'t match the expected output.'
+		);
+	}
 }
