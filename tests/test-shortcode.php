@@ -82,8 +82,8 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		return '
 	<div class="games-filter-group">
 		<button data-filter="*">Show All</button><button data-filter=".gc_attribute-based-on-film-tv">Based on a Film/TV Show</button><button data-filter=".gc_attribute-card">Card Game</button><button data-filter=".gc_attribute-coop">Cooperative</button><button data-filter=".gc_attribute-deck-building">Deck Building</button><button data-filter=".gc_attribute-dice">Dice Game</button><button data-filter=".gc_attribute-easy-to-learn">Easy-to-learn</button><button data-filter=".gc_attribute-fantasy">Fantasy</button><button data-filter=".gc_attribute-fast-paced">Fast-paced</button><button data-filter=".gc_attribute-strategy">Heavy Strategy</button><button data-filter=".gc_attribute-historical">Historical</button><button data-filter=".gc_attribute-party">Party Game</button><button data-filter=".gc_attribute-scifi">Sci-Fi</button><button data-filter=".gc_attribute-solo">Solo Play</button><button data-filter=".short">Short Games</button><button data-filter=".long">Long Games</button><button data-filter=".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">Good for Kids</button><button data-filter=".mature">Adult Games</button><div class="player-filter"><label for="players-filter-select">How many players?:</label>
-		<select class="players-filter-select">
-			<option selected="">- Select one -</option>
+ 		<select class="players-filter-select">
+			<option>- Select one -</option>
 			<option value=".2-players,.min-2-players,.max-2-players,.max-3-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">2+ players</option>
 			<option value=".4-players,.min-4-players,.max-4-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">4+ players</option>
 			<option value=".5-players,.min-5-players,.max-5-players,.max-6-players,.max-7-players,.8-or-more-players">5+ players</option>
@@ -92,7 +92,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		</select>
 	</div><div class="difficulty-filter"><label for="difficulty-filter-select">Difficulty:</label>
 		<select class="difficulty-filter-select">
-			<option selected="">- Select one -</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
+			<option>- Select one -</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
 		</select>
 	</div>	</div>
 	<div class="games-collector-list" style="position: relative; height: 480px;">
