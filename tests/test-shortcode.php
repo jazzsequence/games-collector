@@ -95,8 +95,8 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			<option>- Select one -</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
 		</select>
 	</div>	</div>
-	<div class="games-collector-list" style="position: relative; height: 480px;">
 					<div class="game-single min-1-players max-6-players 11-and-up easy post-44 gc_game type-gc_game status-publish hentry gc_attribute-card gc_attribute-easy-to-learn gc_attribute-fast-paced gc_attribute-scifi gc_attribute-solo" id="game-44" style="position: absolute; left: 0px; top: 0px;">
+	<div class="games-collector-list">
 
 				<span class="game-title" id="game-44-title">Chrononauts</span>
 		<div class="game-info" id="game-44-info">
