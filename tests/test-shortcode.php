@@ -72,12 +72,12 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	}
 
 	private function games_list_markup() {
-		$chrononauts = get_page_by_title( 'Chrononauts',          OBJECT, 'gc_game' );
-		$frog_juice  = get_page_by_title( 'Frog Juice',           OBJECT, 'gc_game' );
-		$hanabi      = get_page_by_title( 'Hanabi',               OBJECT, 'gc_game' );
-		$magic       = get_page_by_title( 'Magic: the Gathering', OBJECT, 'gc_game' );
-		$mp_fluxx    = get_page_by_title( 'Monty Python Fluxx',   OBJECT, 'gc_game' );
-		$ramses      = get_page_by_title( 'Ramses Return',        OBJECT, 'gc_game' );
+		$chrononauts = get_page_by_path( sanitize_title( 'Chrononauts' ),          OBJECT, 'gc_game' );
+		$frog_juice  = get_page_by_path( sanitize_title( 'Frog Juice' ),           OBJECT, 'gc_game' );
+		$hanabi      = get_page_by_path( sanitize_title( 'Hanabi' ),               OBJECT, 'gc_game' );
+		$magic       = get_page_by_path( sanitize_title( 'Magic: the Gathering' ), OBJECT, 'gc_game' );
+		$mp_fluxx    = get_page_by_path( sanitize_title( 'Monty Python Fluxx' ),   OBJECT, 'gc_game' );
+		$ramses      = get_page_by_path( sanitize_title( 'Ramses Return' ),        OBJECT, 'gc_game' );
 
 		return '
 	<div class="games-filter-group">
