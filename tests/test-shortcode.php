@@ -19,12 +19,30 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 		// Create some games.
-		$chrononauts = $this->factory->post->create( [ 'post_title' => 'Chrononauts' ] );
-		$frog_juice  = $this->factory->post->create( [ 'post_title' => 'Frog Juice' ] );
-		$hanabi      = $this->factory->post->create( [ 'post_title' => 'Hanabi' ] );
-		$magic       = $this->factory->post->create( [ 'post_title' => 'Magic: the Gathering' ] );
-		$mp_fluxx    = $this->factory->post->create( [ 'post_title' => 'Monty Python Fluxx' ] );
-		$ramses      = $this->factory->post->create( [ 'post_title' => 'Ramses Return' ] );
+		$chrononauts = $this->factory->post->create([
+			'post_title' => 'Chrononauts',
+			'post_type'  => 'gc_game',
+		]);
+		$frog_juice  = $this->factory->post->create([
+			'post_title' => 'Frog Juice',
+			'post_type'  => 'gc_game',
+		]);
+		$hanabi      = $this->factory->post->create([
+			'post_title' => 'Hanabi',
+			'post_type'  => 'gc_game',
+		]);
+		$magic       = $this->factory->post->create([
+			'post_title' => 'Magic: the Gathering',
+			'post_type'  => 'gc_game',
+		]);
+		$mp_fluxx    = $this->factory->post->create([
+			'post_title' => 'Monty Python Fluxx',
+			'post_type'  => 'gc_game',
+		]);
+		$ramses      = $this->factory->post->create([
+			'post_title' => 'Ramses Return',
+			'post_type'  => 'gc_game',
+		]);
 
 		// Add the post meta.
 		update_post_meta( $chrononauts, '_gc_min_players', 1 );
