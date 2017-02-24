@@ -72,12 +72,42 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	}
 
 	private function games_list_markup() {
-		$chrononauts = get_page_by_path( sanitize_title( 'Chrononauts' ),          OBJECT, 'gc_game' );
-		$frog_juice  = get_page_by_path( sanitize_title( 'Frog Juice' ),           OBJECT, 'gc_game' );
-		$hanabi      = get_page_by_path( sanitize_title( 'Hanabi' ),               OBJECT, 'gc_game' );
-		$magic       = get_page_by_path( sanitize_title( 'Magic: the Gathering' ), OBJECT, 'gc_game' );
-		$mp_fluxx    = get_page_by_path( sanitize_title( 'Monty Python Fluxx' ),   OBJECT, 'gc_game' );
-		$ramses      = get_page_by_path( sanitize_title( 'Ramses Return' ),        OBJECT, 'gc_game' );
+		$games = get_posts([
+			'post_type'      => 'gc_game',
+			'posts_per_page' => 6,
+		]);
+
+		$chrononauts = '';
+		$frog_juice  = '';
+		$hanabi      = '';
+		$magic       = '';
+		$mp_fluxx    = '';
+		$ramses      = '';
+
+		foreach ( $games as $game ) {
+			switch ( $game->post_title ) {
+				case 'Chrononauts':
+					$chrononauts = $game;
+					break;
+				case 'Frog Juice':
+					$frog_juice = $game;
+					break;
+				case 'Hanabi':
+					$hanabi = $game;
+					break;
+				case 'Magic: the Gathering':
+					$magic = $game;
+					break;
+				case 'Monty Python Fluxx':
+					$mp_fluxx = $game;
+					break;
+				case 'Ramses Return':
+					$ramses = $game;
+					break;
+				default:
+					break;
+			}
+		}
 
 		return '
 	<div class="games-filter-group">
