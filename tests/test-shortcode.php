@@ -346,4 +346,20 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			'Shortcode output didn\'t match the expected output.'
 		);
 	}
+
+	public function test_single_game() {
+		$games = $this->games();
+		$test_page_id = $this->factory->post->create([
+			'post_title'   => 'Single Game Test',
+			'post_type'    => 'page',
+			'post_content' => '[games-collector-list gc_game="44"]',
+			'post_status'  => 'publish',
+		]);
+
+				$this->assertSame(
+					Shortcode\shortcode( [ 'gc_game' => $games['chrononauts']->ID ] ),
+					gc_get_game( $games['chrononauts']->ID ),
+					'Shortcode output with a single game did not match output of wrapper function.'
+				);
+	}
 }
