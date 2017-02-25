@@ -391,18 +391,19 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	}
 
 	public function test_single_game() {
+		$stupid_white_space = ' ';
 		$games = $this->games();
-		$test_page_id = $this->factory->post->create([
-			'post_title'   => 'Single Game Test',
-			'post_type'    => 'page',
-			'post_content' => '[games-collector-list gc_game="44"]',
-			'post_status'  => 'publish',
-		]);
 
-				$this->assertSame(
-					Shortcode\shortcode( [ 'gc_game' => $games['chrononauts']->ID ] ),
-					gc_get_game( $games['chrononauts']->ID ),
-					'Shortcode output with a single game did not match output of wrapper function.'
-				);
+		$this->assertSame(
+			Shortcode\shortcode( [ 'gc_game' => $games['chrononauts']->ID ] ),
+			gc_get_game( $games['chrononauts']->ID ),
+			'Shortcode output with a single game did not match output of wrapper function.'
+		);
+
+		$this->assertContains(
+			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_game( $games['chrononauts']->ID ) ),
+			preg_replace( '/\s+/S', "$stupid_white_space", $this->get_single_game( [ $games['chrononauts'] ] ) ),
+			'Shortcode output did not match expected output.'
+		);
 	}
 }
