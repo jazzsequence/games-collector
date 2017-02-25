@@ -89,42 +89,42 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		wp_set_object_terms( $ramses, [ 'dice', 'easy-to-learn', 'fantasy', 'historical' ], 'gc_attribute' );
 	}
 
-	private function games_list_markup() {
-		$games = get_posts([
+	private function games() {
+		$_games = get_posts([
 			'post_type'      => 'gc_game',
 			'posts_per_page' => 6,
 		]);
 
-		$chrononauts = '';
-		$frog_juice  = '';
-		$hanabi      = '';
-		$magic       = '';
-		$mp_fluxx    = '';
-		$ramses      = '';
+		$games = [];
 
-		foreach ( $games as $game ) {
+		foreach ( $_games as $game ) {
 			switch ( $game->post_title ) {
 				case 'Chrononauts':
-					$chrononauts = $game;
+					$games['chrononauts'] = $game;
 					break;
 				case 'Frog Juice':
-					$frog_juice = $game;
+					$games['frog_juice'] = $game;
 					break;
 				case 'Hanabi':
-					$hanabi = $game;
+					$games['hanabi'] = $game;
 					break;
 				case 'Magic: the Gathering':
-					$magic = $game;
+					$games['magic'] = $game;
 					break;
 				case 'Monty Python Fluxx':
-					$mp_fluxx = $game;
+					$games['mp_fluxx'] = $game;
 					break;
 				case 'Ramses Return':
-					$ramses = $game;
+					$games['ramses'] = $game;
 					break;
 			}
 		}
 
+		return $games;
+	}
+
+	private function games_list_markup() {
+		$games = $this->games();
 		return '
 <div class="games-filter-group">
 		<button data-filter="*">Show All</button><button data-filter=".gc_attribute-based-on-film-tv">based-on-film-tv</button><button data-filter=".gc_attribute-card">card</button><button data-filter=".gc_attribute-coop">coop</button><button data-filter=".gc_attribute-deck-building">deck-building</button><button data-filter=".gc_attribute-dice">dice</button><button data-filter=".gc_attribute-easy-to-learn">easy-to-learn</button><button data-filter=".gc_attribute-fantasy">fantasy</button><button data-filter=".gc_attribute-fast-paced">fast-paced</button><button data-filter=".gc_attribute-historical">historical</button><button data-filter=".gc_attribute-party">party</button><button data-filter=".gc_attribute-scifi">scifi</button><button data-filter=".gc_attribute-solo">solo</button><button data-filter=".gc_attribute-strategy">strategy</button><button data-filter=".short">Short Games</button><button data-filter = ".long">Long Games</button><button data-filter = ".4-and-up,.5-and-up,.6-and-up,.7-and-up,.8-and-up,.9-and-up">Good for Kids</button><button data-filter=".mature">Adult Games</button><div class="player-filter"><label for="players-filter-select">How many players?:</label>
