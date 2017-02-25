@@ -334,8 +334,8 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 
 		// Test that the wrapper function returns the same thing as the shortcode function.
 		$this->assertSame(
-			preg_replace( '/\s+/S', "$stupid_white_space", Shortcode\shortcode( [] ) ),
-			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_games() ),
+			Shortcode\shortcode( [] ),
+			gc_get_games(),
 			'The shortcode function output didn\'t match the wrapper function output'
 		);
 
