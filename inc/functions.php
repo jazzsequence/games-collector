@@ -8,6 +8,10 @@
  * @since   0.2
  */
 
+use \GC\GamesCollector\Game;
+use \GC\GamesCollector\Shortcode;
+use \GC\GamesCollector\Attributes;
+
 /**
  * Returns the difficulty for a game.
  *
@@ -16,7 +20,7 @@
  * @return string           The human-readable difficulty level (not the meta value saved).
  */
 function gc_get_difficulty( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_difficulty( $post_id );
+	return Game\get_difficulty( $post_id );
 }
 
 /**
@@ -25,7 +29,7 @@ function gc_get_difficulty( $post_id = 0 ) {
  * @since 0.2
  */
 function gc_the_difficulty() {
-	echo esc_html( \GC\GamesCollector\Game\get_difficulty() );
+	echo esc_html( Game\get_difficulty() );
 }
 
 /**
@@ -36,7 +40,7 @@ function gc_the_difficulty() {
  * @return string      The age range for the game.
  */
 function gc_get_age( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_age( $post_id );
+	return Game\get_age( $post_id );
 }
 
 /**
@@ -45,7 +49,7 @@ function gc_get_age( $post_id = 0 ) {
  * @since 0.2
  */
 function gc_the_age() {
-	echo esc_html( \GC\GamesCollector\Game\get_age() );
+	echo esc_html( Game\get_age() );
 }
 
 /**
@@ -56,7 +60,7 @@ function gc_the_age() {
  * @return string       The number of players for the game.
  */
 function gc_get_number_of_players( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_number_of_players( $post_id );
+	return Game\get_number_of_players( $post_id );
 }
 
 /**
@@ -65,7 +69,7 @@ function gc_get_number_of_players( $post_id = 0 ) {
  * @since 0.2
  */
 function gc_the_number_of_players() {
-	echo esc_html( \GC\GamesCollector\Game\get_number_of_players() );
+	echo esc_html( Game\get_number_of_players() );
 }
 
 /**
@@ -76,7 +80,7 @@ function gc_the_number_of_players() {
  * @return array            An array containing the minimum and maximum number of players for the game.
  */
 function gc_get_players_min_max( $post_id = 0 ) {
-	return \GC\GamesCollector\Game\get_players_min_max( $post_id );
+	return Game\get_players_min_max( $post_id );
 }
 
 /**
@@ -86,7 +90,7 @@ function gc_get_players_min_max( $post_id = 0 ) {
  * @return string All the games in formatted HTML.
  */
 function gc_get_games() {
-	return \GC\GamesCollector\Display\shortcode();
+	return Shortcode\shortcode( [] );
 }
 
 /**
@@ -95,7 +99,49 @@ function gc_get_games() {
  * @since 0.2
  */
 function gc_the_games() {
-	echo \GC\GamesCollector\Display\shortcode(); // WPCS: XSS ok. Already sanitized.
+	echo Shortcode\shortcode( [] ); // WPCS: XSS ok. Already sanitized.
+}
+
+/**
+ * Return a game or a list of games.
+ *
+ * @since  1.1.0
+ * @param  mixed $post_ids Can be a valid game post ID, an array of games, or a comma-separated list of games.
+ * @return string          The requested games in formatted HTML.
+ */
+function gc_get_game( $post_ids = '' ) {
+	// If nothing was passed, just use gc_get_games.
+	if ( '' === $post_ids ) {
+		return gc_get_games();
+	}
+
+	// If an array was passed, implode the array and pass a comma-separated list of IDs to the shortcode.
+	if ( is_array( $post_ids ) ) {
+		return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
+	}
+
+	// If there's a comma, we'll assume comma-separated values, so deal with normally.
+	if ( false !== strpos( (string) $post_ids, ',' ) ) {
+		return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
+	}
+
+	// If an integer was passed, and it's a valid, non-zero integer, pass that to the shortcode atts.
+	if ( 0 !== absint( $post_ids ) && is_int( absint( $post_ids ) ) ) {
+		return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
+	}
+
+	// For all other cases, handle normally. We'll catch the issues later.
+	return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
+}
+
+/**
+ * Echoes a game or list of games.
+ *
+ * @since  1.1.0
+ * @param  mixed $post_ids Can be a valid game post ID, an array of games, or a comma-separated list of games.
+ */
+function gc_the_game( $post_ids = '' ) {
+	echo gc_get_game( $post_ids ); // WPCS: XSS ok, already sanitized.
 }
 
 /**
@@ -109,5 +155,5 @@ function gc_the_games() {
  * @return string             The sanitized list of attributes.
  */
 function gc_get_the_attribute_list( $post_id = 0, $before = '', $seperator = ', ', $after = '' ) {
-	return \GC\GamesCollector\Attributes\get_the_attribute_list( $post_id, $before, $seperator, $after );
+	return Attributes\get_the_attribute_list( $post_id, $before, $seperator, $after );
 }

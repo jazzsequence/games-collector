@@ -13,46 +13,6 @@ use GC\GamesCollector\Game;
 use GC\GamesCollector\Attributes;
 
 /**
- * Shortcode output. Can also be run as a standalone function to display the list.
- *
- * @since  0.2
- * @return string Displays a list of all games.
- */
-function shortcode() {
-	$games = get_posts([
-		'posts_per_page' => -1,
-		'post_type'      => 'gc_game',
-		'orderby'        => 'title',
-		'order'          => 'ASC',
-	]);
-
-	ob_start(); ?>
-
-	<div class="games-filter-group">
-		<?php
-		echo get_buttons(); // WPCS: XSS ok, already sanitized.
-		echo get_filters(); // WPCS: XSS ok, already sanitized.
-		?>
-	</div>
-
-	<div class="games-collector-list">
-		<?php foreach ( $games as $game ) { ?>
-			<div <?php post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
-
-				<?php
-				echo get_game_title( $game );    // WPCS: XSS ok, already sanitized.
-				echo get_game_info( $game->ID ); // WPCS: XSS ok, already sanitized.
-				?>
-
-			</div>
-		<?php } ?>
-	</div>
-
-	<?php $content = ob_get_clean();
-	return $content;
-}
-
-/**
  * Return the game title. With link if a link was saved.
  *
  * @since  1.0.0
@@ -134,7 +94,7 @@ function get_buttons() {
 	}
 
 	/**
-	 * Allow Show All button to be filtered. Can be hooked to __return_false to disable.
+	 * Allow Show All button to be filtered. Can be hooked to __return_null to disable.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for Show All button.
@@ -142,7 +102,7 @@ function get_buttons() {
 	$show_all = apply_filters( 'gc_filter_button_show_all', $show_all );
 
 	/**
-	 * Allow the attribute term buttons to be filtered. This will filter _all_ the term buttons. Can be hooked to __return_false to disable term buttons.
+	 * Allow the attribute term buttons to be filtered. This will filter _all_ the term buttons. Can be hooked to __return_null to disable term buttons.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for all attribute term buttons.
@@ -150,7 +110,7 @@ function get_buttons() {
 	$terms_buttons = apply_filters( 'gc_filter_term_buttons', $terms_buttons );
 
 	/**
-	 * Allow Short Games button to be filtered. Can be hooked to __return_false to disable.
+	 * Allow Short Games button to be filtered. Can be hooked to __return_null to disable.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for Short Games button.
@@ -158,7 +118,7 @@ function get_buttons() {
 	$short_games = apply_filters( 'gc_filter_button_short_games', $short_games );
 
 	/**
-	 * Allow Long Games button to be filtered. Can be hooked to __return_false to disable.
+	 * Allow Long Games button to be filtered. Can be hooked to __return_null to disable.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for Long Games button.
@@ -166,7 +126,7 @@ function get_buttons() {
 	$long_games = apply_filters( 'gc_filter_button_long_games', $long_games );
 
 	/**
-	 * Allow Kids Games button to be filtered. Can be hooked to __return_false to disable.
+	 * Allow Kids Games button to be filtered. Can be hooked to __return_null to disable.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for Kids Games button.
@@ -174,7 +134,7 @@ function get_buttons() {
 	$kids_games = apply_filters( 'gc_filter_button_kids_games', $kids_games );
 
 	/**
-	 * Allow Adults Games button to be filtered. Can be hooked to __return_false to disable.
+	 * Allow Adults Games button to be filtered. Can be hooked to __return_null to disable.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for Adults Games button.
@@ -231,7 +191,7 @@ function get_filters() {
 	</div>';
 
 	/**
-	 * Allow the player filter to be filtered. Can be disabled entirely by hooking to __return_false.
+	 * Allow the player filter to be filtered. Can be disabled entirely by hooking to __return_null.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for player filter.
@@ -239,7 +199,7 @@ function get_filters() {
 	$player_filter = apply_filters( 'gc_filter_player_filter', $player_filter );
 
 	/**
-	 * Allow the difficulty filter to be filtered. Can be disabled entirely by hooking to __return_false.
+	 * Allow the difficulty filter to be filtered. Can be disabled entirely by hooking to __return_null.
 	 *
 	 * @since 1.1.0
 	 * @var   string HTML markup for difficulty filter.
@@ -432,6 +392,7 @@ function get_svg( $name = '', $encoded = true ) {
 	if ( $encoded ) {
 		$icons = [
 			'dice'       => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj4KPHBhdGggZmlsbD0iI2EwYTVhYSIgZD0iTTI3IDZoLTE2Yy0yLjc1IDAtNSAyLjI1LTUgNXYxNmMwIDIuNzUgMi4yNSA1IDUgNWgxNmMyLjc1IDAgNS0yLjI1IDUtNXYtMTZjMC0yLjc1LTIuMjUtNS01LTV6TTEzIDI4Yy0xLjY1NyAwLTMtMS4zNDMtMy0zczEuMzQzLTMgMy0zIDMgMS4zNDMgMyAzLTEuMzQzIDMtMyAzek0xMyAxNmMtMS42NTcgMC0zLTEuMzQzLTMtM3MxLjM0My0zIDMtMyAzIDEuMzQzIDMgMy0xLjM0MyAzLTMgM3pNMTkgMjJjLTEuNjU3IDAtMy0xLjM0My0zLTNzMS4zNDMtMyAzLTMgMyAxLjM0MyAzIDMtMS4zNDMgMy0zIDN6TTI1IDI4Yy0xLjY1NyAwLTMtMS4zNDMtMy0zczEuMzQzLTMgMy0zIDMgMS4zNDMgMyAzLTEuMzQzIDMtMyAzek0yNSAxNmMtMS42NTcgMC0zLTEuMzQzLTMtM3MxLjM0My0zIDMtMyAzIDEuMzQzIDMgMy0xLjM0MyAzLTMgM3pNMjUuODk5IDRjLTAuNDY3LTIuMjc1LTIuNDkxLTQtNC44OTktNGgtMTZjLTIuNzUgMC01IDIuMjUtNSA1djE2YzAgMi40MDggMS43MjUgNC40MzIgNCA0Ljg5OXYtMTkuODk5YzAtMS4xIDAuOS0yIDItMmgxOS44OTl6Ij48L3BhdGg+Cjwvc3ZnPgo=',
+			'dice-alt'   => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0Ij48ZyBpZD0iaWNvbW9vbi1pZ25vcmUiPjwvZz48cGF0aCBkPSJNNjg4IDM1MmgtMjU2Yy00NCAwLTgwIDM2LTgwIDgwdjI1NmMwIDQ0IDM2IDgwIDgwIDgwaDI1NmM0NCAwIDgwLTM2IDgwLTgwdi0yNTZjMC00NC0zNi04MC04MC04MHpNNDY0IDcwNGMtMjYuNTA4IDAtNDgtMjEuNDkyLTQ4LTQ4czIxLjQ5Mi00OCA0OC00OCA0OCAyMS40OTIgNDggNDgtMjEuNDkyIDQ4LTQ4IDQ4ek00NjQgNTEyYy0yNi41MDggMC00OC0yMS40OTItNDgtNDhzMjEuNDkyLTQ4IDQ4LTQ4IDQ4IDIxLjQ5MiA0OCA0OC0yMS40OTIgNDgtNDggNDh6TTU2MCA2MDhjLTI2LjUwOCAwLTQ4LTIxLjQ5Mi00OC00OHMyMS40OTItNDggNDgtNDggNDggMjEuNDkyIDQ4IDQ4LTIxLjQ5MiA0OC00OCA0OHpNNjU2IDcwNGMtMjYuNTA4IDAtNDgtMjEuNDkyLTQ4LTQ4czIxLjQ5Mi00OCA0OC00OCA0OCAyMS40OTIgNDggNDgtMjEuNDkyIDQ4LTQ4IDQ4ek02NTYgNTEyYy0yNi41MDggMC00OC0yMS40OTItNDgtNDhzMjEuNDkyLTQ4IDQ4LTQ4IDQ4IDIxLjQ5MiA0OCA0OC0yMS40OTIgNDgtNDggNDh6TTY3MC4zNzUgMzIwYy03LjQ2NS0zNi40MDQtMzkuODU0LTY0LTc4LjM3NS02NGgtMjU2Yy00NCAwLTgwIDM2LTgwIDgwdjI1NmMwIDM4LjUxOSAyNy41OTYgNzAuOTE4IDY0IDc4LjM3NXYtMzE4LjM3NWMwLTE3LjYgMTQuNC0zMiAzMi0zMmgzMTguMzc1eiI+PC9wYXRoPjwvc3ZnPg==',
 			'age'        => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDIwIDI4Ij4KPHBhdGggZD0iTTE4LjU2MiA4LjU2M2wtNC41NjIgNC41NjJ2MTIuODc1YzAgMC45NjktMC43ODEgMS43NS0xLjc1IDEuNzVzLTEuNzUtMC43ODEtMS43NS0xLjc1di02aC0xdjZjMCAwLjk2OS0wLjc4MSAxLjc1LTEuNzUgMS43NXMtMS43NS0wLjc4MS0xLjc1LTEuNzV2LTEyLjg3NWwtNC41NjItNC41NjJjLTAuNTc4LTAuNTk0LTAuNTc4LTEuNTMxIDAtMi4xMjUgMC41OTQtMC41NzggMS41MzEtMC41NzggMi4xMjUgMGwzLjU2MyAzLjU2M2g1Ljc1bDMuNTYzLTMuNTYzYzAuNTk0LTAuNTc4IDEuNTMxLTAuNTc4IDIuMTI1IDAgMC41NzggMC41OTQgMC41NzggMS41MzEgMCAyLjEyNXpNMTMuNSA2YzAgMS45MzctMS41NjMgMy41LTMuNSAzLjVzLTMuNS0xLjU2My0zLjUtMy41IDEuNTYzLTMuNSAzLjUtMy41IDMuNSAxLjU2MyAzLjUgMy41eiI+PC9wYXRoPgo8L3N2Zz4K',
 			'time'       => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI0IDI4Ij4KPHBhdGggZD0iTTE0IDguNXY3YzAgMC4yODEtMC4yMTkgMC41LTAuNSAwLjVoLTVjLTAuMjgxIDAtMC41LTAuMjE5LTAuNS0wLjV2LTFjMC0wLjI4MSAwLjIxOS0wLjUgMC41LTAuNWgzLjV2LTUuNWMwLTAuMjgxIDAuMjE5LTAuNSAwLjUtMC41aDFjMC4yODEgMCAwLjUgMC4yMTkgMC41IDAuNXpNMjAuNSAxNGMwLTQuNjg4LTMuODEzLTguNS04LjUtOC41cy04LjUgMy44MTMtOC41IDguNSAzLjgxMyA4LjUgOC41IDguNSA4LjUtMy44MTMgOC41LTguNXpNMjQgMTRjMCA2LjYyNS01LjM3NSAxMi0xMiAxMnMtMTItNS4zNzUtMTItMTIgNS4zNzUtMTIgMTItMTIgMTIgNS4zNzUgMTIgMTJ6Ij48L3BhdGg+Cjwvc3ZnPgo=',
 			'players'    => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSIzMCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDMwIDI4Ij4KPHBhdGggZD0iTTkuMjY2IDE0Yy0xLjYyNSAwLjA0Ny0zLjA5NCAwLjc1LTQuMTQxIDJoLTIuMDk0Yy0xLjU2MyAwLTMuMDMxLTAuNzUtMy4wMzEtMi40ODQgMC0xLjI2Ni0wLjA0Ny01LjUxNiAxLjkzNy01LjUxNiAwLjMyOCAwIDEuOTUzIDEuMzI4IDQuMDYyIDEuMzI4IDAuNzE5IDAgMS40MDYtMC4xMjUgMi4wNzgtMC4zNTktMC4wNDcgMC4zNDQtMC4wNzggMC42ODgtMC4wNzggMS4wMzEgMCAxLjQyMiAwLjQ1MyAyLjgyOCAxLjI2NiA0ek0yNiAyMy45NTNjMCAyLjUzMS0xLjY3MiA0LjA0Ny00LjE3MiA0LjA0N2gtMTMuNjU2Yy0yLjUgMC00LjE3Mi0xLjUxNi00LjE3Mi00LjA0NyAwLTMuNTMxIDAuODI4LTguOTUzIDUuNDA2LTguOTUzIDAuNTMxIDAgMi40NjkgMi4xNzIgNS41OTQgMi4xNzJzNS4wNjMtMi4xNzIgNS41OTQtMi4xNzJjNC41NzggMCA1LjQwNiA1LjQyMiA1LjQwNiA4Ljk1M3pNMTAgNGMwIDIuMjAzLTEuNzk3IDQtNCA0cy00LTEuNzk3LTQtNCAxLjc5Ny00IDQtNCA0IDEuNzk3IDQgNHpNMjEgMTBjMCAzLjMxMy0yLjY4OCA2LTYgNnMtNi0yLjY4OC02LTYgMi42ODgtNiA2LTYgNiAyLjY4OCA2IDZ6TTMwIDEzLjUxNmMwIDEuNzM0LTEuNDY5IDIuNDg0LTMuMDMxIDIuNDg0aC0yLjA5NGMtMS4wNDctMS4yNS0yLjUxNi0xLjk1My00LjE0MS0yIDAuODEyLTEuMTcyIDEuMjY2LTIuNTc4IDEuMjY2LTQgMC0wLjM0NC0wLjAzMS0wLjY4OC0wLjA3OC0xLjAzMSAwLjY3MiAwLjIzNCAxLjM1OSAwLjM1OSAyLjA3OCAwLjM1OSAyLjEwOSAwIDMuNzM0LTEuMzI4IDQuMDYyLTEuMzI4IDEuOTg0IDAgMS45MzcgNC4yNSAxLjkzNyA1LjUxNnpNMjggNGMwIDIuMjAzLTEuNzk3IDQtNCA0cy00LTEuNzk3LTQtNCAxLjc5Ny00IDQtNCA0IDEuNzk3IDQgNHoiPjwvcGF0aD4KPC9zdmc+Cg==',
@@ -452,6 +413,10 @@ function get_svg( $name = '', $encoded = true ) {
 <path fill="#a0a5aa" d="M27 6h-16c-2.75 0-5 2.25-5 5v16c0 2.75 2.25 5 5 5h16c2.75 0 5-2.25 5-5v-16c0-2.75-2.25-5-5-5zM13 28c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zM13 16c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zM19 22c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zM25 28c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zM25 16c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zM25.899 4c-0.467-2.275-2.491-4-4.899-4h-16c-2.75 0-5 2.25-5 5v16c0 2.408 1.725 4.432 4 4.899v-19.899c0-1.1 0.9-2 2-2h19.899z"></path>
 </svg>
 ></path>
+</svg>',
+			'dice-alt'   => '<svg class="gc-icon svg gc-icon-dice-alt" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024">
+<title>dice-alt</title>
+<path d="M688 352h-256c-44 0-80 36-80 80v256c0 44 36 80 80 80h256c44 0 80-36 80-80v-256c0-44-36-80-80-80zM464 704c-26.508 0-48-21.492-48-48s21.492-48 48-48 48 21.492 48 48-21.492 48-48 48zM464 512c-26.508 0-48-21.492-48-48s21.492-48 48-48 48 21.492 48 48-21.492 48-48 48zM560 608c-26.508 0-48-21.492-48-48s21.492-48 48-48 48 21.492 48 48-21.492 48-48 48zM656 704c-26.508 0-48-21.492-48-48s21.492-48 48-48 48 21.492 48 48-21.492 48-48 48zM656 512c-26.508 0-48-21.492-48-48s21.492-48 48-48 48 21.492 48 48-21.492 48-48 48zM670.375 320c-7.465-36.404-39.854-64-78.375-64h-256c-44 0-80 36-80 80v256c0 38.519 27.596 70.918 64 78.375v-318.375c0-17.6 14.4-32 32-32h318.375z"></path>
 </svg>',
 			'age'        => '<svg class="gc-icon svg gc-icon-age" aria-labelledby="title-ID" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="28" viewBox="0 0 20 28">
 <title>age</title>
