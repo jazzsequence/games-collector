@@ -21,7 +21,10 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * @return int Test post ID.
 	 */
 	function create_post() {
-		$post_id = $this->factory->post->create( [ 'post_title' => 'Wizard School' ] );
+		$post_id = $this->factory->post->create([
+			'post_title' => 'Wizard School',
+			'post_type' => 'gc_game',
+		]);
 		return $post_id;
 	}
 
