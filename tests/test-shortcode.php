@@ -406,7 +406,11 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_game( $games['chrononauts']->ID ) ),
 			'Shortcode output did not match expected output.'
 		);
+
+		// Test that the output is what we expect, passing a string.
+		$this->assertContains(
 			preg_replace( '/\s+/S', "$stupid_white_space", $this->get_single_game( [ $games['chrononauts'] ] ) ),
+			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_game( (string) $games['chrononauts']->ID ) ),
 			'Shortcode output did not match expected output.'
 		);
 	}
