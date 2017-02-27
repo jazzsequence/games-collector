@@ -43,6 +43,8 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 * Added more filters for display output. Now buttons can be filtered individually and therefore disabled.
 * Switched to SVG images for game info icons which required some CSS changes.
 * Cleaned up spacing for game attributes.
+* Added [Shortcode UI](https://wordpress.org/plugins/shortcode-ui/) integration.
+* Added shortcode that allows you to display a single or multiple specific games using `[games-collector-list gc_game="1,2,3"]`.
 
 ### 1.0.0 ###
 * abstracted display elements into smaller functions and made them filterable
