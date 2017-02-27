@@ -91,6 +91,12 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		wp_set_object_terms( $ramses, [ 'dice', 'easy-to-learn', 'fantasy', 'historical' ], 'gc_attribute' );
 	}
 
+	/**
+	 * Return an array of game WP_Post objects.
+	 *
+	 * @since  1.1.0
+	 * @return array An array of WP_Post objects.
+	 */
 	private function games() {
 		$_games = get_posts([
 			'post_type'      => 'gc_game',
@@ -125,6 +131,12 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		return $games;
 	}
 
+	/**
+	 * The full expected HTML markup for a games list shortcode.
+	 *
+	 * @since  1.1.0
+	 * @return string The HTML markup matching a [games-collector] list.
+	 */
 	private function games_list_markup() {
 		$games = $this->games();
 		return '
@@ -323,6 +335,13 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			</div>';
 	}
 
+	/**
+	 * Return the markup for a single game.
+	 *
+	 * @since  1.1.0
+	 * @param  WP_Post $game A single WP_Post game object.
+	 * @return string        The HTML markup for a single game.
+	 */
 	private function single_game_markup( $game ) {
 		return '<div class="' . join( ' ', get_post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ) ) . '" id="game-' . $game->ID . '">
 
@@ -348,6 +367,13 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 </svg></span><span class="game-difficulty" id="game-' . $game->ID . '-difficulty">' . gc_get_difficulty( $game->ID ) . '</span> ' . Display\get_attributes( $game->ID ) . ' </div> </div> ';
 	}
 
+	/**
+	 * Return a single game or select games.
+	 *
+	 * @since  1.1.0
+	 * @param  WP_Post $games A WP_Post object or an array of WP_Post objects.
+	 * @return string         The HTML markup that should match the [games-collector-list] shortcode.
+	 */
 	private function get_single_game( $games ) {
 		$before = '<div class="games-filter-group"> </div> <div class="games-collector-list"> ';
 		$after  = '</div>';
@@ -390,6 +416,18 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Test that an individual game or select games returns the expected output.
+	 *
+	 * @since  1.1.0
+	 * @covers gc_get_game
+	 * @covers gc_get_difficulty
+	 * @covers gc_get_age
+	 * @covers gc_get_number_of_players
+	 * @covers GC\GamesCollector\Shortcode\shortcode
+	 * @covers GC\GamesCollector\Display\get_attributes
+	 * @covers GC\GamesCollector\Game\get_game_classes
+	 */
 	public function test_single_game() {
 		$stupid_white_space = ' ';
 		$games = $this->games();
