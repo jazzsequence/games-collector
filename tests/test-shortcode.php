@@ -324,7 +324,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	}
 
 	private function single_game_markup( $game ) {
-		return '<div class="' . post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ) . '" id="game-' . $game->ID . '">
+		return '<div class="' . join( ' ', get_post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ) ) . '" id="game-' . $game->ID . '">
 
 				<span class="game-title" id="game-' . $game->ID . '-title">' . $game->post_title . '</span>
 		<div class="game-info" id="game-' . $game->ID . '-info">
