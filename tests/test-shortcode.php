@@ -368,7 +368,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 * Test that the games list matches the output we expect.
 	 *
 	 * @since  1.1.0
-	 * @covers SC\GamesCollector\Shortcode\shortcode
+	 * @covers GC\GamesCollector\Shortcode\shortcode
 	 * @covers gc_get_games
 	 */
 	public function test_games_list() {
