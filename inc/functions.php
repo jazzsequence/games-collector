@@ -116,8 +116,8 @@ function gc_get_game( $post_ids = '' ) {
 	}
 
 	// If there's a comma, we'll assume comma-separated values, so deal with normally.
-	if ( false !== strpos( $post_ids, ',' ) ) {
-		return Shortcode\shortcode( $post_ids );
+	if ( false !== strpos( (string) $post_ids, ',' ) ) {
+		return Shortcode\shortcode( [ 'gc_game' => $post_ids ] );
 	}
 
 	// If an integer was passed, and it's a valid, non-zero integer, pass that to the shortcode atts.
