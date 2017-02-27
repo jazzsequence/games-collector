@@ -21,6 +21,8 @@ function register_cpt() {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'show_in_nav_menus'   => false,
+			'show_in_rest'        => true,
+			'rest_base'           => 'games',
 			// Custom columns.
 			'admin_cols'          => [
 				'players'    => [
