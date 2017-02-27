@@ -431,5 +431,18 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			'Shortcode output with array of games did not match expected output.'
 		);
 
+		// Test multiple games in comma-separated list.
+		$this->assertContains(
+			preg_replace( '/\s+/S', "$stupid_white_space",
+				$this->get_single_game([
+					$games['chrononauts'],
+					$games['hanabi'],
+				])
+			),
+			preg_replace( '/\s+/S', "$stupid_white_space",
+				gc_get_game( (string) $games['chrononauts']->ID . ',' . $games['hanabi']->ID )
+			),
+			'Shortcode output with comma-separated list of games did not match expected output.'
+		);
 	}
 }
