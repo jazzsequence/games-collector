@@ -413,5 +413,23 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_game( (string) $games['chrononauts']->ID ) ),
 			'Shortcode output did not match expected output.'
 		);
+
+		// Make sure we can get more than one game as an array.
+		$this->assertContains(
+			preg_replace( '/\s+/S', "$stupid_white_space",
+				$this->get_single_game([
+					$games['chrononauts'],
+					$games['hanabi'],
+				])
+			),
+			preg_replace( '/\s+/S', "$stupid_white_space",
+				gc_get_game([
+					$games['chrononauts']->ID,
+					$games['hanabi']->ID,
+				])
+			),
+			'Shortcode output with array of games did not match expected output.'
+		);
+
 	}
 }
