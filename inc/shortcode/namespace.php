@@ -84,6 +84,8 @@ function get_games( $post_ids = [] ) {
 			'posts_per_page' => count( $post_ids ),
 			'post_type'      => 'gc_game',
 			'post__in'       => $post_ids,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
 		]);
 	}
 
