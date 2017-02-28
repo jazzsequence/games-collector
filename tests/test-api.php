@@ -46,9 +46,8 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 */
 	public function test_api_endpoint() {
 		// Test that we can hit the endpoint.
-		$response = wp_remote_get( get_home_url( '/wp-json/wp/v2/games/' ) );
+		$response      = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/games/' ) );
 		$response_code = wp_remote_retrieve_response_code( $response );
-
 		$this->assertEquals(
 			$response_code,
 			200,
