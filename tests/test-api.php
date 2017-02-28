@@ -13,6 +13,21 @@ use GC\GamesCollector;
  */
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
+	private function get_game() {
+		$game = get_page_by_title( 'Chrononauts', OBJECT, 'gc_game' );
+
+	 	if ( ! $game ) {
+			$post_id = $this->factory->post->create([
+				'post_title' => 'Chrononauts',
+				'post_type'  => 'gc_game',
+			]);
+
+			return get_post( $post_id, OBJECT );
+		}
+
+		return $game;
+	}
+
 	/**
 	 * Test that the REST endpoint is accessible and returns data we expect.
 	 *
