@@ -13,6 +13,12 @@ use GC\GamesCollector;
  */
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
+	/**
+	 * Get a game from WordPress (or create and get it).
+	 *
+	 * @since  1.1.0
+	 * @return object WP_Post object for the game.
+	 */
 	private function get_game() {
 		$game = get_page_by_title( 'Chrononauts', OBJECT, 'gc_game' );
 
@@ -28,6 +34,12 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 		return $game;
 	}
 
+	/**
+	 * Get a game from the API (or create and get it normally).
+	 *
+	 * @since  1.1.0
+	 * @return object API post object for the game (or WP_Post object if created the normal way).
+	 */
 	private function get_game_by_api() {
 		$response = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/games?search=Chrononauts' ) );
 		$results  = json_decode( wp_remote_retrieve_body( $response ) );
@@ -38,6 +50,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
 		return $results[0];
 	}
+
 	/**
 	 * Test that the REST endpoint is accessible and returns data we expect.
 	 *
