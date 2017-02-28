@@ -17,6 +17,7 @@ namespace GC\GamesCollector\Api;
  * @param  object $data    The data object being converted to JSON.
  * @param  object $post    The WP_Post object.
  * @return object          The filtered data object.
+ * @link   http://wordpress.stackexchange.com/a/227517
  */
 function filter_games_json( $data, $post ) {
 	$min_players = get_post_meta( $post->ID, '_gc_min_players' );
