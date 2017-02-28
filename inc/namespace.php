@@ -23,6 +23,7 @@ function bootstrap() {
 	add_action( 'wp_enqueue_scripts',      __NAMESPACE__ . '\\Display\\enqueue_scripts' );
 	add_action( 'register_shortcode_ui',   __NAMESPACE__ . '\\Shortcode\\register_all_games_shortcode' );
 	add_action( 'register_shortcode_ui',   __NAMESPACE__ . '\\Shortcode\\register_individual_games_shortcode' );
+	add_filter( 'rest_prepare_gc_game',    __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
 	add_shortcode( 'games-collector',      __NAMESPACE__ . '\\Shortcode\\shortcode' );
 	add_shortcode( 'games-collector-list', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 }
