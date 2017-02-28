@@ -12,12 +12,14 @@ use GC\GamesCollector;
  * Games Collector API unit test class.
  */
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
-	public function test_api_endpoint() {
-		$post_id = $this->factory->post->create([
-			'post_title' => 'Wizard School',
-			'post_type'  => 'gc_game',
-		]);
 
+	/**
+	 * Test that the REST endpoint is accessible and returns data we expect.
+	 *
+	 * @since  1.1.0
+	 * @covers nothing
+	 */
+	public function test_api_endpoint() {
 		// Test that we can hit the endpoint.
 		$response = wp_remote_get( get_home_url( '/wp-json/wp/v2/games/' ) );
 		$response_code = wp_remote_retrieve_response_code( $response );
