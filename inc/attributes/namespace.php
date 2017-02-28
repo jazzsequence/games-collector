@@ -18,6 +18,8 @@ function register_taxonomy() {
 	register_extended_taxonomy( 'gc_attribute', 'gc_game', [
 			'dashboard_glance' => true,   // Show this taxonomy in the 'At a Glance' widget.
 			'hierarchical'     => false,
+			'show_in_rest'     => true,
+			'rest_base'        => 'attributes',
 		], [
 			'singular'      => __( 'Game Attribute', 'games-collector' ),
 			'plural'        => __( 'Game Attributes', 'games-collector' ),
