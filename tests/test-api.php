@@ -63,5 +63,14 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 			200,
 			sprintf( 'Did not get a 200 OK status code fetching a post from the API. Response returned was %s: %s', $response_code, wp_remote_retrieve_response_message( $response ) )
 		);
+
+		// Test that the game we're hitting is the one we expect.
+		$wp_post  = $this->get_game();
+		$api_post = $this->get_game_by_api();
+		$this->assertSame(
+			$wp_post->post_title,
+			$api_post->title->rendered,
+			'The post title for the API post did not match what we were expecting.'
+		);
 	}
 }
