@@ -139,4 +139,53 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 		);
 
 	}
+
+	/**
+	 * Test the post meta values in the API JSON data.
+	 *
+	 * @since  1.1.0
+	 * @covers GC\GamesCollector\Api\filter_games_json
+	 */
+	public function test_meta_json_filter() {
+		// Get our post via the API.
+		$post = $this->get_game_by_api();
+		$post_id = $this->get_game()->ID;
+
+		// Test that the post meta matches what we set when we created the game.
+		$this->assertSame(
+			get_post_meta( $post_id, '_gc_min_players' ),
+			$post->min_players,
+			'The min players in post meta did not match the value returned by the API.'
+		);
+
+		$this->assertSame(
+			get_post_meta( $post_id, '_gc_max_players' ),
+			$post->max_players,
+			'The max players in post meta did not match the value returned by the API.'
+		);
+
+		$this->assertSame(
+			get_post_meta( $post_id, '_gc_time' ),
+			$post->time,
+			'The playing time in post meta did not match the value returned by the API.'
+		);
+
+		$this->assertSame(
+			get_post_meta( $post_id, '_gc_age' ),
+			$post->age,
+			'The recommended age in post meta did not match the value returned by the API.'
+		);
+
+		$this->assertSame(
+			get_post_meta( $post_id, '_gc_difficulty' ),
+			$post->difficulty,
+			'The difficulty level in post meta did not match the value returned by the API.'
+		);
+
+		$this->assertSame(
+			get_post_meta( $post_id, '_gc_link' ),
+			$post->url,
+			'The game link in post meta did not match the value returned by the API.'
+		);
+	}
 }
