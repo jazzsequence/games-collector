@@ -54,8 +54,9 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 			sprintf( 'Did not get a 200 OK status code fetching from the API. Response returned was %s: %s', $response_code, wp_remote_retrieve_response_message( $response ) )
 		);
 
-		// Test that we can retrieve the post we created from the endpoint.
-		$response = wp_remote_get( get_home_url( '/wp-json/wp/v2/games/' . $post_id ) );
+		// Test that we can reach a single game's endpoint.
+		$post_id       = $this->get_game_by_api()->id;
+		$response      = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/games/' . $post_id ) );
 		$response_code = wp_remote_retrieve_response_code( $response );
 		$this->assertEquals(
 			$response_code,
