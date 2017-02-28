@@ -7,6 +7,7 @@
  */
 
 use GC\GamesCollector;
+use GC\GamesCollector\Attributes as Attributes;
 
 /**
  * Games Collector API unit test class.
