@@ -28,6 +28,16 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 		return $game;
 	}
 
+	private function get_game_by_api() {
+		$response = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/games?search=Chrononauts' ) );
+		$results  = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( empty( $results ) ) {
+			return $this->get_game();
+		}
+
+		return $results[0];
+	}
 	/**
 	 * Test that the REST endpoint is accessible and returns data we expect.
 	 *
