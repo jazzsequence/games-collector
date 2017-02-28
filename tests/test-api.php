@@ -53,6 +53,23 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Get an attribute ID from the API for a given attribute title.
+	 *
+	 * @since  1.1.0
+	 * @param  string $title The name of the attribute.
+	 * @return int           The attribute ID from the API.
+	 */
+	private function get_attribute_id_by_title( $title ) {
+		$response = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/attributes/' ) );
+		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+			$attributes = wp_list_pluck( json_decode( wp_remote_retrieve_body( $response ) ), 'name', 'id' );
+			return array_search( $title, $attributes );
+		}
+
+		return '';
+	}
+
+	/**
 	 * Test that the REST endpoint is accessible and returns data we expect.
 	 *
 	 * @since  1.1.0
