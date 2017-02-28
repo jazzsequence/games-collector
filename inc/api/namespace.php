@@ -28,11 +28,11 @@ function filter_games_json( $data, $post ) {
 	$link        = get_post_meta( $post->ID, '_gc_link' );
 
 	if ( $min_players ) {
-		$data->data['min-players'] = $min_players;
+		$data->data['min_players'] = $min_players;
 	}
 
 	if ( $max_players ) {
-		$data->data['max-players'] = $max_players;
+		$data->data['max_players'] = $max_players;
 	}
 
 	if ( $time ) {
