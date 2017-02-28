@@ -29,6 +29,13 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 				'post_type'  => 'gc_game',
 			]);
 
+			update_post_meta( $post_id, '_gc_min_players', 1 );
+			update_post_meta( $post_id, '_gc_max_players', 6 );
+			update_post_meta( $post_id, '_gc_time', '20-45' );
+			update_post_meta( $post_id, '_gc_age', 11 );
+			update_post_meta( $post_id, '_gc_difficulty', 'easy' );
+			update_post_meta( $post_id, '_gc_link', 'https://boardgamegeek.com/boardgame/815/chrononauts' );
+
 			return get_post( $post_id, OBJECT );
 		}
 
