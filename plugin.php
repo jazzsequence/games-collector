@@ -37,18 +37,48 @@
 
 namespace GC\GamesCollector;
 
-require_once dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php';
-require_once dirname( __FILE__ ) . '/vendor/extended-taxos/extended-taxos.php';
-require_once dirname( __FILE__ ) . '/vendor/cmb2/init.php';
-require_once dirname( __FILE__ ) . '/inc/namespace.php';
-require_once dirname( __FILE__ ) . '/inc/game/namespace.php';
-require_once dirname( __FILE__ ) . '/inc/attributes/namespace.php';
-require_once dirname( __FILE__ ) . '/inc/display/namespace.php';
-require_once dirname( __FILE__ ) . '/inc/shortcode/namespace.php';
-require_once dirname( __FILE__ ) . '/inc/functions.php';
+/**
+ * Handles autoloading the namespaces and other required files.
+ *
+ * @since 1.1.0
+ */
+function autoload_init() {
+	// Add in some specific includes and vendor libraries.
+	$files = [
+		dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php',
+		dirname( __FILE__ ) . '/vendor/extended-taxos/extended-taxos.php',
+		dirname( __FILE__ ) . '/vendor/cmb2/init.php',
+		dirname( __FILE__ ) . '/inc/namespace.php',
+		dirname( __FILE__ ) . '/inc/functions.php',
+	];
 
-// Register activation hook.
-register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
+	// Autoload the namespaces.
+	$namespaces = array_filter( glob( dirname( __FILE__ ) . '/inc/*' ), 'is_dir' );
+	foreach ( $namespaces as $namespace ) {
+		$files[] = $namespace . '/namespace.php';
+	}
 
-// Kick it off.
-add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
+	// Loop through and load all the things!
+	foreach ( $files as $file ) {
+		require_once( $file );
+	}
+}
+
+/**
+ * Main initialization function.
+ *
+ * @since 1.1.0
+ */
+function init() {
+	// Load all the required files.
+	autoload_init();
+
+	// Register activation hook.
+	register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
+
+	// Kick it off.
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
+}
+
+// Kick it off!
+init();
