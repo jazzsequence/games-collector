@@ -15,6 +15,17 @@ use GC\GamesCollector\Attributes as Attributes;
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
 	/**
+	 * Kick off the rest api.
+	 */
+	public function setUp() {
+		parent::setUp();
+		global $wp_rest_server;
+
+		$this->server = $wp_rest_server = new \WP_Rest_Server;
+		do_action( 'rest_api_init' );
+	}
+
+	/**
 	 * Get a game from WordPress (or create and get it).
 	 *
 	 * @since  1.1.0
