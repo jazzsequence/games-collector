@@ -261,7 +261,7 @@ function get_players( $game_id ) {
 			// Translators: 1: Minimum number of players, 2: Maximum number of players.
 			__( '%1$d %2$s players', 'games-collector' ),
 			absint( $players_min_max['min'] ),
-			isset( $players_min_max['max'] ) ? sprintf( '- %d', absint( $players_min_max['max'] ) ) : ''
+			isset( $players_min_max['max'] ) ? sprintf( '- %d', absint( $players_min_max['max'] ) ) : '+'
 		) ); ?></span><?php
 
 		$output = ob_get_clean();
