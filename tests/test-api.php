@@ -95,30 +95,42 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 */
 	public function test_api_endpoint() {
 		// Test that we can hit the endpoint.
-		$response      = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/games/' ) );
-		$response_code = wp_remote_retrieve_response_code( $response );
+		$my_route = '/wp/v2/games';
+		$routes   = $this->server->get_routes();
+		foreach ( $routes as $route => $route_config ) {
+			if ( 0 === strpos( $my_route, $route ) ) {
+				$this->assertTrue( is_array( $route_config ) );
+				foreach ( $route_config as $i => $endpoint ) {
+					$this->assertArrayHasKey( 'callback', $endpoint );
+					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
+					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
+					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+				}
+			}
+		}
+
+		$request = new \WP_Rest_Request( 'GET', $my_route );
+		$response = $this->server->dispatch( $request );
 		$this->assertEquals(
-			$response_code,
+			$response->get_status(),
 			200,
-			sprintf( 'Did not get a 200 OK status code fetching from the API. Response returned was %s: %s', $response_code, wp_remote_retrieve_response_message( $response ) )
+			sprintf( 'Did not get a 200 OK status code fetching from the API.', $response->get_status() )
 		);
 
 		// Test that we can reach a single game's endpoint.
-		$post_id       = $this->get_game_by_api()->id;
-		$response      = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/games/' . $post_id ) );
-		$response_code = wp_remote_retrieve_response_code( $response );
+		$post_id  = $this->get_game()->ID;
+		$request  = new \WP_Rest_Request( 'GET', $my_route . '/' . $post_id );
+		$response = $this->server->dispatch( $request );
 		$this->assertEquals(
-			$response_code,
+			$response->get_status(),
 			200,
-			sprintf( 'Did not get a 200 OK status code fetching a post from the API. Response returned was %s: %s', $response_code, wp_remote_retrieve_response_message( $response ) )
+			sprintf( 'Did not get a 200 OK status code fetching a post from the API.', $response->get_status() )
 		);
 
 		// Test that the game we're hitting is the one we expect.
-		$wp_post  = $this->get_game();
-		$api_post = $this->get_game_by_api();
 		$this->assertSame(
-			$wp_post->post_title,
-			$api_post->title->rendered,
+			$this->get_game()->post_title,
+			$response->data['title']['rendered'],
 			'The post title for the API post did not match what we were expecting.'
 		);
 	}
@@ -131,21 +143,37 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 */
 	public function test_attribute_api_endpoint() {
 		// Test that we can hit the endpoint.
-		$response      = wp_remote_get( get_home_url( null, '/wp-json/wp/v2/attributes/' ) );
-		$response_code = wp_remote_retrieve_response_code( $response );
+		$my_route = '/wp/v2/attributes';
+		$routes   = $this->server->get_routes();
+		foreach ( $routes as $route => $route_config ) {
+			if ( 0 === strpos( $my_route, $route ) ) {
+				$this->assertTrue( is_array( $route_config ) );
+				foreach ( $route_config as $i => $endpoint ) {
+					$this->assertArrayHasKey( 'callback', $endpoint );
+					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
+					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
+					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+				}
+			}
+		}
+
+		$request = new \WP_Rest_Request( 'GET', $my_route );
+		$response = $this->server->dispatch( $request );
 		$this->assertEquals(
-			$response_code,
+			$response->get_status(),
 			200,
-			sprintf( 'Did not get a 200 OK status code fetching from the API. Response returned was %s: %s', $response_code, wp_remote_retrieve_response_message( $response ) )
+			sprintf( 'Did not get a 200 OK status code fetching from the API.', $response->get_status() )
 		);
 
 		// Test that the API can return data on a specific attribute.
 		Attributes\create_default_attributes();
-		$term     = get_term_by( 'name', 'Fantasy', 'gc_attribute' );
-		$api_term = json_decode( wp_remote_retrieve_body( wp_remote_get( get_home_url( null, '/wp-json/wp/v2/attributes/' . $this->get_attribute_id_by_title( 'Fantasy' ) ) ) ) );
+		$term_name = 'Fantasy';
+		$term     = get_term_by( 'name', $term_name, 'gc_attribute' );
+		$request  = new \WP_Rest_Request( 'GET', $my_route . '/' . $term->term_id );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame(
 			$term->name,
-			$api_term->name,
+			$response->data['name'],
 			'Tried to get the attribute "Fantasy" via the API but was not able to retrieve attribute information from the API.'
 		);
 
@@ -159,43 +187,44 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 */
 	public function test_meta_json_filter() {
 		// Get our post via the API.
-		$post = $this->get_game_by_api();
-		$post_id = $this->get_game()->ID;
+		$post_id  = $this->get_game()->ID;
+		$request  = new \WP_Rest_Request( 'GET', '/wp/v2/games/' . $post_id );
+		$response = $this->server->dispatch( $request );
 
 		// Test that the post meta matches what we set when we created the game.
 		$this->assertSame(
-			get_post_meta( $post_id, '_gc_min_players' ),
-			$post->min_players,
+			'1',
+			$response->data['min_players'][0],
 			'The min players in post meta did not match the value returned by the API.'
 		);
 
 		$this->assertSame(
-			get_post_meta( $post_id, '_gc_max_players' ),
-			$post->max_players,
+			'6',
+			$response->data['max_players'][0],
 			'The max players in post meta did not match the value returned by the API.'
 		);
 
 		$this->assertSame(
-			get_post_meta( $post_id, '_gc_time' ),
-			$post->time,
+			'20-45',
+			$response->data['time'][0],
 			'The playing time in post meta did not match the value returned by the API.'
 		);
 
 		$this->assertSame(
-			get_post_meta( $post_id, '_gc_age' ),
-			$post->age,
+			'11',
+			$response->data['age'][0],
 			'The recommended age in post meta did not match the value returned by the API.'
 		);
 
 		$this->assertSame(
-			get_post_meta( $post_id, '_gc_difficulty' ),
-			$post->difficulty,
+			'easy',
+			$response->data['difficulty'][0],
 			'The difficulty level in post meta did not match the value returned by the API.'
 		);
 
 		$this->assertSame(
-			get_post_meta( $post_id, '_gc_link' ),
-			$post->url,
+			'https://boardgamegeek.com/boardgame/815/chrononauts',
+			$response->data['url'][0],
 			'The game link in post meta did not match the value returned by the API.'
 		);
 	}
