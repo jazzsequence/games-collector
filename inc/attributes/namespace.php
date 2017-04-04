@@ -73,7 +73,6 @@ function meta_box_display() {
 		<?php
 		if ( current_user_can( 'edit_posts' ) ) {
 			$taxonomy = get_taxonomy( $tax );
-			$label = apply_filters( 'ctm_tax_label' , $taxonomy->labels->name, $tax, 'gc_game' );
 
 			$terms = get_terms( $tax, [ 'hide_empty' => 0 ] );
 			$current_terms = wp_get_post_terms( get_the_ID(), $tax, [ 'fields' => 'ids' ] );
@@ -184,15 +183,14 @@ function create_default_attributes() {
  * @link  https://gist.github.com/helen/1573966#file-wp-chosen-tax-metabox-php
  */
 function save_post( $post_id ) {
-	// verify nonce
+	// Verify nonce.
 	if ( ! isset( $_POST['chosen_taxonomy_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['chosen_taxonomy_meta_box_nonce'], 'chosen-save-tax-terms' ) ) {
 		return;
 	}
-	// check autosave
+	// Check autosave.
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
-	$post_type = get_post_type( $post_id );
 
 	$input = isset( $_POST['tax_input']['gc_attribute'] ) ? $_POST['tax_input']['gc_attribute'] : '';
 
