@@ -7,6 +7,9 @@ tools:
 filter:
     excluded_paths:
         - 'tests/*'
+        - 'vendor/*'
+        - 'bin/*'
+        - 'assets/js/isotope.pkgd.min.js'
 checks:
     php:
         code_rating: true
