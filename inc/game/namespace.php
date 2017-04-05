@@ -344,15 +344,15 @@ function get_game_length( $post_id = 0 ) {
 
 	if ( $game_time ) {
 		switch ( $time ) {
-			case ( absint( $time ) <= 20 ) :
+			case ( absint( $time ) <= 20 ):
 				$classes .= 'short';
 				break;
 
-			case ( absint( $time ) > 60 ) :
+			case ( absint( $time ) > 60 ):
 				$classes .= 'long';
 				break;
 
-			default :
+			default:
 				break;
 		}
 	}
