@@ -72,7 +72,6 @@ function meta_box_display() {
 		</script>
 		<?php
 		if ( current_user_can( 'edit_posts' ) ) {
-			$taxonomy = get_taxonomy( $tax );
 
 			$terms = get_terms( $tax, [ 'hide_empty' => 0 ] );
 			$current_terms = wp_get_post_terms( get_the_ID(), $tax, [ 'fields' => 'ids' ] );
