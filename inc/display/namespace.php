@@ -29,8 +29,6 @@ function get_game_title( $game ) {
 		$after  = '</a>';
 	}
 
-	$title = '<span class="game-title" id="game-' . absint( $game->ID ) . '-title">' . wp_kses_post( $game->post_title ) . '</span>';
-
 	// 1: Game ID, 2: Game title, 3: Link <a> tag, 4: Closing </a>.
 	$output = sprintf( '%3$s<span class="game-title" id="game-%1$d-title">%2$s</span>%4$s',
 		absint( $game->ID ),
