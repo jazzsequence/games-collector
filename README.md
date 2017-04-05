@@ -37,6 +37,10 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ## Changelog ##
 
+### 1.2.0 ###
+* Scrutinizer CI integration for code coverage and quality checking.
+* Cleaned up some code as a result of Scrutinizer sniffs.
+
 ### 1.1.0 ###
 * Add activation hook that will create a Games page with the shortcode on plugin activation.
 * Fixed some display errors and undefined notices on titles.
