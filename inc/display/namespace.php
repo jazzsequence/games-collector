@@ -443,8 +443,8 @@ function get_svg( $name = '', $encoded = true ) {
 		 *
 		 * @var array
 		 */
-		$icons = apply_filters( 'gc_filter_svg_xml', Attributes\gc_kses( $icons ) );
-	}
+		$icons = apply_filters( 'gc_filter_svg_xml', $icons );
+	} // End if().
 
 	return $icons[ $name ];
 }
