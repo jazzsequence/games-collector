@@ -77,7 +77,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure the CPT exists.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\register_cpt
 	 */
 	function test_cpt_exists() {
 		$this->assertTrue(
@@ -90,7 +89,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Makes sure a game can be created.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\register_cpt
 	 */
 	function test_game_post() {
 		$post_id = $this->create_post();
@@ -104,7 +102,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure that the number of players saves and returns the right range.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\get_number_of_players
 	 */
 	function test_get_number_of_players() {
 		$post_id = $this->create_post();
@@ -121,7 +118,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure that we can get the min/max players back in an array.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\get_players_min_max
 	 */
 	function test_get_players_min_max() {
 		$post_id = $this->create_post();
@@ -138,7 +134,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure that the age range matches what was entered.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\get_age
 	 */
 	function test_get_age() {
 		$post_id = $this->create_post();
@@ -155,8 +150,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure the difficulty matches the translated string.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\get_difficulty
-	 * @covers GC\GamesCollector\Game\get_difficulties
 	 */
 	function test_difficulty() {
 		$post_id = $this->create_post();
@@ -178,7 +171,6 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 * Make sure game length returns the correct classes.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Game\get_game_length
 	 */
 	function test_game_length() {
 		$post_id = $this->create_post();

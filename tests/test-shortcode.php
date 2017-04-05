@@ -394,7 +394,6 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 * Test that the games list matches the output we expect.
 	 *
 	 * @since  1.1.0
-	 * @covers GC\GamesCollector\Shortcode\shortcode
 	 */
 	public function test_games_list() {
 		$stupid_white_space = ' ';
@@ -419,9 +418,6 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 * Test that an individual game or select games returns the expected output.
 	 *
 	 * @since  1.1.0
-	 * @covers GC\GamesCollector\Shortcode\shortcode
-	 * @covers GC\GamesCollector\Display\get_attributes
-	 * @covers GC\GamesCollector\Game\get_game_classes
 	 */
 	public function test_single_game() {
 		$stupid_white_space = ' ';

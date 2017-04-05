@@ -17,7 +17,6 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 * Test that the Attribute taxonomy was created.
 	 *
 	 * @since 1.0.0
-	 * @covers GC\GamesCollector\Attributes\register_taxonomy
 	 */
 	function test_attributes_taxonomy_exists() {
 		$this->assertTrue(
@@ -30,7 +29,6 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 * Test that the default terms were inserted.
 	 *
 	 * @since 1.0.0
-	 * @covers GC\GamesCollector\Attributes\create_default_attributes
 	 */
 	function test_base_terms_exist() {
 		$terms = [ 'Solo Play', 'Cooperative', 'Party Game', 'Easy-to-learn', 'Heavy Strategy', 'Expansion', 'City/Empire Building', 'Fast-paced', 'Card Game', 'Deck Building', 'Dice Game', 'Role-Playing Game', 'Sci-Fi', 'Horror', 'Fantasy', 'Based on a Film/TV Show', 'Mystery', 'Historical', 'Legacy' ];
@@ -50,7 +48,6 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 * Test that the attribute list is displaying the expected output.
 	 *
 	 * @since  1.0.0
-	 * @covers GC\GamesCollector\Attributes\get_the_attribute_list
 	 */
 	function test_attributes_list() {
 		// Create the attributes.

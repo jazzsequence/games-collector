@@ -183,7 +183,6 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 * Test the post meta values in the API JSON data.
 	 *
 	 * @since  1.1.0
-	 * @covers GC\GamesCollector\Api\filter_games_json
 	 */
 	public function test_meta_json_filter() {
 		// Get our post via the API.
