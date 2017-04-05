@@ -11,6 +11,8 @@ use GC\GamesCollector\Attributes as Attributes;
 
 /**
  * Games Collector API unit test class.
+ *
+ * @group rest-api
  */
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
