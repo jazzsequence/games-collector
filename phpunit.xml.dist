@@ -12,4 +12,20 @@
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+	<filter>
+	  <whitelist processUncoveredFilesFromWhitelist="true">
+		<directory suffix=".php">.</directory>
+		<directory suffix=".php">./inc/</directory>
+		<directory suffix=".php">./inc/api/</directory>
+		<directory suffix=".php">./inc/attributes/</directory>
+		<directory suffix=".php">./inc/display/</directory>
+		<directory suffix=".php">./inc/game/</directory>
+		<directory suffix=".php">./inc/shortcode/</directory>
+		<exclude>
+		  <directory suffix=".php">./vendor/</directory>
+		  <directory suffix=".php">./tests/</directory>
+		  <directory suffix=".php">./bin/</directory>
+		</exclude>
+	  </whitelist>
+	</filter>
 </phpunit>
