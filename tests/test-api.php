@@ -91,7 +91,6 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 * Test that the REST endpoint is accessible and returns data we expect.
 	 *
 	 * @since  1.1.0
-	 * @covers nothing
 	 */
 	public function test_api_endpoint() {
 		// Test that we can hit the endpoint.
@@ -139,7 +138,6 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 * Test that the attributes endpoints can be reached.
 	 *
 	 * @since  1.1.0
-	 * @covers nothing
 	 */
 	public function test_attribute_api_endpoint() {
 		// Test that we can hit the endpoint.
