@@ -183,4 +183,23 @@ class GC_Test_Game extends WP_UnitTestCase {
 			( '' !== $game_length ) ? sprintf( 'Get game length returned %s instead of "long".', $game_length ) : 'Get game length did not return short or long when "long" was expected.'
 		);
 	}
+
+	function test_specific_number_of_players_filter() {
+		$post_id = $this->factory->post->create([
+			'post_title' => 'Chess',
+			'post_type'  => 'gc_game',
+		]);
+
+		add_post_meta( $post_id, '_gc_min_players', 2 );
+		add_post_meta( $post_id, '_gc_max_players', 2 );
+
+		$output          = GC\GamesCollector\Display\get_players( $post_id );
+		$players_min_max = GC\GamesCollector\Game\get_players_min_max( $post_id );
+
+		$this->assertNotEquals(
+			GC\GamesCollector\specific_number_of_players( $post_id, $players_min_max, $output ),
+			$output,
+			'2 player output returned default output instead.'
+		);
+	}
 }
