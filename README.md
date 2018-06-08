@@ -38,6 +38,8 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ## Changelog ##
 
 ### 1.2.0 ###
+* Fixed a display issue where games that can only be played with a specific number of players were still displaying the min/max player numbers. Changed to just display the number of players, e.g. `2 players` instead of `2 - 2 players`.
+* Dropped support for `hhvm`. Require minimum of PHP 5.6 and begin to deprecate PHP 5.4.
 * Scrutinizer CI integration for code coverage and quality checking.
 * Cleaned up some code as a result of Scrutinizer sniffs.
 
