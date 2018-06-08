@@ -253,7 +253,7 @@ function get_players( $game_id ) {
 	$players_min_max = Game\get_players_min_max( $game_id );
 
 	if ( isset( $players_min_max['min'] ) ) {
-			ob_start(); ?>
+		ob_start(); ?>
 
 		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
 			// Translators: 1: Minimum number of players, 2: Maximum number of players.
@@ -268,10 +268,12 @@ function get_players( $game_id ) {
 		 * Allow the # of players to be filtered (but only if there actually are players).
 		 *
 		 * @since 1.0.0
-		 * @var   string The HTML markup for # of players.
-		 * @uses         Game\get_players_min_max
+		 * @var   $game_id         int    The game's post ID.
+		 * @var   $players_min_max array  The minimum & maximum # of players.
+		 * @var   $output          string The HTML markup for # of players.
+		 * @uses                          Game\get_players_min_max
 		 */
-		return apply_filters( 'gc_filter_players', $output );
+		return apply_filters( 'gc_filter_players', $game_id, $players_min_max, $output );
 	}
 
 	return false;

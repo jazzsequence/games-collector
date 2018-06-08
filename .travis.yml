@@ -26,17 +26,15 @@ matrix:
     fast_finish: true
 
     include:
-        # plugin requires minimum of php 5.4
-        - php: '5.4'
-        # aliased to a recent 5.6.x version
+        # plugin requires minimum of php 5.6
         - php: '5.6'
         # aliased to a recent 7.x version
         - php: '7.0'
-        # aliased to a recent hhvm version
-        - php: 'hhvm'
+        # aliased to a recent 5.4 version
+        - php: '5.4'
 
     allow_failures:
-        - php: 'hhvm'
+        - php: '5.4'
 
 env:
   - WP_VERSION=latest WP_MULTISITE=0
