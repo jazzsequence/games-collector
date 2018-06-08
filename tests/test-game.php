@@ -184,6 +184,11 @@ class GC_Test_Game extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Test that the filter that alters the number of players when number of players is not variable changes the display.
+	 *
+	 * @since 1.2.0
+	 */
 	public function test_specific_number_of_players_filter() {
 		$post_id = $this->factory->post->create([
 			'post_title' => 'Chess',
