@@ -199,7 +199,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected_output,
-			strip_tags( GC\GamesCollector\specific_number_of_players( $post_id, $players_min_max, $output ) ),
+			preg_replace( '/\t+|\r|\n/', '', strip_tags( GC\GamesCollector\specific_number_of_players( $post_id, $players_min_max, $output ) ) ),
 			'2 player output returned default output instead.'
 		);
 	}
