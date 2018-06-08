@@ -171,7 +171,7 @@ function get_filters() {
 	$game_difficulties = '';
 
 	foreach ( Game\get_difficulties() as $key => $value ) {
-		$game_difficulties = '<option value=".' . esc_html( $key ) . '">' . esc_html( $value ) . '</option>';
+		$game_difficulties .= '<option value=".' . esc_html( $key ) . '">' . esc_html( $value ) . '</option>';
 	}
 
 	/**

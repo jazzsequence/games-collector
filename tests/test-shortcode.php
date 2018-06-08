@@ -152,7 +152,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		</select>
 	</div><div class="difficulty-filter"><label for="difficulty-filter-select">Difficulty:</label>
 		<select class="difficulty-filter-select">
-			<option selected>- Select one -</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
+			<option selected>- Select one -</option><option value=".easy">Easy</option><option value=".moderate">Moderate</option><option value=".difficult">Difficult</option><option value=".hardcore">Hard Core (experienced gamers only!)</option>
 		</select>
 	</div>	</div>
 
