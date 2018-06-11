@@ -207,5 +207,24 @@ class GC_Test_Game extends WP_UnitTestCase {
 			GC\GamesCollector\numbers_of_players( $post_id, $players_min_max, $output ),
 			'2 player output returned default output instead.'
 		);
+
+		$post_id = $this->factory->post->create([
+			'post_title' => 'Zombie Dice',
+			'post_type'  => 'gc_game',
+		]);
+
+		add_post_meta( $post_id, '_gc_min_players', 2 );
+		add_post_meta( $post_id, '_gc_max_players', 99 );
+
+		$output          = GC\GamesCollector\Display\get_players( $post_id );
+		$players_min_max = GC\GamesCollector\Game\get_players_min_max( $post_id );
+		$expected_output = '2+ players';
+
+		$this->assertSame(
+			$expected_output,
+			GC\GamesCollector\numbers_of_players( $post_id, $players_min_max, $output ),
+			'Large number of max player output returned default output instead.'
+		);
+
 	}
 }
