@@ -58,11 +58,22 @@ function activate() {
  */
 function numbers_of_players( $game_id, $players_min_max, $output ) {
 
+	// Deal with max number of players matching min number of players.
+	if ( absint( $players_min_max['min'] ) === absint( $players_min_max['max'] ) ) {
+		return esc_attr( sprintf(
 			// Translators: %d is the number of players.
 			_n( '%d player', '%d players', absint( $players_min_max['min'] ), 'games-collector' ),
 			absint( $players_min_max['min'] )
 		) );
+	}
 
+	// Deal with indeterminate or large number of max players.
+	if ( 0 === absint( $players_min_max['max'] ) || 20 <= absint( $players_min_max['max'] ) ) {
+		return esc_attr( sprintf(
+			// Translators: %d is the minimum number players.
+			__( '%d+ players', 'games-collector' ),
+			absint( $players_min_max['min'] )
+		) );
 	}
 
 	return $output;
