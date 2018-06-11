@@ -24,7 +24,7 @@ function bootstrap() {
 	add_action( 'register_shortcode_ui',   __NAMESPACE__ . '\\Shortcode\\register_all_games_shortcode' );
 	add_action( 'register_shortcode_ui',   __NAMESPACE__ . '\\Shortcode\\register_individual_games_shortcode' );
 	add_filter( 'rest_prepare_gc_game',    __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
-	add_filter( 'gc_filter_players',       __NAMESPACE__ . '\\specific_number_of_players', 10, 3 );
+	add_filter( 'gc_filter_players',       __NAMESPACE__ . '\\numbers_of_players', 10, 3 );
 	add_shortcode( 'games-collector',      __NAMESPACE__ . '\\Shortcode\\shortcode' );
 	add_shortcode( 'games-collector-list', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 }
@@ -46,7 +46,9 @@ function activate() {
 }
 
 /**
- * Update the number of players if a game only allows a specific number.
+ * Update the number of players.
+ *
+ * Adds conditions for games with specific number of players only (e.g. 1 player, 2 players) or an indeterminate or very large number of players (e.g. 2+, 2-99 players).
  *
  * @since  1.2.0
  * @param  int    $game_id         The game's post ID.
@@ -54,22 +56,24 @@ function activate() {
  * @param  string $output          The player output.
  * @return string                  The filtered output.
  */
-function specific_number_of_players( $game_id, $players_min_max, $output ) {
-	if ( absint( $players_min_max['min'] ) === absint( $players_min_max['max'] ) ) {
-		ob_start(); ?>
+function numbers_of_players( $game_id, $players_min_max, $output ) {
 
-		<span class="gc-icon icon-game-players"><?php Display\the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players">
-		<?php
-		echo esc_attr( sprintf(
+	// Deal with max number of players matching min number of players.
+	if ( absint( $players_min_max['min'] ) === absint( $players_min_max['max'] ) ) {
+		return esc_attr( sprintf(
 			// Translators: %d is the number of players.
 			_n( '%d player', '%d players', absint( $players_min_max['min'] ), 'games-collector' ),
 			absint( $players_min_max['min'] )
 		) );
-		?>
-		</span>
-		<?php
+	}
 
-		$output = ob_get_clean();
+	// Deal with indeterminate or large number of max players.
+	if ( 0 === absint( $players_min_max['max'] ) || 20 <= absint( $players_min_max['max'] ) ) {
+		return esc_attr( sprintf(
+			// Translators: %d is the minimum number players.
+			__( '%d+ players', 'games-collector' ),
+			absint( $players_min_max['min'] )
+		) );
 	}
 
 	return $output;
