@@ -253,6 +253,16 @@ function get_players( $game_id ) {
 	$players_min_max = Game\get_players_min_max( $game_id );
 
 	if ( isset( $players_min_max['min'] ) ) {
+		/**
+		 * Allow the # of players to be filtered (but only if there actually are players).
+		 *
+		 * @since 1.0.0
+		 * @var   $game_id         int    The game's post ID.
+		 * @var   $players_min_max array  The minimum & maximum # of players.
+		 * @var   $output          string The filtered # of players.
+		 * @uses                          Game\get_players_min_max
+		 */
+		$num_players = apply_filters( 'gc_filter_players', $game_id, $players_min_max, sprintf(
 			// Translators: 1: Minimum number of players, 2: Maximum number of players.
 			__( '%1$d %2$s players', 'games-collector' ),
 			absint( $players_min_max['min'] ),
@@ -269,15 +279,15 @@ function get_players( $game_id ) {
 		$output = ob_get_clean();
 
 		/**
-		 * Allow the # of players to be filtered (but only if there actually are players).
+		 * Allow the full output for the # of players to be filtered (but only if there actually are players).
 		 *
 		 * @since 1.0.0
-		 * @var   $game_id         int    The game's post ID.
-		 * @var   $players_min_max array  The minimum & maximum # of players.
-		 * @var   $output          string The HTML markup for # of players.
+		 * @var   $output      string The HTML markup for # of players.
+		 * @var   $game_id     int    The game's post ID.
+		 * @var   $num_players string The number of players (filtered from above).
 		 * @uses                          Game\get_players_min_max
 		 */
-		return apply_filters( 'gc_filter_players', $game_id, $players_min_max, $output );
+		return apply_filters( 'gc_filter_players_output', $output, $game_id, $num_players );
 	}
 
 	return false;
