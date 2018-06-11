@@ -253,15 +253,19 @@ function get_players( $game_id ) {
 	$players_min_max = Game\get_players_min_max( $game_id );
 
 	if ( isset( $players_min_max['min'] ) ) {
-		ob_start(); ?>
-
-		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( sprintf(
 			// Translators: 1: Minimum number of players, 2: Maximum number of players.
 			__( '%1$d %2$s players', 'games-collector' ),
 			absint( $players_min_max['min'] ),
 			isset( $players_min_max['max'] ) ? sprintf( '- %d', absint( $players_min_max['max'] ) ) : '+'
-		) ); ?></span><?php
+		) );
 
+		ob_start();
+		?>
+
+		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players">
+			<?php echo esc_attr( $num_players ); ?>
+		</span>
+		<?php
 		$output = ob_get_clean();
 
 		/**
