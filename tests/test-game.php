@@ -189,7 +189,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 	 *
 	 * @since 1.2.0
 	 */
-	public function test_specific_number_of_players_filter() {
+	public function test_numbers_of_players_filter() {
 		$post_id = $this->factory->post->create([
 			'post_title' => 'Chess',
 			'post_type'  => 'gc_game',
@@ -204,7 +204,7 @@ class GC_Test_Game extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected_output,
-			preg_replace( '/\t+/', '', GC\GamesCollector\specific_number_of_players( $post_id, $players_min_max, $output ) ),
+			GC\GamesCollector\numbers_of_players( $post_id, $players_min_max, $output ),
 			'2 player output returned default output instead.'
 		);
 	}
