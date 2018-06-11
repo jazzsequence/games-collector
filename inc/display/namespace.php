@@ -272,9 +272,7 @@ function get_players( $game_id ) {
 		ob_start();
 		?>
 
-		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players">
-			<?php echo esc_attr( $num_players ); ?>
-		</span>
+		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( $num_players ); ?></span>
 		<?php
 		$output = ob_get_clean();
 
