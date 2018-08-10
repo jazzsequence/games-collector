@@ -49,3 +49,14 @@ function bgg_search( string $query, $type = 'boardgame' ) {
 		esc_html( $type )
 	) );
 }
+
+/**
+ * Return the BGG API endpoint for a single game/entity.
+ *
+ * @since  1.2.0
+ * @param  int $id The BGG entity ID.
+ * @return string  The BGG URL.
+ */
+function bgg_game( int $id ) {
+	return esc_url( bgg_api2() . 'thing?id=' . $id );
+}
