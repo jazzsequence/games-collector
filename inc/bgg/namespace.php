@@ -38,7 +38,7 @@ function bgg_api2() {
  * @param  string $type  The type of search (optional). Allowed values are rpgitem, videogame, boardgame, boardgameaccessory or boardgameexpansion.
  * @return string        The BGG search API URL.
  */
-function bgg_search( $query, $type = 'boardgame' ) {
+function bgg_search( string $query, $type = 'boardgame' ) {
 	$query = str_replace( ' ', '+', $query );
 	$type  = in_array( $type, [ 'rpgitem', 'videogame', 'boardgame', 'boardgameaccessory', 'boardgameexpansion' ] ) ? $type : 'boardgame';
 
