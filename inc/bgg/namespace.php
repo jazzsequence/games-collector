@@ -42,7 +42,7 @@ function bgg_search( string $query, $type = 'boardgame' ) {
 	$query = str_replace( ' ', '+', $query );
 	$type  = in_array( $type, [ 'rpgitem', 'videogame', 'boardgame', 'boardgameaccessory', 'boardgameexpansion' ] ) ? $type : 'boardgame';
 
-	return esc_url( sprintf(
+	return esc_url_raw( sprintf(
 		'%1$ssearch?search=%2$s&type=%3$s',
 		bgg_api(),
 		esc_html( $query ),
