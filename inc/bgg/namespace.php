@@ -346,6 +346,12 @@ function insert_game() {
  * @return int|bool       The term ID if a matching term exists, false if it doesn't.
  */
 function get_attribute_like( $search ) {
+	// Check if a previously cached attribute for this term exists already.
+	$cached_term_search = get_transient( 'gc_frequently_used_attributes' );
+	if ( $cached_term_search && array_key_exists( $search, $cached_term_search ) ) {
+		return $cached_term_search[ $search ];
+	}
+
 	$terms = get_terms( [
 		'taxonomy'   => 'gc_attribute',
 		'hide_empty' => true,
@@ -354,6 +360,16 @@ function get_attribute_like( $search ) {
 	] );
 
 	if ( ! is_wp_error( $terms ) && count( $terms ) > 0 ) {
+		// Cache this term combination so we can access it faster later.
+		if ( ! $cached_term_search ) {
+			set_transient( 'gc_frequently_used_attributes', [
+				$search => $terms[0],
+			], 999 * YEAR_IN_SECONDS );
+		} else {
+			$cached_term_search = array_merge( $cached_term_search, [ $search => $terms[0] ] );
+			set_transient( 'gc_frequently_used_attributes', $cached_term_search, 999 * YEAR_IN_SECONDS );
+		}
+
 		return $terms[0];
 	}
 
