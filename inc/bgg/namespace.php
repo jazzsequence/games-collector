@@ -228,7 +228,7 @@ function render_cmb2_bgg_search( $field, $escaped_value, $object_id, $object_typ
  * Store the Board Game Geek search results in a transient so we can access it later.
  *
  * @since  1.2.0
- * @return void
+ * @return void|wp_die
  */
 function search_response() {
 	if ( isset( $_POST['nonce_CMB2phpbgg-search'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce_CMB2phpbgg-search'] ) ), 'nonce_CMB2phpbgg-search' ) ) {
@@ -267,7 +267,7 @@ function bgg_search_results_options( $results ) {
  * Insert the game using BGG data from the API.
  *
  * @since  1.2.0
- * @return void
+ * @return void|wp_die
  */
 function insert_game() {
 	if ( isset( $_POST['nonce_CMB2phpbgg-search-2'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce_CMB2phpbgg-search-2'] ) ), 'nonce_CMB2phpbgg-search-2' ) ) {
