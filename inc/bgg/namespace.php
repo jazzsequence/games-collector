@@ -60,3 +60,33 @@ function bgg_search( string $query, $type = 'boardgame' ) {
 function bgg_game( int $id ) {
 	return esc_url( bgg_api2() . 'thing?id=' . $id );
 }
+
+/**
+ * Return the search results for a given query.
+ *
+ * @since  1.2.0
+ * @param  string $query A search query for a game.
+ * @return array         An array of possible matches.
+ */
+function get_bgg_search_results( $query ) {
+	$response = wp_remote_get( bgg_search( $query ) );
+	$results  = [];
+
+	if ( isset( $response['response'] ) && 200 === $response['response']['code'] ) {
+		$xml  = simplexml_load_string( wp_remote_retrieve_body( $response ) );
+
+		if ( isset( $xml->boardgame ) ) {
+			foreach ( $xml->boardgame as $game ) {
+				$game = (array) $game;
+
+				$results[] = [
+					'id' => (int) $game['@attributes']['objectid'],
+					'name' => $game['name'],
+					'year' => $game['yearpublished'],
+				];
+			}
+		}
+	}
+
+	return $results;
+}
