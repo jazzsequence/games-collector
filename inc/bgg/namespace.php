@@ -129,3 +129,60 @@ function get_bgg_game( $id ) {
 
 	return $data;
 }
+
+/**
+ * CMB2 field for BGG Search.
+ *
+ * @since 1.2.0
+ */
+function fields() {
+	$search_results = get_transient( 'gc_last_bgg_search' );
+
+	// First run.
+	if ( ! $search_results ) {
+		$cmb = new_cmb2_box( array(
+			'id'           => 'bgg-search',
+			'title'        => __( 'Add game from Board Game Geek', 'games-collector' ),
+			'object_types' => [ 'options-page' ],
+			'option_key'   => 'add_from_bgg',
+			'parent_slug'  => 'edit.php?post_type=gc_game',
+			'menu_title'   => __( 'Add New From BGG', 'games-collector' ),
+			'save_button'  => __( 'Search for Game', 'games-collector' ),
+		) );
+
+		$cmb->add_field( array(
+			'name'       => __( 'Search', 'games-collector' ),
+			'id'         => 'bgg_searchform',
+			'type'       => 'bgg_search',
+			'desc'       => __( 'Type in the title of a game to search for that game on Board Game Geek.', 'games-collector' ),
+		) );
+	} else {
+		// Choose the right game.
+		$cmb = new_cmb2_box( array(
+			'id'           => 'bgg-search-2',
+			'title'        => __( 'Add game from Board Game Geek &mdash; Step 2', 'games-collector' ),
+			'object_types' => [ 'options-page' ],
+			'option_key'   => 'add_from_bgg',
+			'parent_slug'  => 'edit.php?post_type=gc_game',
+			'menu_title'   => __( 'Add New From BGG', 'games-collector' ),
+			'save_button'  => __( 'Add Game', 'games-collector' ),
+		) );
+
+		$cmb->add_field( array(
+			'name'       => __( 'Search Results', 'games-collector' ),
+			'id'         => 'bgg_search_results',
+			'type'       => 'radio',
+			'desc'       => __( 'Select the game that matches your search.', 'games-collector' ),
+			'options'    => bgg_search_results_options( $search_results ),
+		) );
+
+		$cmb->add_field( array(
+			'id'         => 'bgg_search_results_hidden',
+			'type'       => 'hidden',
+			'attributes' => [
+				'name' => 'action',
+				'value' => 'bgg_insert_game',
+			],
+		) );
+	}
+}
