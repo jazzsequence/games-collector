@@ -14,18 +14,18 @@ namespace GC\GamesCollector;
  */
 function bootstrap() {
 	// Add all your plugin hooks here.
-	add_action( 'cmb2_init',               __NAMESPACE__ . '\\Game\\fields' );
-	add_action( 'init',                    __NAMESPACE__ . '\\Game\\register_cpt' );
-	add_action( 'init',                    __NAMESPACE__ . '\\Attributes\\register_taxonomy' );
-	add_action( 'admin_init',              __NAMESPACE__ . '\\Attributes\\create_default_attributes' );
-	add_action( 'add_meta_boxes',          __NAMESPACE__ . '\\Attributes\\metabox' );
-	add_action( 'admin_enqueue_scripts',   __NAMESPACE__ . '\\Attributes\\enqueue_scripts' );
-	add_action( 'wp_enqueue_scripts',      __NAMESPACE__ . '\\Display\\enqueue_scripts' );
-	add_action( 'register_shortcode_ui',   __NAMESPACE__ . '\\Shortcode\\register_all_games_shortcode' );
-	add_action( 'register_shortcode_ui',   __NAMESPACE__ . '\\Shortcode\\register_individual_games_shortcode' );
-	add_filter( 'rest_prepare_gc_game',    __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
-	add_filter( 'gc_filter_players',       __NAMESPACE__ . '\\numbers_of_players', 10, 3 );
-	add_shortcode( 'games-collector',      __NAMESPACE__ . '\\Shortcode\\shortcode' );
+	add_action( 'cmb2_init', __NAMESPACE__ . '\\Game\\fields' );
+	add_action( 'init', __NAMESPACE__ . '\\Game\\register_cpt' );
+	add_action( 'init', __NAMESPACE__ . '\\Attributes\\register_taxonomy' );
+	add_action( 'admin_init', __NAMESPACE__ . '\\Attributes\\create_default_attributes' );
+	add_action( 'add_meta_boxes', __NAMESPACE__ . '\\Attributes\\metabox' );
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Attributes\\enqueue_scripts' );
+	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\Display\\enqueue_scripts' );
+	add_action( 'register_shortcode_ui', __NAMESPACE__ . '\\Shortcode\\register_all_games_shortcode' );
+	add_action( 'register_shortcode_ui', __NAMESPACE__ . '\\Shortcode\\register_individual_games_shortcode' );
+	add_filter( 'rest_prepare_gc_game', __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
+	add_filter( 'gc_filter_players', __NAMESPACE__ . '\\numbers_of_players', 10, 3 );
+	add_shortcode( 'games-collector', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 	add_shortcode( 'games-collector-list', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 }
 
