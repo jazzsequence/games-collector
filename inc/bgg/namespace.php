@@ -224,3 +224,22 @@ function render_cmb2_bgg_search( $field, $escaped_value, $object_id, $object_typ
 	] );
 }
 
+/**
+ * Store the Board Game Geek search results in a transient so we can access it later.
+ *
+ * @since  1.2.0
+ * @return void
+ */
+function search_response() {
+	if ( isset( $_POST['nonce_CMB2phpbgg-search'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce_CMB2phpbgg-search'] ) ), 'nonce_CMB2phpbgg-search' ) ) {
+
+		$search_query = isset( $_POST['bgg_searchform'] ) ? sanitize_text_field( wp_unslash( $_POST['bgg_searchform'] ) ) : '';
+		$results      = get_bgg_search_results( $search_query );
+		set_transient( 'gc_last_bgg_search', $results, DAY_IN_SECONDS );
+		wp_safe_redirect( admin_url( 'edit.php?post_type=gc_game&page=add_from_bgg&step=2' ) );
+		return;
+	}
+
+	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
+}
+
