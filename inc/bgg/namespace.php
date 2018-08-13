@@ -90,3 +90,42 @@ function get_bgg_search_results( $query ) {
 
 	return $results;
 }
+
+/**
+ * Return the BGG data that maps to data used in Games Collector for a game.
+ *
+ * @since  1.2.0
+ * @param  int $id The BGG game id.
+ * @return array   An array of game information pulled from the entry on Board Game Geek.
+ */
+function get_bgg_game( $id ) {
+	$response = wp_remote_get( bgg_game( $id ) );
+	$data     = [];
+
+	if ( isset( $response['response'] ) && 200 === $response['response']['code'] ) {
+		$xml = simplexml_load_string( wp_remote_retrieve_body( $response ) );
+		$game = $xml->item;
+		$data = [
+			'title'       => (string) $game->name->attributes()['value'],
+			'image'       => (string) $game->image,
+			'minplayers'  => (int) $game->minplayers->attributes()['value'],
+			'maxplayers'  => (int) $game->maxplayers->attributes()['value'],
+			'minplaytime' => (int) $game->minplaytime->attributes()['value'],
+			'maxplaytime' => (int) $game->maxplaytime->attributes()['value'],
+			'minage'      => (int) $game->minage->attributes()['value'],
+			'categories'  => [],
+		];
+
+		$categories = [];
+
+		foreach ( $game->link as $metadata ) {
+			if ( 'boardgamecategory' === (string) $metadata->attributes()['type'] ) {
+				$categories[] = (string) $metadata->attributes()['value'];
+			}
+		}
+
+		$data['categories'] = ! empty( $categories ) ? $categories : [];
+	}
+
+	return $data;
+}
