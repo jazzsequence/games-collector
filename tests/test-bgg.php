@@ -72,4 +72,17 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			BGG\bgg_search( $query, 'boardgameexpansion' )
 		);
 	}
+
+	/**
+	 * Test BGG game helper.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\bgg_game
+	 */
+	public function test_bgg_game() {
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi2/thing?id=36218',
+			BGG\bgg_game( 36218 )
+		);
+	}
 }
