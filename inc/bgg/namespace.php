@@ -301,6 +301,7 @@ function insert_game() {
 				add_post_meta( $post_id, '_gc_max_players', absint( $game['maxplayers'] ) );
 				add_post_meta( $post_id, '_gc_age', absint( $game['minage'] ) );
 				add_post_meta( $post_id, '_gc_link', sprintf( 'https://www.boardgamegeek.com/boardgame/%d/', $game_id ) );
+				add_post_meta( $post_id, '_gc_bgg_id', $game_id );
 
 				if ( absint( $game['minplaytime'] ) === absint( $game['maxplaytime'] ) ) {
 					add_post_meta( $post_id, '_gc_time', esc_html( $game['minplaytime'] ) );
