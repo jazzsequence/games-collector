@@ -40,7 +40,7 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	 * @covers GC\GamesCollector\BGG\bgg_search()
 	 */
 	public function test_bgg_search() {
-		$query = 'hero realms';
+		$query = (string) 'hero realms';
 
 		$this->assertEquals(
 			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgame',
