@@ -45,6 +45,7 @@ env:
 before_script:
     - export PHPCS_DIR=/tmp/phpcs
     - export SNIFFS_DIR=/tmp/sniffs
+    -export VENDOR_DIR=/games-collector/vendor
     # Install CodeSniffer for Human Made Coding Standards checks.
     - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
     # Install Human Made Coding Standards.
@@ -65,6 +66,7 @@ before_script:
         composer global require "phpunit/phpunit=4.8.*"
       fi
     - |
+    - git clone --init --recursive https://github.com/CMB2/CMB2.git $VENDOR_DIR/cmb2
 
 # Run test script commands.
 # Default is specific to project language.
