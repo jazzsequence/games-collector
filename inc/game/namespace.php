@@ -234,7 +234,7 @@ function get_difficulty( $post_id = 0 ) {
 	}
 
 	$difficulty = get_post_meta( $post_id, '_gc_difficulty', true );
-	return get_difficulties( $difficulty );
+	return ( $difficulty ) ? get_difficulties( $difficulty ) : false;
 }
 
 /**
