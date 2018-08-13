@@ -375,3 +375,15 @@ function get_attribute_like( $search ) {
 
 	return false;
 }
+
+/**
+ * Sideload image for a BGG image.
+ *
+ * @since  1.2.0
+ * @param  int   $post_id The game ID.
+ * @param  array $game    The array of game data from BGG.
+ */
+function attach_bgg_image( $post_id, $game ) {
+	$image_id = media_sideload_image( esc_url_raw( $game['image'] ), $post_id, esc_html( $game['title'] ), 'id' );
+	set_post_thumbnail( $post_id, $image_id );
+}
