@@ -243,3 +243,22 @@ function search_response() {
 	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
 }
 
+/**
+ * Dislplay the BGG search results in an option array for CMB2.
+ *
+ * @since  1.2.0
+ * @param  array $results The array of BGG search results.
+ * @return array          An array of options for CMB2.
+ */
+function bgg_search_results_options( $results ) {
+	$options = [];
+	foreach ( $results as $game ) {
+		$options[ absint( $game['id'] ) ] = sprintf( '%1$s [%2$s] (%3$s)',
+			'<strong>' . esc_html( $game['name'] ) . '</strong>',
+			esc_html( $game['year'] ),
+			esc_html( $game['id'] )
+		);
+	}
+
+	return $options;
+}
