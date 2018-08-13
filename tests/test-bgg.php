@@ -18,8 +18,8 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	 * Test the API endpoint helpers.
 	 *
 	 * @since  1.2.0
-	 * @covers BGG\bgg_api()
-	 * @covers BGG\bgg_api2()
+	 * @covers GC\GamesCollector\BGG\bgg_api()
+	 * @covers GC\GamesCollector\BGG\bgg_api2()
 	 */
 	public function test_bgg_apis() {
 		$this->assertEquals(
