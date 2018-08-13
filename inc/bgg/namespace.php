@@ -262,3 +262,78 @@ function bgg_search_results_options( $results ) {
 
 	return $options;
 }
+
+/**
+ * Insert the game using BGG data from the API.
+ *
+ * @since  1.2.0
+ * @return void
+ */
+function insert_game() {
+	if ( isset( $_POST['nonce_CMB2phpbgg-search-2'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce_CMB2phpbgg-search-2'] ) ), 'nonce_CMB2phpbgg-search-2' ) ) {
+
+		$game_id      = isset( $_POST['bgg_search_results'] ) ? absint( wp_unslash( $_POST['bgg_search_results'] ) ) : false;
+		$redirect_url = admin_url( 'edit.php?post_type=gc_game&page=add_from_bgg' );
+
+		if ( $game_id ) {
+			$game = get_bgg_game( $game_id );
+
+			// Check if game already exists.
+			if ( get_page_by_title( $game['title'], OBJECT, 'gc_game' ) ) {
+				return wp_die(
+					esc_html__( 'A game with that title already exists. Please try again.', 'games-collector' ),
+					esc_html__( 'Duplicate game found', 'games-collector' ),
+					[ 'back_link' => true ]
+				);
+			}
+
+			$post_id = wp_insert_post( [
+				'post_type'   => 'gc_game',
+				'post_title'  => esc_html( $game['title'] ),
+				'post_status' => 'draft',
+			] );
+
+			if ( ! is_wp_error( $post_id ) ) {
+				$redirect_url = admin_url( sprintf( 'post.php?post=%d&action=edit', $post_id ) );
+
+				// Add game meta.
+				add_post_meta( $post_id, '_gc_min_players', absint( $game['minplayers'] ) );
+				add_post_meta( $post_id, '_gc_max_players', absint( $game['maxplayers'] ) );
+				add_post_meta( $post_id, '_gc_age', absint( $game['minage'] ) );
+				add_post_meta( $post_id, '_gc_link', sprintf( 'https://www.boardgamegeek.com/boardgame/%d/', $game_id ) );
+
+				if ( absint( $game['minplaytime'] ) === absint( $game['maxplaytime'] ) ) {
+					add_post_meta( $post_id, '_gc_time', esc_html( $game['minplaytime'] ) );
+				} else {
+					add_post_meta( $post_id, '_gc_time', esc_html( $game['minplaytime'] . '-' . $game['maxplaytime'] ) );
+				}
+
+				if ( isset( $game['categories'] ) ) {
+					foreach ( $game['categories'] as $game_attribute ) {
+						$similar_attribute = get_attribute_like( $game_attribute );
+
+						// If there's an existing attribute that matches the BGG category, use that.
+						if ( $similar_attribute ) {
+							wp_set_post_terms( $post_id, [ $similar_attribute ], 'gc_attribute', true );
+						}
+
+						// Otherwise insert a new term.
+						wp_set_post_terms( $post_id, $game_attribute, 'gc_attribute', true );
+					}
+				}
+
+				// Sideload the image from BGG.
+				attach_bgg_image( $post_id, $game );
+			}
+		}
+
+		// Delete the transient so we can do this again.
+		delete_transient( 'gc_last_bgg_search' );
+
+		// Redirect to the edit page for this game.
+		wp_safe_redirect( esc_url_raw( $redirect_url ) );
+		exit;
+	}
+
+	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
+}
