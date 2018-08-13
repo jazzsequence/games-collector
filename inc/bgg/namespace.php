@@ -186,3 +186,41 @@ function fields() {
 		) );
 	}
 }
+
+/**
+ * Render the BGG search field in CMB2.
+ *
+ * This callback extends the built in "text" field type.
+ *
+ * @since  1.2.0
+ * @param  string $field             Not used.
+ * @param  string $escaped_value     Not used.
+ * @param  int    $object_id         Not used.
+ * @param  string $object_type       Not used.
+ * @param  object $field_type_object The CMB2 field type object.
+ */
+function render_cmb2_bgg_search( $field, $escaped_value, $object_id, $object_type, $field_type_object ) {
+	$description = '<p class="description">' . esc_html( $field_type_object->field->args()['desc'] ) . '</p>';
+	$form = sprintf( '<input id="%1$s" class="regular-text" name="%2$s" value="" placeholder="%3$s" type="text">',
+		esc_attr( $field_type_object->field->args()['id'] ),
+		esc_attr( $field_type_object->field->args()['id'] ),
+		__( 'A game title or search, e.g. &ldquo;betrayal house hill&rdquo;', 'usat' )
+	);
+	$hidden = '<input type="hidden" name="action" value="bgg_search_response">';
+	$output = $hidden . $form . $description;
+
+	echo wp_kses( $output, [
+		'p'     => [
+			'class'       => [],
+		],
+		'input' => [
+			'id'          => [],
+			'class'       => [],
+			'name'        => [],
+			'value'       => [],
+			'type'        => [],
+			'placeholder' => [],
+		],
+	] );
+}
+
