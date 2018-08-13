@@ -337,3 +337,25 @@ function insert_game() {
 
 	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
 }
+
+/**
+ * Check if an existing game attribute term exists and return the ID if it does.
+ *
+ * @since  1.2.0
+ * @param  string $search The game attribute name.
+ * @return int|bool       The term ID if a matching term exists, false if it doesn't.
+ */
+function get_attribute_like( $search ) {
+	$terms = get_terms( [
+		'taxonomy'   => 'gc_attribute',
+		'hide_empty' => true,
+		'fields'     => 'ids',
+		'name__like' => esc_html( $search ),
+	] );
+
+	if ( ! is_wp_error( $terms ) && count( $terms ) > 0 ) {
+		return $terms[0];
+	}
+
+	return false;
+}
