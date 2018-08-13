@@ -32,4 +32,44 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			BGG\bgg_api2()
 		);
 	}
+
+	/**
+	 * Test the BGG search URL helper.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\bgg_search()
+	 */
+	public function test_bgg_search() {
+		$query = 'hero realms';
+
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgame',
+			BGG\bgg_search( $query )
+		);
+
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgame',
+			BGG\bgg_search( $query, 'somearbitrarytypethatisnotsupported' )
+		);
+
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=videogame',
+			BGG\bgg_search( $query, 'videogame' )
+		);
+
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgameaccessory',
+			BGG\bgg_search( $query, 'boardgameaccessory' )
+		);
+
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=rpgitem',
+			BGG\bgg_search( $query, 'rpgitem' )
+		);
+
+		$this->assertEquals(
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgameexpansion',
+			BGG\bgg_search( $query, 'boardgameexpansion' )
+		);
+	}
 }
