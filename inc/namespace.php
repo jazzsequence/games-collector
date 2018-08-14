@@ -17,6 +17,7 @@ function bootstrap() {
 	add_action( 'cmb2_admin_init', __NAMESPACE__ . '\\BGG\\fields' );
 	add_action( 'cmb2_init', __NAMESPACE__ . '\\Game\\fields' );
 	add_action( 'cmb2_render_bgg_search', __NAMESPACE__ . '\\BGG\\render_cmb2_bgg_search', 10, 5 );
+	add_action( 'cmb2_render_bgg_search_reset', __NAMESPACE__ . '\\BGG\\render_cmb2_bgg_search_reset', 10, 5 );
 	add_action( 'init', __NAMESPACE__ . '\\Game\\register_cpt' );
 	add_action( 'init', __NAMESPACE__ . '\\Attributes\\register_taxonomy' );
 	add_action( 'admin_init', __NAMESPACE__ . '\\Attributes\\create_default_attributes' );

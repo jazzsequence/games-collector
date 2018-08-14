@@ -184,6 +184,12 @@ function fields() {
 				'value' => 'bgg_insert_game',
 			],
 		] );
+
+		$cmb->add_field( [
+			'id'          => 'bgg_search_reset',
+			'type'        => 'bgg_search_reset',
+			'button_name' => __( 'Reset Search', 'games-collector' ),
+		] );
 	}
 }
 
@@ -220,6 +226,53 @@ function render_cmb2_bgg_search( $field, $escaped_value, $object_id, $object_typ
 			'placeholder' => [],
 		],
 	] );
+}
+
+/**
+ * Render the bgg_search_reset field in CMB2.
+ *
+ * This adds a link styled like a button which will clear out the current BGG game search.
+ *
+ * @since  1.2.0
+ * @param  string $field             Not used.
+ * @param  string $escaped_value     Not used.
+ * @param  int    $object_id         Not used.
+ * @param  string $object_type       Not used.
+ * @param  object $field_type_object The CMB2 field object.
+ */
+function render_cmb2_bgg_search_reset( $field, $escaped_value, $object_id, $object_type, $field_type_object ) {
+
+	$nonce = wp_create_nonce( 'bgg_search_reset_nonce' );
+	$url   = add_query_arg( [
+		'post_type'              => 'gc_game',
+		'page'                   => 'add_from_bgg',
+		'reset_search'           => true,
+		'bgg_search_reset_nonce' => $nonce,
+	], admin_url( 'edit.php' ) );
+
+	ob_start();
+	?>
+	<a href="<?php echo esc_url_raw( $url ); ?>">
+		<div class="button alignright" name="bgg_search_reset">
+			<?php echo esc_html( $field_type_object->field->args['button_name'] ); ?>
+		</div>
+	</a>
+	<input type="hidden" name="action" value="bgg_search_reset" />
+	<?php
+
+	echo wp_kses( ob_get_clean(), [
+		'a' => [
+			'href' => [],
+		],
+		'div' => [
+			'class' => [],
+		],
+		'input' => [
+			'type'  => [],
+			'name'  => [],
+			'value' => [],
+		],
+	]);
 }
 
 /**
