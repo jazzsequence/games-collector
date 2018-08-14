@@ -15,6 +15,24 @@ use GC\GamesCollector\BGG as BGG;
  */
 class GC_Test_BGG extends WP_UnitTestCase {
 	/**
+	 * Used to test queries.
+	 * @var string
+	 */
+	public static $test_query;
+
+	/**
+	 * Used to test game ids.
+	 * @var int
+	 */
+	public static $test_id;
+
+	public function __construct() {
+		parent::__construct();
+
+		self::$test_query = 'hero realms';
+		self::$test_id    = 36218
+	}
+	/**
 	 * Test the API endpoint helpers.
 	 *
 	 * @since  1.2.0
@@ -40,36 +58,34 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	 * @covers GC\GamesCollector\BGG\bgg_search()
 	 */
 	public function test_bgg_search() {
-		$query = 'hero realms';
-
 		$this->assertEquals(
-			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgame',
-			BGG\bgg_search( $query )
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', self::$test_query ) . '&type=boardgame',
+			BGG\bgg_search( self::$test_query )
 		);
 
 		$this->assertEquals(
-			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgame',
-			BGG\bgg_search( $query, 'somearbitrarytypethatisnotsupported' )
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', self::$test_query ) . '&type=boardgame',
+			BGG\bgg_search( self::$test_query, 'somearbitrarytypethatisnotsupported' )
 		);
 
 		$this->assertEquals(
-			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=videogame',
-			BGG\bgg_search( $query, 'videogame' )
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', self::$test_query ) . '&type=videogame',
+			BGG\bgg_search( self::$test_query, 'videogame' )
 		);
 
 		$this->assertEquals(
-			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgameaccessory',
-			BGG\bgg_search( $query, 'boardgameaccessory' )
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', self::$test_query ) . '&type=boardgameaccessory',
+			BGG\bgg_search( self::$test_query, 'boardgameaccessory' )
 		);
 
 		$this->assertEquals(
-			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=rpgitem',
-			BGG\bgg_search( $query, 'rpgitem' )
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', self::$test_query ) . '&type=rpgitem',
+			BGG\bgg_search( self::$test_query, 'rpgitem' )
 		);
 
 		$this->assertEquals(
-			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', $query ) . '&type=boardgameexpansion',
-			BGG\bgg_search( $query, 'boardgameexpansion' )
+			'https://www.boardgamegeek.com/xmlapi/search?search=' . str_replace( ' ', '+', self::$test_query ) . '&type=boardgameexpansion',
+			BGG\bgg_search( self::$test_query, 'boardgameexpansion' )
 		);
 	}
 
@@ -82,7 +98,7 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	public function test_bgg_game() {
 		$this->assertEquals(
 			'https://www.boardgamegeek.com/xmlapi2/thing?id=36218',
-			BGG\bgg_game( 36218 )
+			BGG\bgg_game( self::$test_id )
 		);
 	}
 
