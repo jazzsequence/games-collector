@@ -140,7 +140,7 @@ function fields() {
 
 	// First run.
 	if ( ! $search_results ) {
-		$cmb = new_cmb2_box( array(
+		$cmb = new_cmb2_box( [
 			'id'           => 'bgg-search',
 			'title'        => __( 'Add game from Board Game Geek', 'games-collector' ),
 			'object_types' => [ 'options-page' ],
@@ -148,17 +148,17 @@ function fields() {
 			'parent_slug'  => 'edit.php?post_type=gc_game',
 			'menu_title'   => __( 'Add New From BGG', 'games-collector' ),
 			'save_button'  => __( 'Search for Game', 'games-collector' ),
-		) );
+		] );
 
-		$cmb->add_field( array(
+		$cmb->add_field( [
 			'name'       => __( 'Search', 'games-collector' ),
 			'id'         => 'bgg_searchform',
 			'type'       => 'bgg_search',
 			'desc'       => __( 'Type in the title of a game to search for that game on Board Game Geek.', 'games-collector' ),
-		) );
+		] );
 	} else {
 		// Choose the right game.
-		$cmb = new_cmb2_box( array(
+		$cmb = new_cmb2_box( [
 			'id'           => 'bgg-search-2',
 			'title'        => __( 'Add game from Board Game Geek &mdash; Step 2', 'games-collector' ),
 			'object_types' => [ 'options-page' ],
@@ -168,29 +168,27 @@ function fields() {
 			'save_button'  => __( 'Add Game', 'games-collector' ),
 		) );
 
-		$cmb->add_field( array(
+		$cmb->add_field( [
 			'name'       => __( 'Search Results', 'games-collector' ),
 			'id'         => 'bgg_search_results',
 			'type'       => 'radio',
 			'desc'       => __( 'Select the game that matches your search.', 'games-collector' ),
 			'options'    => bgg_search_results_options( $search_results ),
-		) );
+		] );
 
-		$cmb->add_field( array(
+		$cmb->add_field( [
 			'id'         => 'bgg_search_results_hidden',
 			'type'       => 'hidden',
 			'attributes' => [
-				'name' => 'action',
+				'name'  => 'action',
 				'value' => 'bgg_insert_game',
 			],
-		) );
+		] );
 	}
 }
 
 /**
  * Render the BGG search field in CMB2.
- *
- * This callback extends the built in "text" field type.
  *
  * @since  1.2.0
  * @param  string $field             Not used.
