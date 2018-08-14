@@ -136,4 +136,27 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			is_int( $game['id'] )
 		);
 	}
+
+	/**
+	 * Test that the data we get from get_bgg_game matches what we expect for the test game id.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\get_bgg_game()
+	 */
+	public function test_get_bgg_game() {
+		$game = BGG\get_bgg_game( self::$test_id );
+
+		$this->assertTrue(
+			is_array( $game )
+		);
+
+		$this->assertEquals(
+			'Dominion',
+			$game['title']
+		);
+
+		$this->assertTrue(
+			is_array( $game['categories'] )
+		);
+	}
 }
