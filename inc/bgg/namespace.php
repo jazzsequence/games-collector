@@ -139,7 +139,15 @@ function fields() {
 	$search_results = get_transient( 'gc_last_bgg_search' );
 
 	// First run.
-	if ( ! $search_results ) {
+	if ( ! $search_results || isset( $_GET['reset_search'] ) ) {
+
+		// If we're clearing the search, delete the transient and start over.
+		if ( isset( $_GET['bgg_search_reset_nonce'] ) &&
+			wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['bgg_search_reset_nonce'] ) ), 'bgg_search_reset_nonce' ) ) {
+			delete_transient( 'gc_last_bgg_search' );
+			add_action( 'admin_notices', __NAMESPACE__ . '\\search_cleared_notice' );
+		}
+
 		$cmb = new_cmb2_box( [
 			'id'           => 'bgg-search',
 			'title'        => __( 'Add game from Board Game Geek', 'games-collector' ),
@@ -166,7 +174,7 @@ function fields() {
 			'parent_slug'  => 'edit.php?post_type=gc_game',
 			'menu_title'   => __( 'Add New From BGG', 'games-collector' ),
 			'save_button'  => __( 'Add Game', 'games-collector' ),
-		) );
+		] );
 
 		$cmb->add_field( [
 			'name'       => __( 'Search Results', 'games-collector' ),
