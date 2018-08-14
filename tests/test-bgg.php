@@ -281,4 +281,26 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			get_transient( 'gc_last_bgg_search' )
 		);
 	}
+
+	/**
+	 * Test the get_attribute_like function.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\get_attribute_like()
+	 */
+	public function test_get_attribute_like() {
+		$term_query = 'action';
+		$term       = wp_insert_term( 'Action', 'gc_attribute' );
+		$term_like  = BGG\get_attribute_like( $term_query );
+
+		$this->assertEquals(
+			$term['term_id'],
+			$term_like
+		);
+
+		$this->assertSame(
+			[ $term_query => $term['term_id'] ],
+			get_transient( 'gc_frequently_used_attributes' )
+		);
+	}
 }
