@@ -177,4 +177,40 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			is_array( $game['categories'] )
 		);
 	}
+
+	/**
+	 * Test the helper function that returns the search results in an array that can be understood by CMB2.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\bgg_search_results_options()
+	 */
+	public function test_search_results_options() {
+		$search  = BGG\get_bgg_search_results( self::$test_query );
+		$options = BGG\bgg_search_results_options( $search );
+
+		$this->assertTrue(
+			is_array( $options )
+		);
+
+		$this->assertEquals(
+			count( $search ),
+			count( $options )
+		);
+
+		$game = $this->get_game( $search );
+
+		$this->assertTrue(
+			array_key_exists( $game['id'], $options )
+		);
+
+		$this->assertEquals(
+			sprintf(
+				'<strong>%1$s</strong> [%2$s] (%3$s)',
+				ucwords( self::$test_query ),
+				$search[0]['year'],
+				$game['id']
+			),
+			$options[ $game['id'] ]
+		);
+	}
 }
