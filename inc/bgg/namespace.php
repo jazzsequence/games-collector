@@ -455,12 +455,19 @@ function get_attribute_like( $search ) {
 		return $cached_term_search[ $search ];
 	}
 
-	$terms = get_terms( [
-		'taxonomy'   => 'gc_attribute',
-		'hide_empty' => true,
-		'fields'     => 'ids',
-		'name__like' => esc_html( $search ),
+	$terms     = [];
+	$all_terms = get_terms( [
+		'taxonomy' => 'gc_attribute',
+		'hide_empty' => false,
 	] );
+
+	foreach ( $all_terms as $term ) {
+		similar_text( $term->name, $search, $similarity );
+		if ( $similarity > 75 ) {
+			$terms[] = $term->term_id;
+		}
+	}
+
 
 	if ( ! is_wp_error( $terms ) && count( $terms ) > 0 ) {
 		// Cache this term combination so we can access it faster later.
