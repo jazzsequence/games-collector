@@ -30,6 +30,7 @@ function bootstrap() {
 	add_action( 'admin_post_bgg_insert_game', __NAMESPACE__ . '\\BGG\\insert_game' );
 	add_filter( 'rest_prepare_gc_game', __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
 	add_filter( 'gc_filter_players', __NAMESPACE__ . '\\numbers_of_players', 10, 3 );
+	add_filter( 'custom_menu_order', __NAMESPACE__ . '\\BGG\\submenu_order' );
 	add_shortcode( 'games-collector', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 	add_shortcode( 'games-collector-list', __NAMESPACE__ . '\\Shortcode\\shortcode' );
 }

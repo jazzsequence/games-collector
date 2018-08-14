@@ -316,6 +316,33 @@ function search_cleared_notice() {
 	</div>
 	<?php
 }
+
+/**
+ * Rearrange the Games Collector submenu.
+ *
+ * This moves the Add New from BGG link to directly below Add New.
+ *
+ * @since  1.2.0
+ * @param  bool $menu_order Returns true if successful.
+ * @return bool             Returns the $menu_order unchanged.
+ */
+function submenu_order( $menu_order ) {
+	global $submenu;
+
+	// Store the Games Collector menu to a variable.
+	$items = $submenu['edit.php?post_type=gc_game'];
+
+	// Item 11 is right after Add New. Item 16 is the link for Add New from BGG.
+	$submenu['edit.php?post_type=gc_game'][11] = $items[16]; // WPCS: override ok.
+	// Remove item 16, the old Add New from BGG link.
+	unset( $submenu['edit.php?post_type=gc_game'][16] );
+	// Re-sort the menu by index.
+	ksort( $submenu['edit.php?post_type=gc_game'] );
+
+	return $menu_order;
+}
+
+/**
  * Dislplay the BGG search results in an option array for CMB2.
  *
  * @since  1.2.0
