@@ -431,7 +431,10 @@ function insert_game() {
 		delete_transient( 'gc_last_bgg_search' );
 
 		// Redirect to the edit page for this game.
-		wp_safe_redirect( esc_url_raw( $redirect_url ) );
+		if ( is_user_logged_in() ) {
+			wp_safe_redirect( esc_url_raw( $redirect_url ) );
+		}
+
 		return;
 	}
 
