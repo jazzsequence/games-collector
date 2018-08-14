@@ -93,7 +93,7 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	 * Test BGG game helper.
 	 *
 	 * @since  1.2.0
-	 * @covers GC\GamesCollector\BGG\bgg_game
+	 * @covers GC\GamesCollector\BGG\bgg_game()
 	 */
 	public function test_bgg_game() {
 		$this->assertEquals(
@@ -102,5 +102,38 @@ class GC_Test_BGG extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Test get search results.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\get_bgg_search_results()
+	 */
+	public function test_get_bgg_search_results() {
+		$results = BGG\get_bgg_search_results( self::$test_query );
 
+		$this->assertTrue(
+			is_array( $results )
+		);
+
+		// Get all the names from the search results.
+		$names = wp_list_pluck( $results, 'name' );
+		// Get the index of the game that matches the query exactly (we're uppercasing the query so it will be an exact match).
+		$index = array_search( ucwords( self::$test_query ), $names, true );
+		// Save the matching result to a variable.
+		$game  = $results[ $index ];
+
+		$this->assertEquals(
+			ucwords( self::$test_query ),
+			$game['name']
+		);
+
+		$this->assertEquals(
+			'2016',
+			$game['year']
+		);
+
+		$this->assertTrue(
+			is_int( $game['id'] )
+		);
+	}
 }
