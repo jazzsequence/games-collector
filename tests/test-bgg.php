@@ -303,4 +303,32 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			get_transient( 'gc_frequently_used_attributes' )
 		);
 	}
+
+	/**
+	 * Test that BGG images get sideloaded and attached to posts.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\attach_bgg_image()
+	 */
+	public function test_attach_bgg_image() {
+		// Do a BGG search.
+		$results = BGG\get_bgg_search_results( self::$test_query );
+		// Get the matching game.
+		$search = $this->get_game( $results );
+		// Get the BGG data (for the image).
+		$game = BGG\get_bgg_game( $search['id'] );
+
+		// Insert a game.
+		$post_id = $this->factory->post->create([
+			'post_type' => 'gc_game',
+		]);
+
+		// Run attach_bgg_image for the test post with that game's image.
+		BGG\attach_bgg_image( $post_id, $game );
+
+		// Make sure the post has an image.
+		$this->assertTrue(
+			has_post_thumbnail( $post_id )
+		);
+	}
 }
