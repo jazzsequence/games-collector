@@ -80,9 +80,9 @@ function get_bgg_search_results( $query ) {
 				$game = (array) $game;
 
 				$results[] = [
-					'id' => (int) $game['@attributes']['objectid'],
-					'name' => $game['name'],
-					'year' => $game['yearpublished'],
+					'id'   => ( isset( $game['@attributes']['objectid'] ) ) ? (int) $game['@attributes']['objectid'] : '',
+					'name' => ( isset( $game['name'] ) ) ? $game['name'] : '',
+					'year' => ( isset( $game['yearpublished'] ) ) ? $game['yearpublished'] : '',
 				];
 			}
 		}
