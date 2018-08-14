@@ -303,6 +303,19 @@ function search_response() {
 }
 
 /**
+ * Display a notice when the search was cleared.
+ *
+ * @since 1.2.0
+ */
+function search_cleared_notice() {
+	?>
+	<div class="notice updated">
+		<p>
+			<?php esc_html_e( 'Board Game Geek game search reset.', 'games-collector' ); ?>
+		</p>
+	</div>
+	<?php
+}
  * Dislplay the BGG search results in an option array for CMB2.
  *
  * @since  1.2.0
