@@ -30,7 +30,7 @@ class GC_Test_BGG extends WP_UnitTestCase {
 		parent::__construct();
 
 		self::$test_query = 'hero realms';
-		self::$test_id    = 36218
+		self::$test_id    = 36218;
 	}
 	/**
 	 * Test the API endpoint helpers.
