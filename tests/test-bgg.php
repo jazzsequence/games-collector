@@ -16,21 +16,44 @@ use GC\GamesCollector\BGG as BGG;
 class GC_Test_BGG extends WP_UnitTestCase {
 	/**
 	 * Used to test queries.
+	 *
 	 * @var string
 	 */
 	public static $test_query;
 
 	/**
 	 * Used to test game ids.
+	 *
 	 * @var int
 	 */
 	public static $test_id;
 
+	/**
+	 * The class constructor.
+	 */
 	public function __construct() {
 		parent::__construct();
 
 		self::$test_query = 'hero realms';
 		self::$test_id    = 36218;
+	}
+
+	/**
+	 * Get the queried game from search results.
+	 *
+	 * @since  1.2.0
+	 * @param  array $results An array of BGG search results.
+	 * @return array          The game matching the test search.
+	 */
+	private function get_game( $results ) {
+		// Get all the names from the search results.
+		$names = wp_list_pluck( $results, 'name' );
+		// Get the index of the game that matches the query exactly (we're uppercasing the query so it will be an exact match).
+		$index = array_search( ucwords( self::$test_query ), $names, true );
+		// Save the matching result to a variable.
+		$game  = $results[ $index ];
+
+		return $game;
 	}
 	/**
 	 * Test the API endpoint helpers.
@@ -115,12 +138,7 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			is_array( $results )
 		);
 
-		// Get all the names from the search results.
-		$names = wp_list_pluck( $results, 'name' );
-		// Get the index of the game that matches the query exactly (we're uppercasing the query so it will be an exact match).
-		$index = array_search( ucwords( self::$test_query ), $names, true );
-		// Save the matching result to a variable.
-		$game  = $results[ $index ];
+		$game = $this->get_game( $results );
 
 		$this->assertEquals(
 			ucwords( self::$test_query ),
