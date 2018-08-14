@@ -432,7 +432,7 @@ function insert_game() {
 
 		// Redirect to the edit page for this game.
 		wp_safe_redirect( esc_url_raw( $redirect_url ) );
-		exit;
+		return;
 	}
 
 	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
