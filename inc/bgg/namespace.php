@@ -235,7 +235,7 @@ function search_response() {
 
 		$search_query = isset( $_POST['bgg_searchform'] ) ? sanitize_text_field( wp_unslash( $_POST['bgg_searchform'] ) ) : '';
 		$results      = get_bgg_search_results( $search_query );
-		set_transient( 'gc_last_bgg_search', $results, DAY_IN_SECONDS );
+		set_transient( 'gc_last_bgg_search', $results, HOUR_IN_SECONDS );
 		wp_safe_redirect( admin_url( 'edit.php?post_type=gc_game&page=add_from_bgg&step=2' ) );
 		return;
 	}
