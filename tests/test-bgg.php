@@ -213,4 +213,72 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			$options[ $game['id'] ]
 		);
 	}
+
+	/**
+	 * Test inserting a game from BGG.
+	 *
+	 * @since  1.2.0
+	 * @covers GC\GamesCollector\BGG\insert_game()
+	 */
+	public function test_insert_game() {
+		// Create a nonce that matches what the insert game function looks for.
+		$nonce = wp_create_nonce( 'nonce_CMB2phpbgg-search-2' );
+		// Add the nonce to $_POST.
+		$_POST['nonce_CMB2phpbgg-search-2'] = $nonce;
+		// Add the game ID to $_POST.
+		$_POST['bgg_search_results'] = self::$test_id;
+		// Attempt to insert the game with the insert_game function.
+		BGG\insert_game();
+
+		// Get the game (if it was created).
+		$game = get_posts([
+			'post_type'   => 'gc_game',
+			'post_status' => 'draft',
+		])[0];
+
+		// Get game data from BGG to compare against. We've already tested that get_bgg_game works.
+		$game_data = BGG\get_bgg_game( self::$test_id );
+
+		// Test that $game is a post object.
+		$this->assertTrue(
+			is_object( $game )
+		);
+
+		// Make sure the title is correct.
+		$this->assertEquals(
+			'Dominion',
+			$game->post_title
+		);
+
+		// Test that post meta was inserted.
+		$this->assertEquals(
+			$game_data['minplaytime'],
+			get_post_meta( $game->ID, '_gc_time', true )
+		);
+
+		$this->assertEquals(
+			$game_data['minage'],
+			get_post_meta( $game->ID, '_gc_age', true )
+		);
+
+		$this->assertEquals(
+			self::$test_id,
+			get_post_meta( $game->ID, '_gc_bgg_id', true )
+		);
+
+		// Test the attributes were added from BGG categories.
+		$terms = wp_get_object_terms( $game->ID, 'gc_attribute', [ 'fields' => 'names' ] );
+
+		foreach ( $game_data['categories'] as $attribute_name ) {
+			$this->assertContains(
+				$attribute_name,
+				$terms
+			);
+		}
+
+		// Test that the transient was deleted.
+		$this->assertFalse(
+			get_transient( 'gc_last_bgg_search' )
+		);
+	}
 }
