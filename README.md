@@ -35,6 +35,8 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ![Games Collector admin](https://jazzsequence.com/wp-content/uploads/2017/02/Screenshot-2017-02-03-15.06.17.png)
 
+![Games Collector add from BGG](https://i.imgur.com/4bRt36J.gif)
+
 ## Changelog ##
 
 ### 1.2.0 ###
