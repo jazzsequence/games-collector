@@ -6,8 +6,8 @@
 **Donate link:**       https://www.paypal.me/jazzsequence/  
 **Tags:**  
 **Requires at least:** 4.4  
-**Tested up to:**      4.7  
-**Stable tag:**        1.1.0  
+**Tested up to:**      4.9.8  
+**Stable tag:**        1.2.0  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
 **Demo:**              https://jazzsequence.com/games/
@@ -38,11 +38,12 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ## Changelog ##
 
 ### 1.2.0 ###
+* Added integration with Board Game Geek API. Games can now be added by searching BGG for matching titles and information imported and automatically added to new games.
 * Fixed an issue where games with an indeterminate max number of players was displaying a 0 value (e.g. `2 - 0 players`) and combined that with games with an unrealistically large number of players (e.g. `2 - 99 players`) to display `{{min_players}}+ players` e.g. `2+ players`.
 * Refactored the `gc_number_players` filter to only filter the actual number of players and added a `gc_number_players_output` filter which can filter the entire output (what `gc_number_players` previously did).
 * Fixed an issue where only the highest difficulty was displaying in the dropdown.
 * Fixed a display issue where games that can only be played with a specific number of players were still displaying the min/max player numbers. Changed to just display the number of players, e.g. `2 players` instead of `2 - 2 players`.
-* Dropped support for `hhvm`. Require minimum of PHP 5.6 and begin to deprecate PHP 5.4.
+* Dropped support for `hhvm` and php 5.x. Require minimum of PHP 7.0.
 * Scrutinizer CI integration for code coverage and quality checking.
 * Cleaned up some code as a result of Scrutinizer sniffs.
 
