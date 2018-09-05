@@ -28,6 +28,9 @@ bower_components
 .bower-registry
 .bower-tmp
 
+### Don't version control lock files
+*.lock
+package-lock.json
 
 ### Node ###
 # Logs
