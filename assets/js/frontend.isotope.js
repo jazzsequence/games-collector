@@ -4,6 +4,8 @@
 window.GamesCollector = {};
 ( function( window, $, plugin ) {
 
+	var Isotope = require( 'isotope-layout' );
+
 	// Constructor.
 	plugin.init = function() {
 		plugin.cache();
@@ -19,7 +21,7 @@ window.GamesCollector = {};
 			window: $(window),
 			list: $( '.games-collector-list' ),
 			buttons: $( '.games-filter-group' ),
-			grid: $( '.games-collector-list' ).isotope({
+			grid: new Isotope( '.games-collector-list', {
 				itemSelector: '.game-single',
 				vertical: {
 					horizontalAlignment: 0
