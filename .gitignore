@@ -32,6 +32,9 @@ bower_components
 *.lock
 package-lock.json
 
+### Don't version control the yeoman generator file.
+.yo-rc.json
+
 ### Node ###
 # Logs
 logs
