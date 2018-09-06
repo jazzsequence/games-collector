@@ -2,12 +2,12 @@ const path = require( 'path' );
 const webpack = require( 'webpack' );
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
-// Set different CSS extraction for editor only and common block styles
-const blocksCSSPlugin = new ExtractTextPlugin( {
-  filename: './assets/css/blocks.style.css',
+// Set different CSS extraction for editor only and common styles
+const mainCSSPlugin = new ExtractTextPlugin( {
+  filename: './assets/css/main.css',
 } );
 const editBlocksCSSPlugin = new ExtractTextPlugin( {
-  filename: './assets/css/blocks.editor.css',
+  filename: './assets/css/editor.css',
 } );
 
 // Configuration for the ExtractTextPlugin.
@@ -53,7 +53,7 @@ module.exports = {
       },
       {
         test: /style\.s?css$/,
-        use: blocksCSSPlugin.extract( extractConfig ),
+        use: mainCSSPlugin.extract( extractConfig ),
       },
       {
         test: /editor\.s?css$/,
@@ -62,7 +62,7 @@ module.exports = {
     ],
   },
   plugins: [
-    blocksCSSPlugin,
+    mainCSSPlugin,
     editBlocksCSSPlugin,
   ],
 };
