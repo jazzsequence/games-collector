@@ -13,6 +13,9 @@ import '../../sass/editor.scss';
 // Load the Gutenberg icon.
 import icon from './icon';
 
-// Load the editor styles.
-import '../../sass/editor.scss'
+// Load internal Gutenberg stuff.
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
+const { Spinner } = wp.components;
+const { withSelect } = wp.data;
 
