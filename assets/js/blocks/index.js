@@ -4,6 +4,9 @@
  * All the js that is admin-only (e.g. Gutenberg).
  */
 
+// Define the textdomain.
+wp.i18n.setLocaleData( { '': {} }, 'games-collector' );
+
 // Load the Gutenberg icon.
 import icon from './icon';
 
