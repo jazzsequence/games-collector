@@ -12,6 +12,7 @@ namespace GC\GamesCollector\Gutenberg;
  * Enqueue the Gutenberg editor js and css.
  */
 function enqueue_block_editor_assets() {
-	wp_enqueue_script( 'games-collector-gberg-editor', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/js/editor.js', [ 'wp-i18n', 'wp-blocks', 'wp-element', 'wp-component' ], '1.3.0' );
+	$js_file = plugin_dir_url( dirname( __FILE__, 2 ) ) . 'assets/js/editor.js';
+	wp_enqueue_script( 'games-collector-gberg-editor', $js_file, [ 'wp-i18n', 'wp-blocks', 'wp-element' ], '1.3.0' );
 	wp_enqueue_style( 'games-collector-gberg-editor', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/css/editor.css', [ 'wp-blocks' ], '1.3.0' );
 }
