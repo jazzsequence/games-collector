@@ -24,7 +24,6 @@ registerBlockType( 'games-collector/add-all-games', {
 	description: __( 'Add all games to any post or page.', 'games-collector' ),
 	category: 'widgets',
 	icon: {
-		background: '#0073AA',
 		src: icon
 	},
 	keywords: [
