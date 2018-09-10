@@ -16,7 +16,10 @@ import icon from './icon';
 // Load internal Gutenberg stuff.
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { Spinner } = wp.components;
+const {
+	Spinner,
+	TextControl,
+} = wp.components;
 const { withSelect } = wp.data;
 
 registerBlockType( 'games-collector/add-all-games', {
