@@ -30,3 +30,7 @@ function register_blocks() {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 }
+
+function render_block() {
+	return '👋 Hi there.';
+}
