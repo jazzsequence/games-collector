@@ -55,14 +55,7 @@ registerBlockType( 'games-collector/add-all-games', {
             );
         },
         save: props => {
-            const { attributes: { message } } = props;
-            return (
-                <div>
-                    <h2>{ __( 'Call to Action', 'games-collector' ) }</h2>
-                    <div class="message-body">
-                        { message }
-                    </div>
-                </div>
-            );
+            const { attributes: { name } } = props;
+            return;
         },
 } );
