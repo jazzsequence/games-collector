@@ -35,24 +35,21 @@ registerBlockType( 'games-collector/add-all-games', {
 		__( 'all games', 'games-collector' ),
 	],
         attributes: {
-            message: {
-                type: 'array',
+            name: {
+                type: 'string',
                 source: 'children',
-                selector: '.message-body',
+                selector: '.game-name-input',
             }
         },
         edit: props => {
-            const { attributes: { message }, className, setAttributes } = props;
-            const onChangeMessage = message => { setAttributes( { message } ) };
+            const { attributes: { name }, className, setAttributes } = props;
             return (
                 <div className={ className }>
-                    <h2>{ __( 'Call to Action', 'games-collector' ) }</h2>
-                    <RichText
-                        tagName="div"
-                        multiline="p"
-                        placeholder={ __( 'Add your custom message', 'games-collector' ) }
-                  		onChange={ onChangeMessage }
-                  		value={ message }
+                    <TextControl
+                    	label={ __( 'Game', 'games-collector' ) }
+                        placeholder={ __( 'The title of the game, e.g. Star Realms', 'games-collector' ) }
+                  		onChange={ name => setAttributes( { name } ) }
+                  		value={ name }
               		/>
                 </div>
             );
