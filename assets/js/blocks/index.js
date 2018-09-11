@@ -49,6 +49,7 @@ registerBlockType( 'games-collector/add-all-games', {
             return (
                 <div className={ className }>
                     <TextControl
+                    	className="game-name-input"
                     	label={ __( 'Game', 'games-collector' ) }
                         placeholder={ __( 'The title of the game, e.g. Star Realms', 'games-collector' ) }
                   		onChange={ name => setAttributes( { name } ) }
