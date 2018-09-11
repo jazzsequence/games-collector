@@ -70,15 +70,20 @@ registerBlockType( 'games-collector/add-single-game', {
         edit: props => {
             const { attributes: { gameTitle }, className, setAttributes } = props;
             const getGame = function( gameTitle ) {
+            	// Set the gameTitle to be the updated title that was entered into the form.
             	gameTitle = setAttributes( { gameTitle } );
-            	console.log(gameTitle);
-            	// let url = apiUrl + '/wp/v2/games?search=' + gameTitle;
-            	// console.log(url);
-            	// console.log(fetch(url)
-            	// 	.then(response => {
-            	// 		return response;
-            	// 	}));
-            	// console.log( wpapi.games.param('search',gameTitle) );
+
+            	// Create a new title from the updated gameTitle.
+            	let title = props.attributes.gameTitle;
+
+            	// This logs the game title as it's updated.
+            	console.log(props.attributes.gameTitle);
+            	// This logs the URL that is going to be hit.
+            	console.log(wpapi.games().search(title).toString());
+            	// This logs the response against a search for that game.
+            	console.log( wpapi.games().search(title));
+
+            	// Return the gameTitle that was set.
             	return gameTitle;
             }
             return (
