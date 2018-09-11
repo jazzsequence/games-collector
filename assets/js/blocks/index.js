@@ -41,7 +41,7 @@ registerBlockType( 'games-collector/add-all-games', {
             name: {
                 type: 'string',
                 source: 'children',
-                selector: '.game-name-input',
+                selector: '.game-name-input input',
             }
         },
         edit: props => {
