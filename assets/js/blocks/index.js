@@ -61,16 +61,25 @@ registerBlockType( 'games-collector/add-single-game', {
 			__( 'add game', 'games-collector' ),
 		],
         attributes: {
-            name: {
+            gameTitle: {
                 type: 'string',
                 source: 'children',
                 selector: '.game-name-input input',
             }
         },
         edit: props => {
-            const { attributes: { name }, className, setAttributes } = props;
-            const getGame = function( name ) {
-            	console.log( wpapi.games.search(name) );
+            const { attributes: { gameTitle }, className, setAttributes } = props;
+            const getGame = function( gameTitle ) {
+            	gameTitle = setAttributes( { gameTitle } );
+            	console.log(gameTitle);
+            	// let url = apiUrl + '/wp/v2/games?search=' + gameTitle;
+            	// console.log(url);
+            	// console.log(fetch(url)
+            	// 	.then(response => {
+            	// 		return response;
+            	// 	}));
+            	// console.log( wpapi.games.param('search',gameTitle) );
+            	return gameTitle;
             }
             return (
                 <div className={ className }>
@@ -79,7 +88,7 @@ registerBlockType( 'games-collector/add-single-game', {
                     	label={ __( 'Game', 'games-collector' ) }
                         placeholder={ __( 'The title of the game, e.g. Star Realms', 'games-collector' ) }
                   		onChange={ name => setAttributes( { name } ), getGame(name) }
-                  		value={ name }
+                  		value={ gameTitle }
               		/>
                 </div>
             );
