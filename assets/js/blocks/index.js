@@ -37,6 +37,23 @@ registerBlockType( 'games-collector/add-all-games', {
 		__( 'game list', 'games-collector' ),
 		__( 'all games', 'games-collector' ),
 	],
+	save: props => {
+		return;
+	}
+});
+
+registerBlockType( 'games-collector/add-single-game', {
+		title: __( 'Single Game', 'games-collector' ),
+		description: __( 'Add a single game to a post or page.', 'games-collector' ),
+		category: 'widgets',
+		icon: {
+			src: icon
+		},
+		keywords: [
+			__( 'Games Collector', 'games-collector' ),
+			__( 'single game', 'games-collector' ),
+			__( 'add game', 'games-collector' ),
+		],
         attributes: {
             name: {
                 type: 'string',
