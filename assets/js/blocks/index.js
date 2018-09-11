@@ -7,8 +7,9 @@
 // Define the textdomain.
 wp.i18n.setLocaleData( { '': {} }, 'games-collector' );
 
-// Load fetch.
-import 'whatwg-fetch';
+// Load WP.
+// import 'whatwg-fetch';
+import WPAPI from 'wpapi';
 
 // Load the editor styles.
 import '../../sass/editor.scss';
