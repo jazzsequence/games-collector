@@ -46,6 +46,7 @@ registerBlockType( 'games-collector/add-all-games', {
         },
         edit: props => {
             const { attributes: { name }, className, setAttributes } = props;
+            const apiUrl = 'http://vagrant.local/wp-json/wp/v2/games?search=';
             return (
                 <div className={ className }>
                     <TextControl
