@@ -25,6 +25,11 @@ const {
 	TextControl,
 } = wp.components;
 const { withSelect } = wp.data;
+const apiUrl = 'http://vagrant.local/wp-json';
+let wpapi = new WPAPI({endpoint: apiUrl});
+wpapi.games = wpapi.registerRoute( 'wp/v2', '/games', {
+	params: [ 'search' ]
+} );
 
 registerBlockType( 'games-collector/add-all-games', {
 	title: __( 'All Games', 'games-collector' ),
@@ -64,14 +69,16 @@ registerBlockType( 'games-collector/add-single-game', {
         },
         edit: props => {
             const { attributes: { name }, className, setAttributes } = props;
-            const apiUrl = 'http://vagrant.local/wp-json/wp/v2/games?search=';
+            const getGame = function( name ) {
+            	console.log( wpapi.games.search(name) );
+            }
             return (
                 <div className={ className }>
                     <TextControl
                     	className="game-name-input"
                     	label={ __( 'Game', 'games-collector' ) }
                         placeholder={ __( 'The title of the game, e.g. Star Realms', 'games-collector' ) }
-                  		onChange={ name => setAttributes( { name } ) }
+                  		onChange={ name => setAttributes( { name } ), getGame(name) }
                   		value={ name }
               		/>
                 </div>
