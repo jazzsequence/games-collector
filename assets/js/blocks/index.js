@@ -87,7 +87,7 @@ registerBlockType( 'games-collector/add-single-game', {
                     	className="game-name-input"
                     	label={ __( 'Game', 'games-collector' ) }
                         placeholder={ __( 'The title of the game, e.g. Star Realms', 'games-collector' ) }
-                  		onChange={ name => setAttributes( { name } ), getGame(name) }
+                  		onChange={ gameTitle => getGame( gameTitle ) }
                   		value={ gameTitle }
               		/>
                 </div>
