@@ -94,7 +94,7 @@ registerBlockType( 'games-collector/add-single-game', {
             );
         },
         save: props => {
-            const { attributes: { name } } = props;
-            return;
+            const { gameTitle } = props.attributes;
+            return gameTitle;
         },
 } );
