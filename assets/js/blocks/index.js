@@ -13,8 +13,11 @@ wp.i18n.setLocaleData( { '': {} }, 'games-collector' );
 // import apiFetch from '@wordpress/api-fetch';
 // import { addQueryArgs } from '@wordpress/url';
 
-// Load the editor styles.
+// Load the editor-specific styles.
 import '../../sass/editor.scss';
+
+// Load front-end styles.
+import '../../sass/style.scss';
 
 // Load the Gutenberg icons.
 import icons from './icons';
