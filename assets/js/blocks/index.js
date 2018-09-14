@@ -80,7 +80,6 @@ registerBlockType( 'games-collector/add-all-games', {
 			return (
 				<div className={ className }>
 					{ posts.map( post => {
-						console.log(post);
 						let divId       = `game-${ post.id }-info`,
 							title       = {
 								id: `game-${ post.id }-title`,
