@@ -81,9 +81,8 @@ registerBlockType( 'games-collector/add-all-games', {
 				<div className={ className }>
 					{ posts.map( post => {
 						let divId       = `game-${ post.id }-info`,
-							title       = {
-								id: `game-${ post.id }-title`,
-							},
+							title       = ( 'undefined' !== typeof post.url ) ? `
+								<a href=${ post.url.toString() }><span className="game-title" id="game-${ post.id }-title">${ post.title.rendered }</span></a>` : `<span className="game-title" id="game-${ post.id }-title">${ post.title.rendered }</span>`,
 							numPlayers  = {
 								id: `game-${ post.id }-num-players`,
 								total: (
@@ -109,9 +108,7 @@ registerBlockType( 'games-collector/add-all-games', {
 
 						return (
 							<div className={ className }>
-								<a href={ post.link }>
-									<span className="game-title" id={ title.id }>{ post.title.rendered }</span>
-								</a>
+								<div dangerouslySetInnerHTML={{ __html: title }} />
 								<div className="game-info" id={ divId }>
 									<span className="gc-icon icon-game-players">{ icons.players }</span><span className="game-num-players" id={ numPlayers.id }>{ numPlayers.total }</span>
 									<span className="gc-icon icon-game-time">{ icons.time }</span><span className="game-playing-time" id={ playingTime.id }>{ playingTime.message }</span>
