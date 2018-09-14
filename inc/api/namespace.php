@@ -26,6 +26,7 @@ function filter_games_json( $data, $post ) {
 	$age         = get_post_meta( $post->ID, '_gc_age' );
 	$difficulty  = get_post_meta( $post->ID, '_gc_difficulty' );
 	$link        = get_post_meta( $post->ID, '_gc_link' );
+	$attributes  = wp_get_object_terms( $post->ID, 'gc_attribute', [ 'fields' => 'names' ] );
 
 	if ( $min_players ) {
 		$data->data['min_players'] = $min_players;
@@ -49,6 +50,10 @@ function filter_games_json( $data, $post ) {
 
 	if ( $link ) {
 		$data->data['url'] = $link;
+	}
+
+	if ( $attributes ) {
+		$data->data['attributes'] = $attributes;
 	}
 
 	return $data;
