@@ -16,8 +16,8 @@ wp.i18n.setLocaleData( { '': {} }, 'games-collector' );
 // Load the editor styles.
 import '../../sass/editor.scss';
 
-// Load the Gutenberg icon.
-import icon from './icon';
+// Load the Gutenberg icons.
+import icons from './icons';
 
 // Load internal Gutenberg stuff.
 const { __ } = wp.i18n;
