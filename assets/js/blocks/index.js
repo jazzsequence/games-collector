@@ -27,11 +27,11 @@ const {
 	TextControl,
 } = wp.components;
 const { withSelect } = wp.data;
-const apiUrl = 'http://vagrant.local/wp-json';
-let wpapi = new WPAPI({endpoint: apiUrl});
-wpapi.games = wpapi.registerRoute( 'wp/v2', '/games', {
-	params: [ 'search' ]
-} );
+// const apiUrl = 'http://vagrant.local/wp-json';
+// let wpapi = new WPAPI({endpoint: apiUrl});
+// wpapi.games = wpapi.registerRoute( 'wp/v2', '/games', {
+// 	params: [ 'search' ]
+// } );
 
 registerBlockType( 'games-collector/add-all-games', {
 	title: __( 'All Games', 'games-collector' ),
