@@ -118,7 +118,7 @@ registerBlockType( 'games-collector/add-all-games', {
 					}) }
 				</div>
 			);
-		} ) // end withAPIData
+		} ) // end withSelect
 	, // end edit
 	save() {
 		// Rendering in PHP
