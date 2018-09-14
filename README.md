@@ -37,6 +37,8 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ![Games Collector add from BGG](https://i.imgur.com/4bRt36J.gif)
 
+![Games Collector Gutenberg block](https://user-images.githubusercontent.com/991511/45578321-f6ec5780-b83d-11e8-949e-cb56907af0a5.png)
+
 ## Changelog ##
 
 ### 1.3.0 ###
