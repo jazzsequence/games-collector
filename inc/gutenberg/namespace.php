@@ -8,6 +8,8 @@
 
 namespace GC\GamesCollector\Gutenberg;
 
+use GC\GamesCollector\Shortcode;
+
 /**
  * Enqueue the Gutenberg editor js and css.
  */
@@ -32,7 +34,11 @@ function register_blocks() {
 	] );
 }
 
+/**
+ * Piggyback off the shortcode for rendering the games list.
+ *
+ * @return string HTML for the games list.
+ */
 function render_add_all_games() {
-	var_dump('this is a thing i am doing');
 	return Shortcode\render_games();
 }
