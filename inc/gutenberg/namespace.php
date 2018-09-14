@@ -28,10 +28,11 @@ function register_blocks() {
 	}
 
 	register_block_type( 'games-collector/add-all-games', [
-		'render_callback' => __NAMESPACE__ . '\\render_block',
+		'render_callback' => __NAMESPACE__ . '\\render_add_all_games',
 	] );
 }
 
-function render_block() {
-	return '👋 Hi there.';
+function render_add_all_games() {
+	var_dump('this is a thing i am doing');
+	return Shortcode\render_games();
 }
