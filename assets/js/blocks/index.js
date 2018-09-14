@@ -8,8 +8,10 @@
 wp.i18n.setLocaleData( { '': {} }, 'games-collector' );
 
 // Load WP.
-import WPAPI from 'wpapi';
-import 'whatwg-fetch';
+// import WPAPI from 'wpapi';
+// import 'whatwg-fetch';
+// import apiFetch from '@wordpress/api-fetch';
+// import { addQueryArgs } from '@wordpress/url';
 
 // Load the editor styles.
 import '../../sass/editor.scss';
