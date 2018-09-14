@@ -33,10 +33,19 @@ const { withSelect } = wp.data;
 // 	params: [ 'search' ]
 // } );
 
-function ucfirst(string) {
+/**
+ * Make the first letter of a string uppercase.
+ *
+ * Mirror's PHP's ucfirst function.
+ *
+ * @param  {string} string The string to process.
+ * @return {string}        The string with the first letter capitalized.
+ */
+function ucfirst( string ) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// Register the all games Gutenberg block.
 registerBlockType( 'games-collector/add-all-games', {
 	title: __( 'All Games', 'games-collector' ),
 	description: __( 'Add all games to any post or page.', 'games-collector' ),
