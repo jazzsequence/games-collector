@@ -42,7 +42,7 @@ const { withSelect } = wp.data;
  * @return {string}        The string with the first letter capitalized.
  */
 function ucfirst( string ) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Register the all games Gutenberg block.
@@ -58,26 +58,26 @@ registerBlockType( 'games-collector/add-all-games', {
 		__( 'game list', 'games-collector' ),
 		__( 'all games', 'games-collector' ),
 	],
-    edit: withSelect( query => {
-            return {
-                posts: query( 'core' ).getEntityRecords( 'postType', 'gc_game', { per_page: -1, orderby: 'title', order: 'asc' } )
-            };
-        } )( ( { posts, className, isSelected } ) => {
-            if ( ! posts ) {
-                return (
-                    <p className={ className } >
-                        <Spinner />
-                        { __( 'Loading Posts', 'games-collector' ) }
-                    </p>
-                );
-            }
-            if ( 0 === posts.length ) {
-                return <p>{ __( 'No Posts', 'games-collector' ) }</p>;
-            }
-            return (
-                <div className={ className }>
-                    { posts.map( post => {
-                    	console.log(post);
+	edit: withSelect( query => {
+			return {
+				posts: query( 'core' ).getEntityRecords( 'postType', 'gc_game', { per_page: -1, orderby: 'title', order: 'asc' } )
+			};
+		} )( ( { posts, className, isSelected } ) => {
+			if ( ! posts ) {
+				return (
+					<p className={ className } >
+						<Spinner />
+						{ __( 'Loading Posts', 'games-collector' ) }
+					</p>
+				);
+			}
+			if ( 0 === posts.length ) {
+				return <p>{ __( 'No Posts', 'games-collector' ) }</p>;
+			}
+			return (
+				<div className={ className }>
+					{ posts.map( post => {
+						console.log(post);
 						let divId       = `game-${ post.id }-info`,
 							title       = {
 								id: `game-${ post.id }-title`,
@@ -105,31 +105,31 @@ registerBlockType( 'games-collector/add-all-games', {
 								message: `${ post.attributes.join( ', ' ) }`,
 							};
 
-                        return (
-                            <div className={ className }>
-                                <a href={ post.link }>
-                                    <span className="game-title" id={ title.id }>{ post.title.rendered }</span>
-                                </a>
-                                <div className="game-info" id={ divId }>
-                        			<span className="gc-icon icon-game-players">{ icons.players }</span><span className="game-num-players" id={ numPlayers.id }>{ numPlayers.total }</span>
-                        			<span className="gc-icon icon-game-time">{ icons.time }</span><span className="game-playing-time" id={ playingTime.id }>{ playingTime.message }</span>
-                        			<span className="gc-icon icon-game-age">{ icons.age }</span><span className="game-age" id={ age.id }>{ age.message }</span>
-                        			<span className="gc-icon icon-game-difficulty">{ icons.difficulty }</span><span className="game-difficulty" id={ difficulty.id }>{ ucfirst( post.difficulty[0] ) }</span>
-                        			<div className="game-attributes">
-                        				<span className="gc-icon icon-game-attributes">{ icons.tags }</span><span className="game-attributes" id={ attributes.id }>{ attributes.message }</span>
-                        			</div>
-                                </div>
-                            </div>
-                        );
-                    }) }
-                </div>
-            );
-        } ) // end withAPIData
-    , // end edit
-    save() {
-        // Rendering in PHP
-        return null;
-    },
+						return (
+							<div className={ className }>
+								<a href={ post.link }>
+									<span className="game-title" id={ title.id }>{ post.title.rendered }</span>
+								</a>
+								<div className="game-info" id={ divId }>
+									<span className="gc-icon icon-game-players">{ icons.players }</span><span className="game-num-players" id={ numPlayers.id }>{ numPlayers.total }</span>
+									<span className="gc-icon icon-game-time">{ icons.time }</span><span className="game-playing-time" id={ playingTime.id }>{ playingTime.message }</span>
+									<span className="gc-icon icon-game-age">{ icons.age }</span><span className="game-age" id={ age.id }>{ age.message }</span>
+									<span className="gc-icon icon-game-difficulty">{ icons.difficulty }</span><span className="game-difficulty" id={ difficulty.id }>{ ucfirst( post.difficulty[0] ) }</span>
+									<div className="game-attributes">
+										<span className="gc-icon icon-game-attributes">{ icons.tags }</span><span className="game-attributes" id={ attributes.id }>{ attributes.message }</span>
+									</div>
+								</div>
+							</div>
+						);
+					}) }
+				</div>
+			);
+		} ) // end withAPIData
+	, // end edit
+	save() {
+		// Rendering in PHP
+		return null;
+	},
 });
 
 
