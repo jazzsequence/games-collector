@@ -28,6 +28,12 @@ bower_components
 .bower-registry
 .bower-tmp
 
+### Don't version control lock files
+*.lock
+package-lock.json
+
+### Don't version control the yeoman generator file.
+.yo-rc.json
 
 ### Node ###
 # Logs

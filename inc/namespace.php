@@ -28,6 +28,8 @@ function bootstrap() {
 	add_action( 'register_shortcode_ui', __NAMESPACE__ . '\\Shortcode\\register_individual_games_shortcode' );
 	add_action( 'admin_post_bgg_search_response', __NAMESPACE__ . '\\BGG\\search_response' );
 	add_action( 'admin_post_bgg_insert_game', __NAMESPACE__ . '\\BGG\\insert_game' );
+	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\Gutenberg\\enqueue_block_editor_assets' );
+	add_action( 'wp', __NAMESPACE__ . '\\Gutenberg\\register_blocks' );
 	add_filter( 'rest_prepare_gc_game', __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
 	add_filter( 'gc_filter_players', __NAMESPACE__ . '\\numbers_of_players', 10, 3 );
 	add_filter( 'custom_menu_order', __NAMESPACE__ . '\\BGG\\submenu_order' );

@@ -39,6 +39,9 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ## Changelog ##
 
+### 1.3.0 ###
+* Added first Gutenberg block! Now you can add your games list in Gutenberg rather than using a shortcode. More Gutenberg blocks to come.
+
 ### 1.2.0 ###
 * Added integration with Board Game Geek API. Games can now be added by searching BGG for matching titles and information imported and automatically added to new games.
 * Fixed an issue where games with an indeterminate max number of players was displaying a 0 value (e.g. `2 - 0 players`) and combined that with games with an unrealistically large number of players (e.g. `2 - 99 players`) to display `{{min_players}}+ players` e.g. `2+ players`.
