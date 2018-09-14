@@ -37,6 +37,17 @@ function shortcode( $atts ) {
 		$post_ids = [ $atts['gc_game'] ];
 	}
 
+	return render_games( $post_ids );
+}
+
+/**
+ * Front-end display of games.
+ *
+ * @since  1.3.0
+ * @param  array $post_ids An array of post IDs (or an empty array).
+ * @return string          The games HTML.
+ */
+function render_games( $post_ids = [] ) {
 	$games = get_games( $post_ids );
 	ob_start(); ?>
 
@@ -60,8 +71,8 @@ function shortcode( $atts ) {
 		<?php } ?>
 	</div>
 
-	<?php $content = ob_get_clean();
-	return $content;
+	<?php
+	return ob_get_clean();
 }
 
 /**
