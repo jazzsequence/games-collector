@@ -30,11 +30,6 @@ const {
 	TextControl,
 } = wp.components;
 const { withSelect } = wp.data;
-// const apiUrl = 'http://vagrant.local/wp-json';
-// let wpapi = new WPAPI({endpoint: apiUrl});
-// wpapi.games = wpapi.registerRoute( 'wp/v2', '/games', {
-// 	params: [ 'search' ]
-// } );
 
 /**
  * Make the first letter of a string uppercase.
@@ -130,84 +125,3 @@ registerBlockType( 'games-collector/add-all-games', {
 		return null;
 	},
 });
-
-
-// registerBlockType( 'games-collector/add-single-game', {
-// 		title: __( 'Single Game', 'games-collector' ),
-// 		description: __( 'Add a single game to a post or page.', 'games-collector' ),
-// 		category: 'widgets',
-// 		icon: {
-// 			src: icon
-// 		},
-// 		keywords: [
-// 			__( 'Games Collector', 'games-collector' ),
-// 			__( 'single game', 'games-collector' ),
-// 			__( 'add game', 'games-collector' ),
-// 		],
-//         attributes: {
-//             gameTitle: {
-//                 type: 'string',
-//                 source: 'children',
-//                 selector: '.game-name-input input',
-//             }
-//         },
-//         edit: props => {
-//             const { attributes: { gameTitle }, className, setAttributes } = props;
-// 			const DEFAULT_QUERY = {
-// 				per_page: -1,
-// 				orderby: 'count',
-// 				order: 'desc',
-// 				_fields: 'id,name',
-// 			}
-//             const getGame = function( gameTitle ) {
-//             	// Set the gameTitle to be the updated title that was entered into the form.
-//             	gameTitle = setAttributes( { gameTitle } );
-
-//             	// Create a new title from the updated gameTitle.
-//             	let title = props.attributes.gameTitle;
-
-//             	// This logs the game title as it's updated.
-//             	console.log(props.attributes.gameTitle);
-//             	console.log(apiFetch({
-//             		path: addQueryArgs( '/wp/v2/games/', { ...DEFAULT_QUERY, search: title })
-//             	}));
-//             	// This logs the URL that is going to be hit.
-//             	// console.log(wpapi.games().search(title).toString());
-//             	// This logs the response against a search for that game.
-//             	// console.log( wpapi.games().search(title).get());
-//             	// let gamesResult = wpapi.games().search(title).get();
-//             	// gamesResult.then(function(result) {
-//             	// 	console.log(result);
-//             	// 	console.log(result.length);
-//             	// 	wp.render(renderGameHtml(result),autosuggestGames);
-//             	// });
-
-//             	// console.log(gamesResult.length);
-//             	// Return the gameTitle that was set.
-//             	return gameTitle;
-//             }
-//             return (
-//                 <div className={ className }>
-//                     <TextControl
-//                     	className="game-name-input"
-//                     	label={ __( 'Game', 'games-collector' ) }
-//                         placeholder={ __( 'The title of the game, e.g. Star Realms', 'games-collector' ) }
-//                   		onChange={ gameTitle => getGame( gameTitle ) }
-//                   		value={ gameTitle }
-//               		/>
-//               		<ul ref="autosuggestGames" />
-//                 </div>
-//             );
-//         },
-//         save: props => {
-//             const { gameTitle } = props.attributes;
-//             return gameTitle;
-//         },
-// } );
-
-// function renderGameHtml( game ) {
-// 	let liClass = 'game-suggestion game-' + game.id;
-// 	return { __html:<li className="liClass">
-// 		game.title
-// 	</li>};
-// }
