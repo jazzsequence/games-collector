@@ -33,6 +33,10 @@ const { withSelect } = wp.data;
 // 	params: [ 'search' ]
 // } );
 
+function ucfirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 registerBlockType( 'games-collector/add-all-games', {
 	title: __( 'All Games', 'games-collector' ),
 	description: __( 'Add all games to any post or page.', 'games-collector' ),
