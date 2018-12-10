@@ -1,5 +1,8 @@
 {
     "require": {
         "humanmade/coding-standards": "^0.2.1",
+        "johnbillion/extended-cpts": "^4.2",
+        "harvesthq/chosen": "^1.8",
+        "cmb2/cmb2": "^2.5"
     }
 }
