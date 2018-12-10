@@ -45,11 +45,15 @@ namespace GC\GamesCollector;
 function autoload_init() {
 	// Add in some specific includes and vendor libraries.
 	$files = [
-		dirname( __FILE__ ) . '/vendor/johnbillion/extended-cpts/extended-cpts.php',
 		dirname( __FILE__ ) . '/vendor/cmb2/cmb2/init.php',
 		dirname( __FILE__ ) . '/inc/namespace.php',
 		dirname( __FILE__ ) . '/inc/functions.php',
 	];
+
+	// Check for extended cpts, load it if it hasn't already been loaded.
+	if ( ! function_exists( 'register_extended_post_type' ) ) {
+		$files[] = dirname( __FILE__ ) . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+	}
 
 	// Autoload the namespaces.
 	$namespaces = array_filter( glob( dirname( __FILE__ ) . '/inc/*' ), 'is_dir' );
