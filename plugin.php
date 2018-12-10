@@ -46,7 +46,6 @@ function autoload_init() {
 	// Add in some specific includes and vendor libraries.
 	$files = [
 		dirname( __FILE__ ) . '/vendor/extended-cpts/extended-cpts.php',
-		dirname( __FILE__ ) . '/vendor/extended-taxos/extended-taxos.php',
 		dirname( __FILE__ ) . '/vendor/cmb2/init.php',
 		dirname( __FILE__ ) . '/inc/namespace.php',
 		dirname( __FILE__ ) . '/inc/functions.php',
