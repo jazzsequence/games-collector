@@ -1,17 +1,142 @@
 [
     {
-        "name": "squizlabs/php_codesniffer",
-        "version": "2.7.1",
-        "version_normalized": "2.7.1.0",
+        "name": "cmb2/cmb2",
+        "version": "v2.5.1",
+        "version_normalized": "2.5.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-            "reference": "9b324f3a1132459a7274a0ace2e1b766ba80930f"
+            "url": "https://github.com/CMB2/CMB2.git",
+            "reference": "1129acf4b7689010789d830f6fba0b7b68ad51ff"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9b324f3a1132459a7274a0ace2e1b766ba80930f",
-            "reference": "9b324f3a1132459a7274a0ace2e1b766ba80930f",
+            "url": "https://api.github.com/repos/CMB2/CMB2/zipball/1129acf4b7689010789d830f6fba0b7b68ad51ff",
+            "reference": "1129acf4b7689010789d830f6fba0b7b68ad51ff",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">5.2.4"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+        },
+        "suggest": {
+            "composer/installers": "~1.0"
+        },
+        "time": "2018-12-10T15:11:54+00:00",
+        "type": "wordpress-plugin",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "WebDevStudios",
+                "email": "contact@webdevstudios.com",
+                "homepage": "https://github.com/WebDevStudios",
+                "role": "Developer"
+            },
+            {
+                "name": "Justin Sternberg",
+                "email": "justin@dsgnwrks.pro",
+                "homepage": "https://dsgnwrks.pro",
+                "role": "Developer"
+            }
+        ],
+        "description": "CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.",
+        "homepage": "https://github.com/CMB2/CMB2",
+        "keywords": [
+            "metabox",
+            "plugin",
+            "wordpress"
+        ]
+    },
+    {
+        "name": "fig-r/psr2r-sniffer",
+        "version": "0.3.1",
+        "version_normalized": "0.3.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig-rectified/psr2r-sniffer.git",
+            "reference": "cdf61b2922efb225903e52c6222d7192d3b97ebf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig-rectified/psr2r-sniffer/zipball/cdf61b2922efb225903e52c6222d7192d3b97ebf",
+            "reference": "cdf61b2922efb225903e52c6222d7192d3b97ebf",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.16",
+            "squizlabs/php_codesniffer": "~2.3"
+        },
+        "time": "2016-07-11T14:35:34+00:00",
+        "bin": [
+            "bin/tokenize",
+            "bin/sniff"
+        ],
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PSR2R\\": "PSR2R"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Mark Scherer",
+                "homepage": "http://www.dereuromark.de",
+                "role": "Contributor"
+            }
+        ],
+        "description": "Code-Sniffer, Auto-Fixer and Tokenizer for PSR2-R"
+    },
+    {
+        "name": "humanmade/coding-standards",
+        "version": "0.2.2",
+        "version_normalized": "0.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/humanmade/coding-standards.git",
+            "reference": "f3974696bf139eb17049ae0ced114cbee1f86b20"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/humanmade/coding-standards/zipball/f3974696bf139eb17049ae0ced114cbee1f86b20",
+            "reference": "f3974696bf139eb17049ae0ced114cbee1f86b20",
+            "shasum": ""
+        },
+        "require": {
+            "fig-r/psr2r-sniffer": "^0.3.1",
+            "wp-coding-standards/wpcs": "^0.10.0"
+        },
+        "time": "2017-08-31T03:33:08+00:00",
+        "type": "project",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "description": "Human Made coding standards"
+    },
+    {
+        "name": "squizlabs/php_codesniffer",
+        "version": "2.9.2",
+        "version_normalized": "2.9.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+            "reference": "2acf168de78487db620ab4bc524135a13cfe6745"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/2acf168de78487db620ab4bc524135a13cfe6745",
+            "reference": "2acf168de78487db620ab4bc524135a13cfe6745",
             "shasum": ""
         },
         "require": {
@@ -23,7 +148,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2016-11-30T04:02:31+00:00",
+        "time": "2018-11-07T22:31:41+00:00",
         "bin": [
             "scripts/phpcs",
             "scripts/phpcbf"
@@ -80,50 +205,6 @@
         ]
     },
     {
-        "name": "fig-r/psr2r-sniffer",
-        "version": "0.3.1",
-        "version_normalized": "0.3.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-fig-rectified/psr2r-sniffer.git",
-            "reference": "cdf61b2922efb225903e52c6222d7192d3b97ebf"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-fig-rectified/psr2r-sniffer/zipball/cdf61b2922efb225903e52c6222d7192d3b97ebf",
-            "reference": "cdf61b2922efb225903e52c6222d7192d3b97ebf",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.16",
-            "squizlabs/php_codesniffer": "~2.3"
-        },
-        "time": "2016-07-11T14:35:34+00:00",
-        "bin": [
-            "bin/tokenize",
-            "bin/sniff"
-        ],
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "PSR2R\\": "PSR2R"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Mark Scherer",
-                "homepage": "http://www.dereuromark.de",
-                "role": "Contributor"
-            }
-        ],
-        "description": "Code-Sniffer, Auto-Fixer and Tokenizer for PSR2-R"
-    },
-    {
         "name": "wp-coding-standards/wpcs",
         "version": "0.10.0",
         "version_normalized": "0.10.0.0",
@@ -160,33 +241,5 @@
             "standards",
             "wordpress"
         ]
-    },
-    {
-        "name": "humanmade/coding-standards",
-        "version": "0.2.1",
-        "version_normalized": "0.2.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/humanmade/coding-standards.git",
-            "reference": "1f1d90c937b1057f1c0999ac65f501db7c72f46c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/humanmade/coding-standards/zipball/1f1d90c937b1057f1c0999ac65f501db7c72f46c",
-            "reference": "1f1d90c937b1057f1c0999ac65f501db7c72f46c",
-            "shasum": ""
-        },
-        "require": {
-            "fig-r/psr2r-sniffer": "^0.3.1",
-            "wp-coding-standards/wpcs": "^0.10.0"
-        },
-        "time": "2016-12-08T08:41:35+00:00",
-        "type": "project",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0"
-        ],
-        "description": "Human Made coding standards"
     }
 ]

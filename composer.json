@@ -1,5 +1,6 @@
 {
     "require": {
-        "humanmade/coding-standards": "^0.2.1"
+        "humanmade/coding-standards": "^0.2.1",
+	"CMB2/CMB2": "^2.5.1"
     }
 }
