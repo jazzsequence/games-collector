@@ -35,14 +35,17 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ![Games Collector admin](https://jazzsequence.com/wp-content/uploads/2017/02/Screenshot-2017-02-03-15.06.17.png)
 
+![Games Collector add from BGG](https://i.imgur.com/4bRt36J.gif)
+
+![Games Collector Gutenberg block](https://user-images.githubusercontent.com/991511/45578321-f6ec5780-b83d-11e8-949e-cb56907af0a5.png)
+
 ## Changelog ##
 
 ### 1.3.1 ###
 * Uses composer for dependencies and updates paths
 
 ### 1.3.0 ###
-Gutentag Gutenberg!
-* Adds initial support for a Games Collector Gutenberg Block
+* Added first Gutenberg block! Now you can add your games list in Gutenberg rather than using a shortcode. More Gutenberg blocks to come.
 
 ### 1.2.0 ###
 * Added integration with Board Game Geek API. Games can now be added by searching BGG for matching titles and information imported and automatically added to new games.
