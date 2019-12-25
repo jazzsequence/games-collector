@@ -7,7 +7,7 @@
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      4.9.8  
-**Stable tag:**        1.3.2  
+**Stable tag:**        1.3.3  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
 **Demo:**              https://jazzsequence.com/games/
@@ -40,6 +40,12 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ![Games Collector Gutenberg block](https://user-images.githubusercontent.com/991511/45578321-f6ec5780-b83d-11e8-949e-cb56907af0a5.png)
 
 ## Changelog ##
+
+### 1.3.3 ###
+* require isotope as a dependency for our isotope loader
+
+### 1.3.2 ###
+* Update version for new Composer build
 
 ### 1.3.1 ###
 * Uses composer for dependencies and updates paths
