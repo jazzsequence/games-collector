@@ -57,7 +57,7 @@ before_script:
     - wget https://raw.github.com/tierra/wordpress-plugin-tests/setup/setup.sh
     - source setup.sh
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
-    - composer global require phpunit/phpunit "^7.0"
+    - composer global require phpunit/phpunit "^5.7"
 
 # Run test script commands.
 # Default is specific to project language.
