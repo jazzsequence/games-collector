@@ -54,7 +54,8 @@ before_script:
     - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs --config-set installed_paths $SNIFFS_DIR; fi
     # After CodeSniffer install you should refresh your path.
     - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
-    - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+    - wget https://raw.github.com/tierra/wordpress-plugin-tests/setup/setup.sh
+    - source setup.sh
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
     - composer global require phpunit/phpunit "^7.0"
 
