@@ -14,9 +14,9 @@ sudo: false
 language: php
 
 # Start the db service
-# @link https://docs.travis-ci.com/user/database-setup/#mariadb
-addons:
-  mariadb: '10.0'
+# @link https://docs.travis-ci.com/user/database-setup/#mysql
+services:
+  - mysql
 
 # Receive notifications for build results.
 # @link http://docs.travis-ci.com/user/notifications/#Email-notifications
