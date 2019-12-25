@@ -51,13 +51,7 @@ before_script:
     - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
-    - |
-      if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then
-        composer global require "phpunit/phpunit=5.7.*"
-      else
-        composer global require "phpunit/phpunit=4.8.*"
-      fi
-    - |
+    - composer global require "phpunit/phpunit=5.7.*"
 
 # Run test script commands.
 # Default is specific to project language.
