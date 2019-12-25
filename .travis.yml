@@ -57,7 +57,6 @@ before_script:
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
     - composer global require phpunit/phpunit:5.*
-    - phpunit --version
 
 # Run test script commands.
 # Default is specific to project language.
@@ -73,7 +72,7 @@ script:
     # --standard: Use WordPress as the standard.
     # --extensions: Only sniff PHP files.
     - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n . --standard=vendor/humanmade/coding-standards .; fi
-    - phpunit . --coverage-clover=coverage.clover
+    - phpunit
 after_script:
-- wget https://scrutinizer-ci.com/ocular.phar
-- php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+# - wget https://scrutinizer-ci.com/ocular.phar
+# - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
