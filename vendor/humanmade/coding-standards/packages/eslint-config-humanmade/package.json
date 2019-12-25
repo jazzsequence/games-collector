@@ -1,24 +1,34 @@
 {
   "name": "eslint-config-humanmade",
-  "version": "0.2.0",
+  "version": "0.7.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/humanmade/coding-standards.git"
   },
-  "peerDependencies": {
-    "babel-eslint": "^7.0.0",
-    "eslint": "^3.11.1",
-    "eslint-config-react-app": "^0.5.0",
-    "eslint-plugin-flowtype": "^2.21.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1"
+  "scripts": {
+    "test": "node fixtures/test-lint-config"
   },
-  "dependencies": {
-    "js-yaml": "^3.7.0"
+  "devDependencies": {
+    "babel-eslint": "^10.0.0",
+    "chalk": "^2.4.1",
+    "eslint": "^5.10.0",
+    "eslint-config-react-app": "^3.0.5",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1"
+  },
+  "peerDependencies": {
+    "babel-eslint": "^10.0.0",
+    "eslint": "^5.10.0",
+    "eslint-config-react-app": "^3.0.5",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1"
   },
   "files": [
-    ".eslintrc.yml",
+    ".eslintrc",
     "index.js"
   ]
 }
