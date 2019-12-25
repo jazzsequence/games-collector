@@ -1,29 +1,31 @@
 [
     {
         "name": "cmb2/cmb2",
-        "version": "v2.5.1",
-        "version_normalized": "2.5.1.0",
+        "version": "v2.6.0",
+        "version_normalized": "2.6.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/CMB2/CMB2.git",
-            "reference": "1129acf4b7689010789d830f6fba0b7b68ad51ff"
+            "reference": "008d9b83263d971d6bd41c27e31113db852d5ef3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/CMB2/CMB2/zipball/1129acf4b7689010789d830f6fba0b7b68ad51ff",
-            "reference": "1129acf4b7689010789d830f6fba0b7b68ad51ff",
+            "url": "https://api.github.com/repos/CMB2/CMB2/zipball/008d9b83263d971d6bd41c27e31113db852d5ef3",
+            "reference": "008d9b83263d971d6bd41c27e31113db852d5ef3",
             "shasum": ""
         },
         "require": {
             "php": ">5.2.4"
         },
         "require-dev": {
-            "phpunit/phpunit": "3.7.*"
+            "apigen/apigen": "4.1.2",
+            "nette/utils": "2.5.3",
+            "phpunit/phpunit": "6.5.13"
         },
         "suggest": {
             "composer/installers": "~1.0"
         },
-        "time": "2018-12-10T15:11:54+00:00",
+        "time": "2019-01-21T04:30:08+00:00",
         "type": "wordpress-plugin",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",
@@ -177,17 +179,17 @@
     },
     {
         "name": "johnbillion/extended-cpts",
-        "version": "4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "4.3.2",
+        "version_normalized": "4.3.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/johnbillion/extended-cpts.git",
-            "reference": "89ba13fa10c66b77f21aacdfb794ef3607814ed5"
+            "reference": "6446170b222869e1e0770c130ead47def5261b51"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/johnbillion/extended-cpts/zipball/89ba13fa10c66b77f21aacdfb794ef3607814ed5",
-            "reference": "89ba13fa10c66b77f21aacdfb794ef3607814ed5",
+            "url": "https://api.github.com/repos/johnbillion/extended-cpts/zipball/6446170b222869e1e0770c130ead47def5261b51",
+            "reference": "6446170b222869e1e0770c130ead47def5261b51",
             "shasum": ""
         },
         "require": {
@@ -195,19 +197,31 @@
         },
         "require-dev": {
             "automattic/phpcs-neutron-standard": "^1.5",
-            "johnbillion/php-docs-standards": "^1.2",
-            "phpunit/phpunit": "^5.7",
-            "slevomat/coding-standard": "^4.0",
-            "wimg/php-compatibility": "^8",
-            "wp-coding-standards/wpcs": "1.0"
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.5",
+            "johnbillion/falsey-assertequals-detector": "^2",
+            "johnbillion/php-docs-standards": "^1",
+            "phpcompatibility/phpcompatibility-wp": "^2",
+            "phpunit/phpunit": "^6",
+            "roots/wordpress": "*",
+            "vlucas/phpdotenv": "^3",
+            "wp-cli/wp-cli-bundle": "^2.1",
+            "wp-coding-standards/wpcs": "^2",
+            "wp-phpunit/wp-phpunit": "*"
         },
         "suggest": {
+            "seravo/wp-custom-bulk-actions": "Custom Bulk Actions",
             "wpackagist-plugin/rewrite-testing": "Rewrite Rule Testing"
         },
-        "time": "2018-12-08T15:16:49+00:00",
+        "time": "2019-08-25T21:14:07+00:00",
         "type": "library",
+        "extra": {
+            "wordpress-install-dir": "tests/wordpress"
+        },
         "installation-source": "dist",
         "autoload": {
+            "psr-4": {
+                "ExtCPTs\\Tests\\": "tests/phpunit"
+            },
             "files": [
                 "extended-cpts.php"
             ]
@@ -311,12 +325,12 @@
         "version_normalized": "0.10.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git",
+            "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
             "reference": "b39490465f6fd7375743a395019cd597e12119c9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/b39490465f6fd7375743a395019cd597e12119c9",
+            "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/b39490465f6fd7375743a395019cd597e12119c9",
             "reference": "b39490465f6fd7375743a395019cd597e12119c9",
             "shasum": ""
         },

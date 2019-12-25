@@ -15,12 +15,20 @@ class ComposerStaticInit83bf692c093c858a3dd768b10598daca
         array (
             'PSR2R\\' => 6,
         ),
+        'E' => 
+        array (
+            'ExtCPTs\\Tests\\' => 14,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'PSR2R\\' => 
         array (
             0 => __DIR__ . '/..' . '/fig-r/psr2r-sniffer/PSR2R',
+        ),
+        'ExtCPTs\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/johnbillion/extended-cpts/tests/phpunit',
         ),
     );
 
