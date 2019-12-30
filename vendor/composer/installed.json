@@ -369,17 +369,17 @@
     },
     {
         "name": "phpcompatibility/php-compatibility",
-        "version": "9.3.4",
-        "version_normalized": "9.3.4.0",
+        "version": "9.3.5",
+        "version_normalized": "9.3.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
-            "reference": "1f37659196e4f3113ea506a7efba201c52303bf1"
+            "reference": "9fb324479acf6f39452e0655d2429cc0d3914243"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/1f37659196e4f3113ea506a7efba201c52303bf1",
-            "reference": "1f37659196e4f3113ea506a7efba201c52303bf1",
+            "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/9fb324479acf6f39452e0655d2429cc0d3914243",
+            "reference": "9fb324479acf6f39452e0655d2429cc0d3914243",
             "shasum": ""
         },
         "require": {
@@ -396,7 +396,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": "^0.5 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically.",
             "roave/security-advisories": "dev-master || Helps prevent installing dependencies with known security issues."
         },
-        "time": "2019-11-15T04:12:02+00:00",
+        "time": "2019-12-27T09:44:58+00:00",
         "type": "phpcodesniffer-standard",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",
