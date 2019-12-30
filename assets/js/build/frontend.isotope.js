@@ -9,6 +9,7 @@ window.GamesCollector = {};
 	 */
 	plugin.init = function() {
 		if ( plugin.meetsRequirements ) {
+			plugin.cache();
 			plugin.bindEvents();
 		}
 	};
