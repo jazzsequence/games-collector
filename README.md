@@ -6,7 +6,7 @@
 **Donate link:**       https://www.paypal.me/jazzsequence/  
 **Tags:**  
 **Requires at least:** 4.4  
-**Tested up to:**      4.9.8  
+**Tested up to:**      5.2.4  
 **Stable tag:**        1.3.3  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
@@ -43,6 +43,7 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ### 1.3.3 ###
 * require isotope as a dependency for our isotope loader
+* use the jQuery implementation of Isotope
 
 ### 1.3.2 ###
 * Update version for new Composer build
