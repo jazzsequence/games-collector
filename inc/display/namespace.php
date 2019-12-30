@@ -382,8 +382,8 @@ function enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'games-collector', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/css/main.css', [], '1.3.0' );
-	wp_enqueue_script( 'games-collector', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/js/main.js', [ 'jquery' ], '1.3.0' );
+	wp_enqueue_style( 'games-collector', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/css/main.css', [], '1.3.3' );
+	wp_enqueue_script( 'games-collector', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/js/main.js', [ 'jquery', 'isotope' ], '1.3.3' );
 	wp_enqueue_script( 'isotope', 'https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js', [], '3.0.6' );
 }
 
