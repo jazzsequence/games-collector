@@ -1,21 +1,21 @@
 /**
- * Games Collector isotope handler.
+ * Games Collector Isotope handler.
  */
 window.GamesCollector = {};
 ( function( window, $, plugin ) {
 
-	var Isotope = require( 'isotope-layout' );
-
-	// Constructor.
+	/**
+	 * Constructor
+	 */
 	plugin.init = function() {
-		plugin.cache();
-
 		if ( plugin.meetsRequirements ) {
 			plugin.bindEvents();
 		}
 	};
 
-	// Cache all the things.
+	/**
+	 * Cache all the things.
+	 */
 	plugin.cache = function() {
 		plugin.$c = {
 			window: $(window),
@@ -32,23 +32,30 @@ window.GamesCollector = {};
 		};
 	};
 
-	// Combine all events.
+	/**
+	 * Combine all events.
+	 */
 	plugin.bindEvents = function() {
 		plugin.$c.buttons.on( 'click', 'button', plugin.filter );
 		plugin.$c.playersFilter.on( 'change', plugin.filterDropdown );
 		plugin.$c.difficultyFilter.on( 'change', plugin.filterDropdown );
 	};
 
-	// Do we meet the requirements?
+	/**
+	 * Check if we meet the requirements.
+	 */
 	plugin.meetsRequirements = function() {
 		return plugin.$c.list.length;
 	};
 
-	plugin.filter = function() {
-		let filterValue = $(this).attr( 'data-filter' );
-		plugin.$c.grid.isotope({ filter: filterValue });
+	/**
+	 * Filter based on category buttons.
+	 */
 	}
 
+	/**
+	 * Filter based on dropdowns.
+	 */
 	plugin.filterDropdown = function() {
 		// get filter value from option value
 		var filterValue = this.value;
