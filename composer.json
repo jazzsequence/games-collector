@@ -1,7 +1,7 @@
 {
     "require": {
         "humanmade/coding-standards": "^1.1.0",
-        "johnbillion/extended-cpts": "^4.2",
+        "johnbillion/extended-cpts": "^5.0",
         "harvesthq/chosen": "^1.8",
         "cmb2/cmb2": "^2.6"
     }
