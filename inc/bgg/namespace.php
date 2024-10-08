@@ -296,7 +296,7 @@ function search_response() {
 		$results      = get_bgg_search_results( $search_query );
 		set_transient( 'gc_last_bgg_search', $results, HOUR_IN_SECONDS );
 		wp_safe_redirect( admin_url( 'edit.php?post_type=gc_game&page=add_from_bgg&step=2' ) );
-		return;
+		exit;
 	}
 
 	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
@@ -433,6 +433,7 @@ function insert_game() {
 		// Redirect to the edit page for this game.
 		if ( is_user_logged_in() ) {
 			wp_safe_redirect( esc_url_raw( $redirect_url ) );
+			exit;
 		}
 
 		return;

@@ -53,8 +53,8 @@ function render_games( $post_ids = [] ) {
 
 	<div class="games-filter-group">
 		<?php
-		echo Display\get_buttons(); // WPCS: XSS ok, already sanitized.
-		echo Display\get_filters(); // WPCS: XSS ok, already sanitized.
+		echo Display\get_buttons(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo Display\get_filters(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	</div>
 
@@ -63,8 +63,8 @@ function render_games( $post_ids = [] ) {
 			<div <?php post_class( Game\get_game_classes( 'game-single', $game->ID ), $game->ID ); ?> id="game-<?php echo absint( $game->ID ); ?>">
 
 				<?php
-				echo Display\get_game_title( $game );    // WPCS: XSS ok, already sanitized.
-				echo Display\get_game_info( $game->ID ); // WPCS: XSS ok, already sanitized.
+				echo Display\get_game_title( $game );    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo Display\get_game_info( $game->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 
 			</div>

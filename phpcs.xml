@@ -14,6 +14,7 @@
 
   <!-- Ignore sniffs against things that we explicitly want for Pantheon upstreams. -->
   <rule ref="Pantheon-WP">
+	<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited"/>
   </rule>
 
   <!--
