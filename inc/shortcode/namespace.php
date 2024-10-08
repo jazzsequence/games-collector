@@ -89,7 +89,7 @@ function get_games( $post_ids = [] ) {
 
 	if ( $post_ids ) {
 		// If we're only displaying select games, don't show the filters.
-		add_filter( 'gc_filter_buttons',      '__return_null' );
+		add_filter( 'gc_filter_buttons', '__return_null' );
 		add_filter( 'gc_filter_game_filters', '__return_null' );
 
 		return get_posts([

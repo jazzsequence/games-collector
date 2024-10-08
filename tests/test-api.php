@@ -7,7 +7,7 @@
  */
 
 use GC\GamesCollector;
-use GC\GamesCollector\Attributes as Attributes;
+use GC\GamesCollector\Attributes;
 
 /**
  * Games Collector API unit test class.
@@ -23,7 +23,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 		parent::setUp();
 		global $wp_rest_server;
 
-		$this->server = $wp_rest_server = new \WP_Rest_Server;
+		$this->server = $wp_rest_server = new \WP_Rest_Server();
 		do_action( 'rest_api_init' );
 	}
 
@@ -105,7 +105,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 					$this->assertArrayHasKey( 'callback', $endpoint );
 					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
 					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
-					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+					$this->assertTrue( is_callable( [ $endpoint['callback'][0], $endpoint['callback'][1] ] ) );
 				}
 			}
 		}
@@ -152,7 +152,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 					$this->assertArrayHasKey( 'callback', $endpoint );
 					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
 					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
-					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+					$this->assertTrue( is_callable( [ $endpoint['callback'][0], $endpoint['callback'][1] ] ) );
 				}
 			}
 		}
@@ -176,7 +176,6 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 			$response->data['name'],
 			'Tried to get the attribute "Fantasy" via the API but was not able to retrieve attribute information from the API.'
 		);
-
 	}
 
 	/**

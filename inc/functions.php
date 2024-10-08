@@ -8,9 +8,9 @@
  * @since   0.2
  */
 
-use \GC\GamesCollector\Game;
-use \GC\GamesCollector\Shortcode;
-use \GC\GamesCollector\Attributes;
+use GC\GamesCollector\Game;
+use GC\GamesCollector\Shortcode;
+use GC\GamesCollector\Attributes;
 
 /**
  * Returns the difficulty for a game.

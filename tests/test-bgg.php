@@ -6,7 +6,7 @@
  * @package GC\GamesCollector
  */
 
-use GC\GamesCollector\BGG as BGG;
+use GC\GamesCollector\BGG;
 
 /**
  * Games Collector Game unit test class.

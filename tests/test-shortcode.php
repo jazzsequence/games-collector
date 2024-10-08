@@ -6,9 +6,9 @@
  * @package GC\GamesCollector
  */
 
-use GC\GamesCollector\Game as Game;
-use GC\GamesCollector\Shortcode as Shortcode;
-use GC\GamesCollector\Display as Display;
+use GC\GamesCollector\Game;
+use GC\GamesCollector\Shortcode;
+use GC\GamesCollector\Display;
 
 /**
  * Games Collector Shortcode unit test class.

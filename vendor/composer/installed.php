@@ -3,7 +3,7 @@
         'name' => 'jazzsequence/games-collector',
         'pretty_version' => 'dev-develop',
         'version' => 'dev-develop',
-        'reference' => '298231e7fa5317c6b59a85a9a05dc034be84ba3b',
+        'reference' => '76ba73528f9ef720a831760b0db233d157aeb40f',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -58,7 +58,7 @@
         'jazzsequence/games-collector' => array(
             'pretty_version' => 'dev-develop',
             'version' => 'dev-develop',
-            'reference' => '298231e7fa5317c6b59a85a9a05dc034be84ba3b',
+            'reference' => '76ba73528f9ef720a831760b0db233d157aeb40f',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

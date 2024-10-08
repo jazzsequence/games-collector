@@ -9,6 +9,7 @@
  */
 
 namespace GC\GamesCollector\Display;
+
 use GC\GamesCollector\Game;
 use GC\GamesCollector\Attributes;
 
@@ -67,7 +68,8 @@ function get_game_info( $game_id ) {
 			?>
 		</div>
 
-	<?php return ob_get_clean();
+	<?php
+	return ob_get_clean();
 }
 
 /**
@@ -301,10 +303,12 @@ function get_players( $game_id ) {
  */
 function get_difficulty( $game_id ) {
 	if ( $difficulty = get_post_meta( $game_id, '_gc_difficulty', true ) ) {
-		ob_start(); ?>
+		ob_start();
+		?>
 		<span class="gc-icon icon-game-difficulty"><?php the_svg( 'difficulty', false ); ?></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
 
-		<?php $output = ob_get_clean();
+		<?php
+		$output = ob_get_clean();
 
 		/**
 		 * Allow the difficulty output to be filtered (but only if it has been set).
@@ -328,10 +332,12 @@ function get_difficulty( $game_id ) {
  */
 function get_playing_time( $game_id ) {
 	if ( $playing_time = get_post_meta( $game_id, '_gc_time', true ) ) {
-		ob_start(); ?>
+		ob_start();
+		?>
 		<span class="gc-icon icon-game-time"><?php the_svg( 'time', false ); ?></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
 
-		<?php $output = ob_get_clean();
+		<?php
+		$output = ob_get_clean();
 
 		/**
 		 * Allow the playing time output to be filtered (but only if it has been set).
@@ -354,10 +360,12 @@ function get_playing_time( $game_id ) {
  */
 function get_age( $game_id ) {
 	if ( $age = get_post_meta( $game_id, '_gc_age', true ) ) {
-		ob_start(); ?>
+		ob_start();
+		?>
 		<span class="gc-icon icon-game-age"><?php the_svg( 'age', false ); ?></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
 
-		<?php $output = ob_get_clean();
+		<?php
+		$output = ob_get_clean();
 
 		/**
 		 * Allow the age output to be filtered (but only if it has been set).
