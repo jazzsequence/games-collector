@@ -8,9 +8,9 @@
  * @since   0.2
  */
 
-use \GC\GamesCollector\Game;
-use \GC\GamesCollector\Shortcode;
-use \GC\GamesCollector\Attributes;
+use GC\GamesCollector\Game;
+use GC\GamesCollector\Shortcode;
+use GC\GamesCollector\Attributes;
 
 /**
  * Returns the difficulty for a game.
@@ -99,7 +99,7 @@ function gc_get_games() {
  * @since 0.2
  */
 function gc_the_games() {
-	echo Shortcode\shortcode( [] ); // WPCS: XSS ok. Already sanitized.
+	echo Shortcode\shortcode( [] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**
@@ -141,7 +141,7 @@ function gc_get_game( $post_ids = '' ) {
  * @param  mixed $post_ids Can be a valid game post ID, an array of games, or a comma-separated list of games.
  */
 function gc_the_game( $post_ids = '' ) {
-	echo gc_get_game( $post_ids ); // WPCS: XSS ok, already sanitized.
+	echo gc_get_game( $post_ids ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**

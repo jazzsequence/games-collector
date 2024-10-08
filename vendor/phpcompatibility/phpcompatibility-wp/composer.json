@@ -2,7 +2,7 @@
   "name" : "phpcompatibility/phpcompatibility-wp",
   "description" : "A ruleset for PHP_CodeSniffer to check for PHP cross-version compatibility issues in projects, while accounting for polyfills provided by WordPress.",
   "type" : "phpcodesniffer-standard",
-  "keywords" : [ "compatibility", "phpcs", "standards", "wordpress" ],
+  "keywords" : [ "compatibility", "phpcs", "standards", "static analysis", "wordpress" ],
   "homepage" : "http://phpcompatibility.com/",
   "license" : "LGPL-3.0-or-later",
   "authors" : [ {
@@ -15,17 +15,24 @@
   } ],
   "support" : {
     "issues" : "https://github.com/PHPCompatibility/PHPCompatibilityWP/issues",
-    "source" : "https://github.com/PHPCompatibility/PHPCompatibilityWP"
+    "source" : "https://github.com/PHPCompatibility/PHPCompatibilityWP",
+    "security": "https://github.com/PHPCompatibility/PHPCompatibilityWP/security/policy"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "lock": false
   },
   "require" : {
     "phpcompatibility/php-compatibility" : "^9.0",
     "phpcompatibility/phpcompatibility-paragonie" : "^1.0"
   },
   "require-dev" : {
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.5"
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
   },
   "suggest" : {
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.5 || This Composer plugin will sort out the PHP_CodeSniffer 'installed_paths' automatically.",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0 || This Composer plugin will sort out the PHP_CodeSniffer 'installed_paths' automatically.",
     "roave/security-advisories": "dev-master || Helps prevent installing dependencies with known security issues."
   },
   "prefer-stable" : true

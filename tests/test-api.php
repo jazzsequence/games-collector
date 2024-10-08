@@ -7,7 +7,7 @@
  */
 
 use GC\GamesCollector;
-use GC\GamesCollector\Attributes as Attributes;
+use GC\GamesCollector\Attributes;
 
 /**
  * Games Collector API unit test class.
@@ -17,13 +17,20 @@ use GC\GamesCollector\Attributes as Attributes;
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
 	/**
+	 * The REST server.
+	 *
+	 * @var WP_Rest_Server
+	 */
+	protected $server;
+
+	/**
 	 * Kick off the rest api.
 	 */
-	public function setUp() {
+	public function setUp() : void {
 		parent::setUp();
 		global $wp_rest_server;
-
-		$this->server = $wp_rest_server = new \WP_Rest_Server;
+		$wp_rest_server = new \WP_Rest_Server();
+		$this->server = $wp_rest_server;
 		do_action( 'rest_api_init' );
 	}
 
@@ -34,7 +41,13 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 * @return object WP_Post object for the game.
 	 */
 	private function get_game() {
-		$game = get_page_by_title( 'Chrononauts', OBJECT, 'gc_game' );
+		$games = get_posts( [
+			'title' => 'chrononauts',
+			'post_type' => 'gc_game',
+			'posts_per_page' => 1,
+		] );
+
+		$game = array_shift( $games ) ?: false;
 
 		if ( ! $game ) {
 			$post_id = $this->factory->post->create([
@@ -105,7 +118,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 					$this->assertArrayHasKey( 'callback', $endpoint );
 					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
 					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
-					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+					$this->assertTrue( is_callable( [ $endpoint['callback'][0], $endpoint['callback'][1] ] ) );
 				}
 			}
 		}
@@ -152,7 +165,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 					$this->assertArrayHasKey( 'callback', $endpoint );
 					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
 					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
-					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+					$this->assertTrue( is_callable( [ $endpoint['callback'][0], $endpoint['callback'][1] ] ) );
 				}
 			}
 		}
@@ -176,7 +189,6 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 			$response->data['name'],
 			'Tried to get the attribute "Fantasy" via the API but was not able to retrieve attribute information from the API.'
 		);
-
 	}
 
 	/**

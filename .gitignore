@@ -6,6 +6,11 @@
 # Icon must end with two \r
 Icon
 
+# Ignore WP Unit Helpers
+bin/helpers.sh
+bin/install-local-tests.sh
+bin/install-wp-tests.sh
+bin/phpunit-test.sh
 
 # Thumbnails
 ._*
@@ -29,7 +34,6 @@ bower_components
 .bower-tmp
 
 ### Don't version control lock files
-*.lock
 package-lock.json
 
 ### Don't version control the yeoman generator file.

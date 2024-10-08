@@ -6,7 +6,7 @@
  * @package GC\GamesCollector
  */
 
-use GC\GamesCollector\BGG as BGG;
+use GC\GamesCollector\BGG;
 
 /**
  * Games Collector Game unit test class.
@@ -207,7 +207,7 @@ class GC_Test_BGG extends WP_UnitTestCase {
 			sprintf(
 				'<strong>%1$s</strong> [%2$s] (%3$s)',
 				ucwords( self::$test_query ),
-				$search[0]['year'],
+				'2016',
 				$game['id']
 			),
 			$options[ $game['id'] ]

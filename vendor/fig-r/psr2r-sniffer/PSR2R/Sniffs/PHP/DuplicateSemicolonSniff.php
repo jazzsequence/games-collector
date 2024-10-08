@@ -9,10 +9,17 @@ use PHP_CodeSniffer\Util\Tokens;
 /**
  * Makes sure there is no duplicate semicolon.
  *
- * @author  Mark Scherer
+ * @author Mark Scherer
  * @license MIT
  */
 class DuplicateSemicolonSniff implements Sniff {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [T_SEMICOLON];
+	}
 
 	/**
 	 * @inheritDoc
@@ -44,13 +51,6 @@ class DuplicateSemicolonSniff implements Sniff {
 
 			$phpcsFile->fixer->endChangeset();
 		}
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_SEMICOLON];
 	}
 
 }

@@ -1,70 +1,58 @@
 <?php
 /**
- * Tests for the \PHP_CodeSniffer\Files\File:findExtendedClassName method.
+ * Tests for the \PHP_CodeSniffer\Files\File::findExtendedClassName method.
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\File;
 
-use PHP_CodeSniffer\Config;
-use PHP_CodeSniffer\Ruleset;
-use PHP_CodeSniffer\Files\DummyFile;
-use PHPUnit\Framework\TestCase;
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 
-class FindExtendedClassNameTest extends TestCase
+/**
+ * Tests for the \PHP_CodeSniffer\Files\File::findExtendedClassName method.
+ *
+ * @covers \PHP_CodeSniffer\Files\File::findExtendedClassName
+ */
+final class FindExtendedClassNameTest extends AbstractMethodUnitTest
 {
 
-    /**
-     * The PHP_CodeSniffer_File object containing parsed contents of the test case file.
-     *
-     * @var \PHP_CodeSniffer\Files\File
-     */
-    private $phpcsFile;
-
 
     /**
-     * Initialize & tokenize \PHP_CodeSniffer\Files\File with code from the test case file.
-     *
-     * Methods used for these tests can be found in a test case file in the same
-     * directory and with the same name, using the .inc extension.
+     * Test getting a `false` result when a non-existent token is passed.
      *
      * @return void
      */
-    public function setUp()
+    public function testNonExistentToken()
     {
-        $config            = new Config();
-        $config->standards = ['Generic'];
+        $result = self::$phpcsFile->findExtendedClassName(100000);
+        $this->assertFalse($result);
 
-        $ruleset = new Ruleset($config);
-
-        $pathToTestFile  = dirname(__FILE__).'/'.basename(__FILE__, '.php').'.inc';
-        $this->phpcsFile = new DummyFile(file_get_contents($pathToTestFile), $ruleset, $config);
-        $this->phpcsFile->process();
-
-    }//end setUp()
+    }//end testNonExistentToken()
 
 
     /**
-     * Clean up after finished test.
+     * Test getting a `false` result when a token other than one of the supported tokens is passed.
      *
      * @return void
      */
-    public function tearDown()
+    public function testNotAClass()
     {
-        unset($this->phpcsFile);
+        $token  = $this->getTargetToken('/* testNotAClass */', [T_FUNCTION]);
+        $result = self::$phpcsFile->findExtendedClassName($token);
+        $this->assertFalse($result);
 
-    }//end tearDown()
+    }//end testNotAClass()
 
 
     /**
      * Test retrieving the name of the class being extended by another class
      * (or interface).
      *
-     * @param string $identifier Comment which precedes the test case.
-     * @param bool   $expected   Expected function output.
+     * @param string       $identifier Comment which precedes the test case.
+     * @param string|false $expected   Expected function output.
      *
      * @dataProvider dataExtendedClass
      *
@@ -72,17 +60,8 @@ class FindExtendedClassNameTest extends TestCase
      */
     public function testFindExtendedClassName($identifier, $expected)
     {
-        $start   = ($this->phpcsFile->numTokens - 1);
-        $delim   = $this->phpcsFile->findPrevious(
-            T_COMMENT,
-            $start,
-            null,
-            false,
-            $identifier
-        );
-        $OOToken = $this->phpcsFile->findNext([T_CLASS, T_ANON_CLASS, T_INTERFACE], ($delim + 1));
-
-        $result = $this->phpcsFile->findExtendedClassName($OOToken);
+        $OOToken = $this->getTargetToken($identifier, [T_CLASS, T_ANON_CLASS, T_INTERFACE]);
+        $result  = self::$phpcsFile->findExtendedClassName($OOToken);
         $this->assertSame($expected, $result);
 
     }//end testFindExtendedClassName()
@@ -93,50 +72,70 @@ class FindExtendedClassNameTest extends TestCase
      *
      * @see testFindExtendedClassName()
      *
-     * @return array
+     * @return array<string, array<string, string|false>>
      */
-    public function dataExtendedClass()
+    public static function dataExtendedClass()
     {
         return [
-            [
-                '/* testExtendedClass */',
-                'testFECNClass',
+            'class does not extend'                                       => [
+                'identifier' => '/* testNonExtendedClass */',
+                'expected'   => false,
             ],
-            [
-                '/* testNamespacedClass */',
-                '\PHP_CodeSniffer\Tests\Core\File\testFECNClass',
+            'class extends unqualified class'                             => [
+                'identifier' => '/* testExtendsUnqualifiedClass */',
+                'expected'   => 'testFECNClass',
             ],
-            [
-                '/* testNonExtendedClass */',
-                false,
+            'class extends fully qualified class'                         => [
+                'identifier' => '/* testExtendsFullyQualifiedClass */',
+                'expected'   => '\PHP_CodeSniffer\Tests\Core\File\testFECNClass',
             ],
-            [
-                '/* testInterface */',
-                false,
+            'class extends partially qualified class'                     => [
+                'identifier' => '/* testExtendsPartiallyQualifiedClass */',
+                'expected'   => 'Core\File\RelativeClass',
             ],
-            [
-                '/* testInterfaceThatExtendsInterface */',
-                'testFECNInterface',
+            'interface does not extend'                                   => [
+                'identifier' => '/* testNonExtendedInterface */',
+                'expected'   => false,
             ],
-            [
-                '/* testInterfaceThatExtendsFQCNInterface */',
-                '\PHP_CodeSniffer\Tests\Core\File\testFECNInterface',
+            'interface extends unqualified interface'                     => [
+                'identifier' => '/* testInterfaceExtendsUnqualifiedInterface */',
+                'expected'   => 'testFECNInterface',
             ],
-            [
-                '/* testNestedExtendedClass */',
-                false,
+            'interface extends fully qualified interface'                 => [
+                'identifier' => '/* testInterfaceExtendsFullyQualifiedInterface */',
+                'expected'   => '\PHP_CodeSniffer\Tests\Core\File\testFECNInterface',
             ],
-            [
-                '/* testNestedExtendedAnonClass */',
-                'testFECNAnonClass',
+            'anon class extends unqualified class'                        => [
+                'identifier' => '/* testExtendedAnonClass */',
+                'expected'   => 'testFECNExtendedAnonClass',
             ],
-            [
-                '/* testClassThatExtendsAndImplements */',
-                'testFECNClass',
+            'class does not extend but contains anon class which extends' => [
+                'identifier' => '/* testNestedExtendedClass */',
+                'expected'   => false,
             ],
-            [
-                '/* testClassThatImplementsAndExtends */',
-                'testFECNClass',
+            'anon class extends, nested in non-extended class'            => [
+                'identifier' => '/* testNestedExtendedAnonClass */',
+                'expected'   => 'testFECNAnonClass',
+            ],
+            'class extends and implements'                                => [
+                'identifier' => '/* testClassThatExtendsAndImplements */',
+                'expected'   => 'testFECNClass',
+            ],
+            'class implements and extends'                                => [
+                'identifier' => '/* testClassThatImplementsAndExtends */',
+                'expected'   => 'testFECNClass',
+            ],
+            'interface extends multiple interfaces (not supported)'       => [
+                'identifier' => '/* testInterfaceMultiExtends */',
+                'expected'   => '\Package\FooInterface',
+            ],
+            'parse error - extends keyword, but no class name'            => [
+                'identifier' => '/* testMissingExtendsName */',
+                'expected'   => false,
+            ],
+            'parse error - live coding - no curly braces'                 => [
+                'identifier' => '/* testParseError */',
+                'expected'   => false,
             ],
         ];
 

@@ -9,10 +9,17 @@ use PSR2R\Tools\AbstractSniff;
 /**
  * Always use `static::` and "late static binding" over `self::` usage.
  *
- * @author  Mark Scherer
+ * @author Mark Scherer
  * @license MIT
  */
 class PreferStaticOverSelfSniff extends AbstractSniff {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [T_DOUBLE_COLON];
+	}
 
 	/**
 	 * @inheritDoc
@@ -34,13 +41,6 @@ class PreferStaticOverSelfSniff extends AbstractSniff {
 		}
 
 		$phpcsFile->fixer->replaceToken($index, 'static');
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_DOUBLE_COLON];
 	}
 
 }

@@ -2,15 +2,11 @@
 /**
  * PSR2_Sniffs_ControlStructures_ElseIfDeclarationSniff.
  *
- * PHP version 5
- *
- * @category  PHP
- *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 
 namespace PSR2R\Sniffs\ControlStructures;
@@ -23,15 +19,25 @@ use PHP_CodeSniffer\Sniffs\Sniff;
  *
  * Verifies that there are no else if statements. Elseif should be used instead.
  *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 class ElseIfDeclarationSniff implements Sniff {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [
+			T_ELSE,
+			T_ELSEIF,
+		];
+	}
 
 	/**
 	 * @inheritDoc
@@ -61,16 +67,6 @@ class ElseIfDeclarationSniff implements Sniff {
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [
-			T_ELSE,
-			T_ELSEIF,
-		];
 	}
 
 }

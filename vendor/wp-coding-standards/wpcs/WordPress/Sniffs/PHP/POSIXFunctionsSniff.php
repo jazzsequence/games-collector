@@ -3,28 +3,27 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Perl compatible regular expressions (PCRE, preg_ functions) should be used in preference
  * to their POSIX counterparts.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#regular-expressions
- * @link    http://php.net/manual/en/ref.regex.php
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#regular-expressions
+ * @link https://php-legacy-docs.zend.com/manual/php5/en/ref.regex
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff
- *                 and the WordPress_Sniffs_PHP_DiscouragedPHPFunctionsSniff.
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.10.0 Previously this check was contained within the
+ *               `WordPress.VIP.RestrictedFunctions` and the
+ *               `WordPress.PHP.DiscouragedPHPFunctions` sniffs.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -71,5 +70,4 @@ class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 		);
 	}
-
 }

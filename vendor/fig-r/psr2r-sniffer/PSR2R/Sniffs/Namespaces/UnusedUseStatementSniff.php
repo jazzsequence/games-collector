@@ -19,6 +19,13 @@ class UnusedUseStatementSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [T_USE];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
@@ -35,7 +42,7 @@ class UnusedUseStatementSniff extends AbstractSniff {
 			Tokens::$emptyTokens,
 			$semicolonIndex - 1,
 			null,
-			true
+			true,
 		);
 
 		// Seek along the statement to get the last part, which is the class/interface name.
@@ -49,15 +56,20 @@ class UnusedUseStatementSniff extends AbstractSniff {
 			return;
 		}
 
-		$classUsed = $phpcsFile->findNext([T_STRING, T_RETURN_TYPE], $classNameIndex + 1, null, false,
-			$tokens[$classNameIndex]['content']);
+		$classUsed = $phpcsFile->findNext(
+			[T_STRING, T_RETURN_TYPE],
+			$classNameIndex + 1,
+			null,
+			false,
+			$tokens[$classNameIndex]['content'],
+		);
 
 		while ($classUsed !== false) {
 			$beforeUsage = $phpcsFile->findPrevious(
 				Tokens::$emptyTokens,
 				$classUsed - 1,
 				null,
-				true
+				true,
 			);
 			// If a backslash is used before the class name then this is some other
 			// use statement.
@@ -70,8 +82,13 @@ class UnusedUseStatementSniff extends AbstractSniff {
 				return;
 			}
 
-			$classUsed = $phpcsFile->findNext([T_STRING, T_RETURN_TYPE], $classUsed + 1, null, false,
-				$tokens[$classNameIndex]['content']);
+			$classUsed = $phpcsFile->findNext(
+				[T_STRING, T_RETURN_TYPE],
+				$classUsed + 1,
+				null,
+				false,
+				$tokens[$classNameIndex]['content'],
+			);
 		}
 
 		$warning = 'Unused use statement';
@@ -96,13 +113,6 @@ class UnusedUseStatementSniff extends AbstractSniff {
 		}
 
 		$phpcsFile->fixer->endChangeset();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_USE];
 	}
 
 }

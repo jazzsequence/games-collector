@@ -16,42 +16,45 @@ use GC\GamesCollector\Display;
  * @since 0.1
  */
 function register_cpt() {
-	register_extended_post_type( 'gc_game', [
-		'supports'            => [ 'title', 'thumbnail' ],
-		'menu_icon'           => Display\get_svg( 'dice' ),
-		'exclude_from_search' => true,
-		'publicly_queryable'  => false,
-		'show_in_nav_menus'   => false,
-		'show_in_rest'        => true,
-		'rest_base'           => 'games',
-		// Custom columns.
-		'admin_cols'          => [
-			'players'    => [
-				'title'    => __( '# of Players', 'games-collector' ),
-				'function' => __NAMESPACE__ . '\\the_number_of_players',
+	register_extended_post_type( 
+		'gc_game', 
+		[
+			'supports'            => [ 'title', 'thumbnail' ],
+			'menu_icon'           => Display\get_svg( 'dice' ),
+			'exclude_from_search' => true,
+			'publicly_queryable'  => false,
+			'show_in_nav_menus'   => false,
+			'show_in_rest'        => true,
+			'rest_base'           => 'games',
+			// Custom columns.
+			'admin_cols'          => [
+				'players'    => [
+					'title'    => __( '# of Players', 'games-collector' ),
+					'function' => __NAMESPACE__ . '\\the_number_of_players',
+				],
+				'time'       => [
+					'title'    => __( 'Playing Time', 'games-collector' ),
+					'meta_key' => '_gc_time',
+				],
+				'age'        => [
+					'title'    => __( 'Age', 'games-collector' ),
+					'function' => __NAMESPACE__ . '\\the_age',
+				],
+				'difficulty' => [
+					'title'    => __( 'Difficulty', 'games-collector' ),
+					'function' => __NAMESPACE__ . '\\the_difficulty',
+				],
+				'attributes' => [
+					'taxonomy' => 'gc_attribute',
+				],
+				'date'       => [
+					'title'    => __( 'Date added', 'games-collector' ),
+				],
 			],
-			'time'       => [
-				'title'    => __( 'Playing Time', 'games-collector' ),
-				'meta_key' => '_gc_time',
-			],
-			'age'        => [
-				'title'    => __( 'Age', 'games-collector' ),
-				'function' => __NAMESPACE__ . '\\the_age',
-			],
-			'difficulty' => [
-				'title'    => __( 'Difficulty', 'games-collector' ),
-				'function' => __NAMESPACE__ . '\\the_difficulty',
-			],
-			'attributes' => [
-				'taxonomy' => 'gc_attribute',
-			],
-			'date'       => [
-				'title'    => __( 'Date added', 'games-collector' ),
-			],
-		],
-		// Dropdown filters.
-		'admin_filters'       => [],
-		], [
+			// Dropdown filters.
+			'admin_filters'       => [],
+		], 
+		[
 			'singular'      => __( 'Game', 'games-collector' ),
 			'plural'        => __( 'Games', 'games-collector' ),
 			'slug'          => 'game',
@@ -123,7 +126,7 @@ function fields() {
 		'default'    => 'easy',
 	]);
 
-	$cmb->add_field( array(
+	$cmb->add_field( [
 		'name'       => __( 'More Info Link', 'games-collector' ),
 		'id'         => $prefix . 'link',
 		'type'       => 'text_url',
@@ -131,7 +134,7 @@ function fields() {
 		'attributes' => [
 			'placeholder' => 'https://boardgamegeek.com/boardgame/random',
 		],
-	) );
+	] );
 }
 
 /**

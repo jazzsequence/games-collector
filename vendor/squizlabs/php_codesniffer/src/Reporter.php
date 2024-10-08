@@ -4,15 +4,15 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer;
 
-use PHP_CodeSniffer\Reports\Report;
-use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Exceptions\DeepExitException;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Reports\Report;
 use PHP_CodeSniffer\Util\Common;
 
 class Reporter
@@ -92,7 +92,8 @@ class Reporter
      * @param \PHP_CodeSniffer\Config $config The config data for the run.
      *
      * @return void
-     * @throws \PHP_CodeSniffer\Exceptions\RuntimeException If a report is not available.
+     * @throws \PHP_CodeSniffer\Exceptions\DeepExitException If a custom report class could not be found.
+     * @throws \PHP_CodeSniffer\Exceptions\RuntimeException  If a report class is incorrectly set up.
      */
     public function __construct(Config $config)
     {
@@ -142,7 +143,7 @@ class Reporter
             }
 
             $reportClass = new $reportClassName();
-            if (false === ($reportClass instanceof Report)) {
+            if (($reportClass instanceof Report) === false) {
                 throw new RuntimeException('Class "'.$reportClassName.'" must implement the "PHP_CodeSniffer\Report" interface.');
             }
 
@@ -235,7 +236,7 @@ class Reporter
         ob_end_clean();
 
         if ($this->config->colors !== true || $reportFile !== null) {
-            $generatedReport = preg_replace('`\033\[[0-9;]+m`', '', $generatedReport);
+            $generatedReport = Common::stripColors($generatedReport);
         }
 
         if ($reportFile !== null) {
@@ -328,7 +329,29 @@ class Reporter
      *
      * @param \PHP_CodeSniffer\Files\File $phpcsFile The file that has been processed.
      *
-     * @return array
+     * @return array<string, string|int|array> Prepared report data.
+     *                                         The format of prepared data is as follows:
+     *                                         ```
+     *                                         array(
+     *                                           'filename' => string The name of the current file.
+     *                                           'errors'   => int    The number of errors seen in the current file.
+     *                                           'warnings' => int    The number of warnings seen in the current file.
+     *                                           'fixable'  => int    The number of fixable issues seen in the current file.
+     *                                           'messages' => array(
+     *                                             int <Line number> => array(
+     *                                               int <Column number> => array(
+     *                                                 int <Message index> => array(
+     *                                                   'message'  => string The error/warning message.
+     *                                                   'source'   => string The full error code for the message.
+     *                                                   'severity' => int    The severity of the message.
+     *                                                   'fixable'  => bool   Whether this error/warning is auto-fixable.
+     *                                                   'type'     => string The type of message. Either 'ERROR' or 'WARNING'.
+     *                                                 )
+     *                                               )
+     *                                             )
+     *                                           )
+     *                                         )
+     *                                         ```
      */
     public function prepareFileReport(File $phpcsFile)
     {
@@ -341,7 +364,7 @@ class Reporter
         ];
 
         if ($report['errors'] === 0 && $report['warnings'] === 0) {
-            // Prefect score!
+            // Perfect score!
             return $report;
         }
 

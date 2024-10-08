@@ -20,7 +20,7 @@ class DocBlockParamArraySniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [
 			T_FUNCTION,
 		];
@@ -29,7 +29,7 @@ class DocBlockParamArraySniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function process(File $phpCsFile, $stackPointer) {
+	public function process(File $phpCsFile, $stackPointer): void {
 		$tokens = $phpCsFile->getTokens();
 
 		$docBlockEndIndex = $this->findRelatedDocBlock($phpCsFile, $stackPointer);
@@ -39,10 +39,6 @@ class DocBlockParamArraySniff extends AbstractSniff {
 		}
 
 		$docBlockStartIndex = $tokens[$docBlockEndIndex]['comment_opener'];
-
-		if ($this->hasInheritDoc($phpCsFile, $docBlockStartIndex, $docBlockEndIndex)) {
-			return;
-		}
 
 		for ($i = $docBlockStartIndex + 1; $i < $docBlockEndIndex; $i++) {
 			if ($tokens[$i]['type'] !== 'T_DOC_COMMENT_TAG') {

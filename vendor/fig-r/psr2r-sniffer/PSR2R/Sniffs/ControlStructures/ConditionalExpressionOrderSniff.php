@@ -17,13 +17,21 @@ class ConditionalExpressionOrderSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function process(File $phpCsFile, $stackPointer) {
+	public function register(): array {
+		return Tokens::$comparisonTokens;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function process(File $phpCsFile, $stackPointer): void {
 		$tokens = $phpCsFile->getTokens();
 
 		$prevIndex = $phpCsFile->findPrevious(Tokens::$emptyTokens, $stackPointer - 1, null, true);
-		if (!$this->isGivenKind([T_CLOSE_SHORT_ARRAY, T_TRUE, T_FALSE, T_NULL, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING],
-			$tokens[$prevIndex])
-		) {
+		if (!$this->isGivenKind(
+			[T_CLOSE_SHORT_ARRAY, T_TRUE, T_FALSE, T_NULL, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING],
+			$tokens[$prevIndex],
+		)) {
 			return;
 		}
 
@@ -56,15 +64,19 @@ class ConditionalExpressionOrderSniff extends AbstractSniff {
 		) {
 			// Not fixable
 			$phpCsFile->addError($error, $stackPointer, 'YodaConditions');
+
 			return;
 		}
 
 		$rightIndexStart = $phpCsFile->findNext(Tokens::$emptyTokens, $stackPointer + 1, null, true);
 
 		if ($this->isGivenKind(T_OPEN_PARENTHESIS, $tokens[$prevIndex])) {
-			$rightIndexEnd =
-				$phpCsFile->findPrevious(Tokens::$emptyTokens, $tokens[$prevIndex]['parenthesis_closer'] - 1, null,
-					true);
+			$rightIndexEnd = $phpCsFile->findPrevious(
+				Tokens::$emptyTokens,
+				$tokens[$prevIndex]['parenthesis_closer'] - 1,
+				null,
+				true,
+			);
 		} else {
 			$previousParenthesisOpenerIndex = $phpCsFile->findPrevious(T_OPEN_PARENTHESIS, $prevIndex - 1);
 			$limit = null;
@@ -79,16 +91,15 @@ class ConditionalExpressionOrderSniff extends AbstractSniff {
 
 		$fix = $phpCsFile->addFixableError($error, $stackPointer, 'RightEnd');
 		if ($fix) {
-			$this->applyFix($phpCsFile, $stackPointer, $leftIndexStart, $leftIndexEnd, $rightIndexStart,
-				$rightIndexEnd);
+			$this->applyFix(
+				$phpCsFile,
+				$stackPointer,
+				$leftIndexStart,
+				$leftIndexEnd,
+				$rightIndexStart,
+				$rightIndexEnd,
+			);
 		}
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return Tokens::$comparisonTokens;
 	}
 
 	/**
@@ -124,6 +135,7 @@ class ConditionalExpressionOrderSniff extends AbstractSniff {
 			if ($this->isGivenKind(T_OPEN_PARENTHESIS, $tokens[$nextIndex])) {
 				$nextIndex = $tokens[$nextIndex]['parenthesis_closer'];
 				$rightEndIndex = $nextIndex;
+
 				continue;
 			}
 
@@ -155,7 +167,8 @@ class ConditionalExpressionOrderSniff extends AbstractSniff {
 		$leftIndexStart,
 		$leftIndexEnd,
 		$rightIndexStart,
-		$rightIndexEnd) {
+		$rightIndexEnd
+	) {
 		$tokens = $phpCsFile->getTokens();
 
 		$token = $tokens[$index];

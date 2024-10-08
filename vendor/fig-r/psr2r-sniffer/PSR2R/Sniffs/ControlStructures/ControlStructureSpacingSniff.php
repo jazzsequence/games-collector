@@ -2,15 +2,11 @@
 /**
  * PSR2_Sniffs_WhiteSpace_ControlStructureSpacingSniff.
  *
- * PHP version 5
- *
- * @category  PHP
- *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 
 namespace PSR2R\Sniffs\ControlStructures;
@@ -23,13 +19,13 @@ use PHP_CodeSniffer\Sniffs\Sniff;
  *
  * Checks that control structures have the correct spacing around brackets.
  *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 class ControlStructureSpacingSniff implements Sniff {
 
@@ -39,6 +35,24 @@ class ControlStructureSpacingSniff implements Sniff {
 	 * @var int
 	 */
 	public $requiredSpacesAfterOpen = 0;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [
+			T_IF,
+			T_WHILE,
+			T_FOREACH,
+			T_FOR,
+			T_SWITCH,
+			T_DO,
+			T_ELSE,
+			T_ELSEIF,
+			T_TRY,
+			T_CATCH,
+		];
+	}
 
 	/**
 	 * How many spaces should precede the closing bracket.
@@ -102,6 +116,7 @@ class ControlStructureSpacingSniff implements Sniff {
 			}
 
 			$phpcsFile->recordMetric($stackPtr, 'Spaces before control structure close parenthesis', (string)$spaceBeforeClose);
+			$x = (bool)$phpcsFile;
 
 			if ($spaceBeforeClose !== $this->requiredSpacesBeforeClose) {
 				$error = 'Expected %s spaces before closing bracket; %s found';
@@ -120,24 +135,6 @@ class ControlStructureSpacingSniff implements Sniff {
 				}
 			}
 		}
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [
-			T_IF,
-			T_WHILE,
-			T_FOREACH,
-			T_FOR,
-			T_SWITCH,
-			T_DO,
-			T_ELSE,
-			T_ELSEIF,
-			T_TRY,
-			T_CATCH,
-		];
 	}
 
 }

@@ -2,15 +2,11 @@
 /**
  * Generic_Sniffs_Files_EndFileNewlineSniff.
  *
- * PHP version 5
- *
- * @category  PHP
- *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 
 namespace PSR2R\Sniffs\Files;
@@ -23,15 +19,22 @@ use PHP_CodeSniffer\Sniffs\Sniff;
  *
  * Ensures the file ends with a newline character.
  *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 class EndFileNewlineSniff implements Sniff {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [T_OPEN_TAG];
+	}
 
 	/**
 	 * @inheritDoc
@@ -89,13 +92,6 @@ class EndFileNewlineSniff implements Sniff {
 
 		// Skip the rest of the file.
 		return $phpcsFile->numTokens + 1;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_OPEN_TAG];
 	}
 
 }

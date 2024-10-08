@@ -4,13 +4,13 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\Squiz\Sniffs\ControlStructures;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class ControlSignatureSniff implements Sniff
@@ -37,7 +37,7 @@ class ControlSignatureSniff implements Sniff
     /**
      * Returns an array of tokens this test wants to listen for.
      *
-     * @return int[]
+     * @return array<int|string>
      */
     public function register()
     {
@@ -53,6 +53,7 @@ class ControlSignatureSniff implements Sniff
             T_ELSE,
             T_ELSEIF,
             T_SWITCH,
+            T_MATCH,
         ];
 
     }//end register()
@@ -104,9 +105,15 @@ class ControlSignatureSniff implements Sniff
         }
 
         if ($found !== $expected) {
-            $error = 'Expected %s space(s) after %s keyword; %s found';
+            $pluralizeSpace = 's';
+            if ($expected === 1) {
+                $pluralizeSpace = '';
+            }
+
+            $error = 'Expected %s space%s after %s keyword; %s found';
             $data  = [
                 $expected,
+                $pluralizeSpace,
                 strtoupper($tokens[$stackPtr]['content']),
                 $found,
             ];
@@ -119,7 +126,7 @@ class ControlSignatureSniff implements Sniff
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), str_repeat(' ', $expected));
                 }
             }
-        }
+        }//end if
 
         // Single space after closing parenthesis.
         if (isset($tokens[$stackPtr]['parenthesis_closer']) === true
@@ -145,9 +152,15 @@ class ControlSignatureSniff implements Sniff
             }
 
             if ($found !== $expected) {
-                $error = 'Expected %s space(s) after closing parenthesis; found %s';
+                $pluralizeSpace = 's';
+                if ($expected === 1) {
+                    $pluralizeSpace = '';
+                }
+
+                $error = 'Expected %s space%s after closing parenthesis; found %s';
                 $data  = [
                     $expected,
+                    $pluralizeSpace,
                     $found,
                 ];
 
@@ -230,23 +243,26 @@ class ControlSignatureSniff implements Sniff
                 }
             }//end if
         } else if ($tokens[$stackPtr]['code'] === T_WHILE) {
-            // Zero spaces after parenthesis closer.
-            $closer = $tokens[$stackPtr]['parenthesis_closer'];
-            $found  = 0;
-            if ($tokens[($closer + 1)]['code'] === T_WHITESPACE) {
-                if (strpos($tokens[($closer + 1)]['content'], $phpcsFile->eolChar) !== false) {
-                    $found = 'newline';
-                } else {
-                    $found = $tokens[($closer + 1)]['length'];
+            // Zero spaces after parenthesis closer, but only if followed by a semicolon.
+            $closer       = $tokens[$stackPtr]['parenthesis_closer'];
+            $nextNonEmpty = $phpcsFile->findNext(Tokens::$emptyTokens, ($closer + 1), null, true);
+            if ($nextNonEmpty !== false && $tokens[$nextNonEmpty]['code'] === T_SEMICOLON) {
+                $found = 0;
+                if ($tokens[($closer + 1)]['code'] === T_WHITESPACE) {
+                    if (strpos($tokens[($closer + 1)]['content'], $phpcsFile->eolChar) !== false) {
+                        $found = 'newline';
+                    } else {
+                        $found = $tokens[($closer + 1)]['length'];
+                    }
                 }
-            }
 
-            if ($found !== 0) {
-                $error = 'Expected 0 spaces before semicolon; %s found';
-                $data  = [$found];
-                $fix   = $phpcsFile->addFixableError($error, $closer, 'SpaceBeforeSemicolon', $data);
-                if ($fix === true) {
-                    $phpcsFile->fixer->replaceToken(($closer + 1), '');
+                if ($found !== 0) {
+                    $error = 'Expected 0 spaces before semicolon; %s found';
+                    $data  = [$found];
+                    $fix   = $phpcsFile->addFixableError($error, $closer, 'SpaceBeforeSemicolon', $data);
+                    if ($fix === true) {
+                        $phpcsFile->fixer->replaceToken(($closer + 1), '');
+                    }
                 }
             }
         }//end if

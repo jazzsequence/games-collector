@@ -16,6 +16,13 @@ class UnneededElseSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [T_ELSE, T_ELSEIF];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
@@ -48,8 +55,11 @@ class UnneededElseSniff extends AbstractSniff {
 			return;
 		}
 
-		$returnEarlyIndex = $phpcsFile->findPrevious([T_RETURN, T_CONTINUE, T_BREAK], $prevScopeLastTokenIndex - 1,
-			$scopeStartIndex + 1);
+		$returnEarlyIndex = $phpcsFile->findPrevious(
+			[T_RETURN, T_CONTINUE, T_BREAK],
+			$prevScopeLastTokenIndex - 1,
+			$scopeStartIndex + 1,
+		);
 		if (!$returnEarlyIndex) {
 			return;
 		}
@@ -60,14 +70,18 @@ class UnneededElseSniff extends AbstractSniff {
 			}
 		}
 
-		$fix = $phpcsFile->addFixableError('Unneeded ' . $tokens[$stackPtr]['type'] . ' detected.', $stackPtr,
-			'UnneededElse');
+		$fix = $phpcsFile->addFixableError(
+			'Unneeded ' . $tokens[$stackPtr]['type'] . ' detected.',
+			$stackPtr,
+			'UnneededElse',
+		);
 		if (!$fix) {
 			return;
 		}
 
 		if ($tokens[$stackPtr]['code'] === T_ELSEIF) {
 			$this->fixElseIfToIf($phpcsFile, $stackPtr);
+
 			return;
 		}
 
@@ -116,15 +130,9 @@ class UnneededElseSniff extends AbstractSniff {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_ELSE, T_ELSEIF];
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return bool
 	 */
 	protected function isNotLastCondition(File $phpcsFile, $stackPtr) {
@@ -149,6 +157,7 @@ class UnneededElseSniff extends AbstractSniff {
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function fixElseIfToIf(File $phpcsFile, $stackPtr) {

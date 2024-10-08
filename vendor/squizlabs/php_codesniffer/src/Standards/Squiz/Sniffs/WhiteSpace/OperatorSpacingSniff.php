@@ -4,13 +4,13 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class OperatorSpacingSniff implements Sniff
@@ -33,19 +33,89 @@ class OperatorSpacingSniff implements Sniff
      */
     public $ignoreNewlines = false;
 
+    /**
+     * Don't check spacing for assignment operators.
+     *
+     * This allows multiple assignment statements to be aligned.
+     *
+     * @var boolean
+     */
+    public $ignoreSpacingBeforeAssignments = true;
+
+    /**
+     * A list of tokens that aren't considered as operands.
+     *
+     * @var string[]
+     */
+    private $nonOperandTokens = [];
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
      *
-     * @return array
+     * @return array<int|string>
      */
     public function register()
     {
+        /*
+            First we setup an array of all the tokens that can come before
+            a T_MINUS or T_PLUS token to indicate that the token is not being
+            used as an operator.
+        */
+
+        // Trying to operate on a negative value; eg. ($var * -1).
+        $this->nonOperandTokens = Tokens::$operators;
+
+        // Trying to compare a negative value; eg. ($var === -1).
+        $this->nonOperandTokens += Tokens::$comparisonTokens;
+
+        // Trying to compare a negative value; eg. ($var || -1 === $b).
+        $this->nonOperandTokens += Tokens::$booleanOperators;
+
+        // Trying to assign a negative value; eg. ($var = -1).
+        $this->nonOperandTokens += Tokens::$assignmentTokens;
+
+        // Returning/printing a negative value; eg. (return -1).
+        $this->nonOperandTokens += [
+            T_RETURN      => T_RETURN,
+            T_ECHO        => T_ECHO,
+            T_EXIT        => T_EXIT,
+            T_PRINT       => T_PRINT,
+            T_YIELD       => T_YIELD,
+            T_FN_ARROW    => T_FN_ARROW,
+            T_MATCH_ARROW => T_MATCH_ARROW,
+        ];
+
+        // Trying to use a negative value; eg. myFunction($var, -2).
+        $this->nonOperandTokens += [
+            T_CASE                => T_CASE,
+            T_COLON               => T_COLON,
+            T_COMMA               => T_COMMA,
+            T_INLINE_ELSE         => T_INLINE_ELSE,
+            T_INLINE_THEN         => T_INLINE_THEN,
+            T_OPEN_CURLY_BRACKET  => T_OPEN_CURLY_BRACKET,
+            T_OPEN_PARENTHESIS    => T_OPEN_PARENTHESIS,
+            T_OPEN_SHORT_ARRAY    => T_OPEN_SHORT_ARRAY,
+            T_OPEN_SQUARE_BRACKET => T_OPEN_SQUARE_BRACKET,
+            T_STRING_CONCAT       => T_STRING_CONCAT,
+        ];
+
+        // Casting a negative value; eg. (array) -$a.
+        $this->nonOperandTokens += Tokens::$castTokens;
+
+        /*
+            These are the tokens the sniff is looking for.
+        */
+
         $targets   = Tokens::$comparisonTokens;
         $targets  += Tokens::$operators;
         $targets  += Tokens::$assignmentTokens;
         $targets[] = T_INLINE_THEN;
         $targets[] = T_INLINE_ELSE;
+        $targets[] = T_INSTANCEOF;
+
+        // Also register the contexts we want to specifically skip over.
+        $targets[] = T_DECLARE;
 
         return $targets;
 
@@ -59,11 +129,24 @@ class OperatorSpacingSniff implements Sniff
      * @param int                         $stackPtr  The position of the current token in
      *                                               the stack passed in $tokens.
      *
-     * @return void
+     * @return void|int Optionally returns a stack pointer. The sniff will not be
+     *                  called again on the current file until the returned stack
+     *                  pointer is reached. Return `$phpcsFile->numTokens` to skip
+     *                  the rest of the file.
      */
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
+
+        // Skip over declare statements as those should be handled by different sniffs.
+        if ($tokens[$stackPtr]['code'] === T_DECLARE) {
+            if (isset($tokens[$stackPtr]['parenthesis_closer']) === false) {
+                // Parse error / live coding.
+                return $phpcsFile->numTokens;
+            }
+
+            return $tokens[$stackPtr]['parenthesis_closer'];
+        }
 
         if ($this->isOperator($phpcsFile, $stackPtr) === false) {
             return;
@@ -98,6 +181,12 @@ class OperatorSpacingSniff implements Sniff
                     }
                 }
             }//end if
+
+            $hasNext = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
+            if ($hasNext === false) {
+                // Live coding/parse error at end of file.
+                return;
+            }
 
             // Check there is one space after the & operator.
             if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
@@ -144,10 +233,13 @@ class OperatorSpacingSniff implements Sniff
             }
 
             $phpcsFile->recordMetric($stackPtr, 'Space before operator', 0);
-        } else if (isset(Tokens::$assignmentTokens[$tokens[$stackPtr]['code']]) === false) {
-            // Don't throw an error for assignments, because other standards allow
-            // multiple spaces there to align multiple assignments.
-            if ($tokens[($stackPtr - 2)]['line'] !== $tokens[$stackPtr]['line']) {
+        } else if (isset(Tokens::$assignmentTokens[$tokens[$stackPtr]['code']]) === false
+            || $this->ignoreSpacingBeforeAssignments === false
+        ) {
+            // Throw an error for assignments only if enabled using the sniff property
+            // because other standards allow multiple spaces to align assignments.
+            $prevNonWhitespace = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
+            if ($tokens[$prevNonWhitespace]['line'] !== $tokens[$stackPtr]['line']) {
                 $found = 'newline';
             } else {
                 $found = $tokens[($stackPtr - 1)]['length'];
@@ -162,24 +254,35 @@ class OperatorSpacingSniff implements Sniff
                     $operator,
                     $found,
                 ];
-                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpacingBefore', $data);
-                if ($fix === true) {
-                    $phpcsFile->fixer->beginChangeset();
-                    if ($found === 'newline') {
-                        $i = ($stackPtr - 2);
-                        while ($tokens[$i]['code'] === T_WHITESPACE) {
-                            $phpcsFile->fixer->replaceToken($i, '');
-                            $i--;
-                        }
-                    }
 
-                    $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
-                    $phpcsFile->fixer->endChangeset();
-                }
+                if (isset(Tokens::$commentTokens[$tokens[$prevNonWhitespace]['code']]) === true) {
+                    // Throw a non-fixable error if the token on the previous line is a comment token,
+                    // as in that case it's not for the sniff to decide where the comment should be moved to
+                    // and it would get us into unfixable situations as the new line char is included
+                    // in the contents of the comment token.
+                    $phpcsFile->addError($error, $stackPtr, 'SpacingBefore', $data);
+                } else {
+                    $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpacingBefore', $data);
+                    if ($fix === true) {
+                        $phpcsFile->fixer->beginChangeset();
+                        if ($found === 'newline') {
+                            $i = ($stackPtr - 2);
+                            while ($tokens[$i]['code'] === T_WHITESPACE) {
+                                $phpcsFile->fixer->replaceToken($i, '');
+                                $i--;
+                            }
+                        }
+
+                        $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
+                        $phpcsFile->fixer->endChangeset();
+                    }
+                }//end if
             }//end if
         }//end if
 
-        if (isset($tokens[($stackPtr + 1)]) === false) {
+        $hasNext = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
+        if ($hasNext === false) {
+            // Live coding/parse error at end of file.
             return;
         }
 
@@ -250,11 +353,13 @@ class OperatorSpacingSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
+        if ($tokens[$stackPtr]['code'] === T_DECLARE) {
+            return false;
+        }
+
         // Skip default values in function declarations.
         // Skip declare statements.
-        if ($tokens[$stackPtr]['code'] === T_EQUAL
-            || $tokens[$stackPtr]['code'] === T_MINUS
-        ) {
+        if ($tokens[$stackPtr]['code'] === T_EQUAL) {
             if (isset($tokens[$stackPtr]['nested_parenthesis']) === true) {
                 $parenthesis = array_keys($tokens[$stackPtr]['nested_parenthesis']);
                 $bracket     = array_pop($parenthesis);
@@ -262,7 +367,7 @@ class OperatorSpacingSniff implements Sniff
                     $function = $tokens[$bracket]['parenthesis_owner'];
                     if ($tokens[$function]['code'] === T_FUNCTION
                         || $tokens[$function]['code'] === T_CLOSURE
-                        || $tokens[$function]['code'] === T_DECLARE
+                        || $tokens[$function]['code'] === T_FN
                     ) {
                         return false;
                     }
@@ -291,48 +396,7 @@ class OperatorSpacingSniff implements Sniff
             // Check minus spacing, but make sure we aren't just assigning
             // a minus value or returning one.
             $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
-            if ($tokens[$prev]['code'] === T_RETURN) {
-                // Just returning a negative value; eg. (return -1).
-                return false;
-            }
-
-            if (isset(Tokens::$operators[$tokens[$prev]['code']]) === true) {
-                // Just trying to operate on a negative value; eg. ($var * -1).
-                return false;
-            }
-
-            if (isset(Tokens::$comparisonTokens[$tokens[$prev]['code']]) === true) {
-                // Just trying to compare a negative value; eg. ($var === -1).
-                return false;
-            }
-
-            if (isset(Tokens::$booleanOperators[$tokens[$prev]['code']]) === true) {
-                // Just trying to compare a negative value; eg. ($var || -1 === $b).
-                return false;
-            }
-
-            if (isset(Tokens::$assignmentTokens[$tokens[$prev]['code']]) === true) {
-                // Just trying to assign a negative value; eg. ($var = -1).
-                return false;
-            }
-
-            // A list of tokens that indicate that the token is not
-            // part of an arithmetic operation.
-            $invalidTokens = [
-                T_COMMA               => true,
-                T_OPEN_PARENTHESIS    => true,
-                T_OPEN_SQUARE_BRACKET => true,
-                T_OPEN_SHORT_ARRAY    => true,
-                T_DOUBLE_ARROW        => true,
-                T_COLON               => true,
-                T_INLINE_THEN         => true,
-                T_INLINE_ELSE         => true,
-                T_CASE                => true,
-                T_OPEN_CURLY_BRACKET  => true,
-            ];
-
-            if (isset($invalidTokens[$tokens[$prev]['code']]) === true) {
-                // Just trying to use a negative value; eg. myFunction($var, -2).
+            if (isset($this->nonOperandTokens[$tokens[$prev]['code']]) === true) {
                 return false;
             }
         }//end if

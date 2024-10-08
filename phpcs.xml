@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<ruleset name="Games Collector">
+  <description>Games Collector Sniffs</description>
+
+  <!-- Scan all files in directory -->
+  <file>.</file>
+
+  <!-- Scan only PHP files -->
+  <arg name="extensions" value="php"/>
+
+  <!-- Ignore Composer and NPM dependencies -->
+  <exclude-pattern>vendor/</exclude-pattern>
+  <exclude-pattern>node_modules/</exclude-pattern>
+
+  <!-- Ignore sniffs against things that we explicitly want for Pantheon upstreams. -->
+  <rule ref="Pantheon-WP">
+	<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited"/>
+  </rule>
+
+  <!--
+  Prevent errors caused by WordPress Coding Standards not supporting PHP 8.0+.
+  See https://github.com/WordPress/WordPress-Coding-Standards/issues/2035
+  -->
+  <ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+
+  <!-- Show colors in console -->
+  <arg value="-colors"/>
+
+  <!-- Show sniff codes in all reports -->
+  <arg value="ns"/>
+</ruleset>

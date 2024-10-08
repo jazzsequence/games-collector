@@ -3,23 +3,21 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Restrict the use of various development functions.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -62,5 +60,4 @@ class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

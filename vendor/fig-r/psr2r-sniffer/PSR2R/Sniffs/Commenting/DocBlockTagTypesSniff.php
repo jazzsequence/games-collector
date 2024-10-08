@@ -8,7 +8,7 @@ use PSR2R\Tools\AbstractSniff;
 /**
  * Verifies that only whitelisted `@...` tags are being used.
  *
- * @author  Mark Scherer
+ * @author Mark Scherer
  * @license MIT
  */
 class DocBlockTagTypesSniff extends AbstractSniff {
@@ -46,25 +46,47 @@ class DocBlockTagTypesSniff extends AbstractSniff {
 		'@var',
 		'@version',
 		'@todo',
-		// PHPUnit
-		'@covers',
-		'@coversDefaultClass',
-		'@expectedException',
-		'@expectedExceptionCode',
-		'@expectedExceptionMessage',
-		'@expectedExceptionMessageRegExp',
-		'@coversNothing',
-		'@dataProvider',
-		'@depends',
-		'@group',
-		'@uses',
+		// PHPUnit 9
+		'@after',
+		'@afterClass',
+		'@backupGlobals',
+		'@backupStaticAttributes',
+		'@before',
+		'@beforeClass',
 		'@codeCoverageIgnore',
 		'@codeCoverageIgnoreStart',
 		'@codeCoverageIgnoreEnd',
+		'@covers',
+		'@coversDefaultClass',
+		'@coversNothing',
+		'@dataProvider',
+		'@depends',
+		'@doesNotPerformAssertions',
+		'@group',
+		'@large',
+		'@medium',
+		'@preserveGlobalState',
+		'@requires',
+		'@runTestsInSeparateProcesses',
+		'@runInSeparateProcess',
+		'@small',
+		'@test',
+		'@testdox',
+		'@testWith',
+		'@ticket',
+		'@uses',
+		'@coversNothing',
 		// PHPMD
 		'@SuppressWarnings(PHPMD)',
 		// PhpStorm
 		'@noinspection',
+		// Stan
+		'@phpstan-param',
+		'@phpstan-return',
+		'@phpstan-var',
+		'@psalm-param',
+		'@psalm-return',
+		'@psalm-var',
 	];
 
 	/**
@@ -104,7 +126,7 @@ class DocBlockTagTypesSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [T_CLASS, T_FUNCTION];
 	}
 
@@ -135,6 +157,7 @@ class DocBlockTagTypesSniff extends AbstractSniff {
 			$error = 'Unexpected tag type `' . $tokens[$i]['content'] . '` in doc block';
 			if (!array_key_exists($content, static::$mapping) && !in_array($content, static::$blacklistedTags, true)) {
 				$phpcsFile->addWarning($error, $i, 'Unknown');
+
 				continue;
 			}
 
@@ -149,6 +172,7 @@ class DocBlockTagTypesSniff extends AbstractSniff {
 				$phpcsFile->findNext([T_DOC_COMMENT_STAR, T_DOC_COMMENT_CLOSE_TAG], $i + 1, $docBlockEndIndex + 1);
 			if (!$prevAsterix || !$nextAsterix) {
 				$phpcsFile->addError($error, $i, 'Invalid');
+
 				continue;
 			}
 
@@ -156,6 +180,7 @@ class DocBlockTagTypesSniff extends AbstractSniff {
 			if ($phpcsFile->fixer->enabled) {
 				if ($mappingTag) {
 					$phpcsFile->fixer->replaceToken($i, $mappingTag);
+
 					continue;
 				}
 

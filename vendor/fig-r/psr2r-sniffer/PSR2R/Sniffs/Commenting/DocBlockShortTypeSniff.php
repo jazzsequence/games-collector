@@ -8,7 +8,7 @@ use PSR2R\Tools\AbstractSniff;
 /**
  * Use short types for boolean and integer in doc blocks.
  *
- * @author  Mark Scherer
+ * @author Mark Scherer
  * @license MIT
  */
 class DocBlockShortTypeSniff extends AbstractSniff {
@@ -16,7 +16,7 @@ class DocBlockShortTypeSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [
 			T_CLASS,
 			T_INTERFACE,
@@ -29,7 +29,7 @@ class DocBlockShortTypeSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function process(File $phpCsFile, $stackPointer) {
+	public function process(File $phpCsFile, $stackPointer): void {
 		$tokens = $phpCsFile->getTokens();
 
 		$docBlockEndIndex = $this->findRelatedDocBlock($phpCsFile, $stackPointer);

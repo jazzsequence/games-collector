@@ -1,0 +1,37 @@
+name: Lint & Test
+on: [push]
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Lint
+        run: |
+          composer install
+          composer lint
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Start MariaDB
+        run: sudo systemctl start mysql
+      - name: Setup WP-CLI
+        uses: godaddy-wordpress/setup-wp-cli@1
+      - name: Install Composer dependencies
+        run: | 
+          composer install
+          chmod +x bin/*.sh
+          bash ./bin/phpunit-test.sh
+      - name: Test
+        run: composer test

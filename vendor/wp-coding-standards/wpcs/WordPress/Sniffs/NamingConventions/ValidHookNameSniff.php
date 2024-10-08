@@ -3,13 +3,16 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\NamingConventions;
+namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\WPHookHelper;
 
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
@@ -19,13 +22,11 @@ use WordPress\AbstractFunctionParameterSniff;
  *
  * Hook names invoked with `do_action_deprecated()` and `apply_filters_deprecated()` are ignored.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
- * @since   0.11.0 Extends the WordPress_AbstractFunctionParameterSniff class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.10.0
+ * @since 0.11.0 Extends the WordPressCS native `AbstractFunctionParameterSniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
 class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
@@ -64,14 +65,16 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	protected $punctuation_regex = '`[^\w%s]`';
 
 	/**
-	 * Groups of function to restrict.
+	 * Groups of functions to restrict.
 	 *
 	 * @since 0.11.0
 	 *
 	 * @return array
 	 */
 	public function getGroups() {
-		$this->target_functions = $this->hookInvokeFunctions;
+		// Only retrieve functions which are not used for deprecated hooks.
+		$this->target_functions = WPHookHelper::get_functions( false );
+
 		return parent::getGroups();
 	}
 
@@ -81,81 +84,129 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.11.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		// Ignore deprecated hook names.
-		if ( strpos( $matched_content, '_deprecated' ) > 0 ) {
-			return;
-		}
 
-		if ( ! isset( $parameters[1] ) ) {
+		$hook_name_param = WPHookHelper::get_hook_name_param( $matched_content, $parameters );
+		if ( false === $hook_name_param ) {
 			return;
 		}
 
 		$regex = $this->prepare_regex();
 
-		$case_errors = 0;
-		$underscores = 0;
-		$content     = array();
-		$expected    = array();
+		$case_errors    = 0;
+		$underscores    = 0;
+		$content        = array();
+		$expected       = array();
+		$last_non_empty = null;
 
-		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+		for ( $i = $hook_name_param['start']; $i <= $hook_name_param['end']; $i++ ) {
+			// Skip past comment tokens.
+			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+				continue;
+			}
+
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
+			// Skip past potential variable array access: `$var['key']`.
+			if ( \T_VARIABLE === $this->tokens[ $i ]['code'] ) {
+				do {
+					$open_bracket = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+					if ( false === $open_bracket
+						|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
+						|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
+					) {
+						$last_non_empty = $i;
+						continue 2;
+					}
 
-				/*
-				 * Here be dragons - a double quoted string can contain extrapolated variables
-				 * which don't have to comply with these rules.
-				 */
-				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
-					$transform       = $this->transform_complex_string( $string, $regex );
-					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
-					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
-				} else {
-					$transform       = $this->transform( $string, $regex );
-					$case_transform  = $this->transform( $string, $regex, 'case' );
-					$punct_transform = $this->transform( $string, $regex, 'punctuation' );
-				}
+					$i = $this->tokens[ $open_bracket ]['bracket_closer'];
 
-				if ( $string === $transform ) {
-					continue;
-				}
+				} while ( isset( $this->tokens[ $i ] ) && $i <= $hook_name_param['end'] );
 
-				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
-					$expected[ $i ] = '"' . $transform . '"';
-				} else {
-					$expected[ $i ] = '\'' . $transform . '\'';
-				}
+				$last_non_empty = $i;
+				continue;
+			}
 
-				if ( $string !== $case_transform ) {
-					$case_errors++;
-				}
-				if ( $string !== $punct_transform ) {
-					$underscores++;
-				}
+			// Skip over parameters passed to function calls.
+			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
+				&& ( \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				|| \T_VARIABLE === $this->tokens[ $last_non_empty ]['code'] )
+				&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
+			) {
+				$i              = $this->tokens[ $i ]['parenthesis_closer'];
+				$last_non_empty = $i;
+				continue;
+			}
+
+			// Skip past non text string tokens.
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
+				$last_non_empty = $i;
+				continue;
+			}
+
+			$last_non_empty = $i;
+			$string         = TextStrings::stripQuotes( $this->tokens[ $i ]['content'] );
+
+			/*
+			 * Here be dragons - a double quoted string can contain extrapolated variables
+			 * which don't have to comply with these rules.
+			 */
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				$transform       = $this->transform_complex_string( $string, $regex );
+				$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
+				$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
+			} else {
+				$transform       = $this->transform( $string, $regex );
+				$case_transform  = $this->transform( $string, $regex, 'case' );
+				$punct_transform = $this->transform( $string, $regex, 'punctuation' );
+			}
+
+			if ( $string === $transform ) {
+				continue;
+			}
+
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				$expected[ $i ] = '"' . $transform . '"';
+			} else {
+				$expected[ $i ] = '\'' . $transform . '\'';
+			}
+
+			if ( $string !== $case_transform ) {
+				++$case_errors;
+			}
+			if ( $string !== $punct_transform ) {
+				++$underscores;
 			}
 		}
 
+		$first_non_empty = $this->phpcsFile->findNext(
+			Tokens::$emptyTokens,
+			$hook_name_param['start'],
+			( $hook_name_param['end'] + 1 ),
+			true
+		);
+
 		$data = array(
-			implode( '', $expected ),
-			implode( '', $content ),
+			trim( implode( '', $expected ) ),
+			trim( implode( '', $content ) ),
 		);
 
 		if ( $case_errors > 0 ) {
 			$error = 'Hook names should be lowercase. Expected: %s, but found: %s.';
-			$this->phpcsFile->addError( $error, $stackPtr, 'NotLowercase', $data );
+			$this->phpcsFile->addError( $error, $first_non_empty, 'NotLowercase', $data );
 		}
+
 		if ( $underscores > 0 ) {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
-			$this->phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
+			$this->phpcsFile->addWarning( $error, $first_non_empty, 'UseUnderscores', $data );
 		}
 	}
 
@@ -163,8 +214,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * Prepare the punctuation regular expression.
 	 *
 	 * Merges the existing regular expression with potentially provided extra word delimiters to allow.
-	 * This is done 'late' and for each found token as otherwise inline `@codingStandardsChangeSetting`
-	 * directives would be ignored.
+	 * This is done 'late' and for each found token as otherwise inline `phpcs:set` directives
+	 * would be ignored.
 	 *
 	 * @return string
 	 */
@@ -180,77 +231,47 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Transform an arbitrary string to lowercase and replace punctuation and spaces with underscores.
 	 *
-	 * @param string $string         The target string.
+	 * @param string $text_string    The target string.
 	 * @param string $regex          The punctuation regular expression to use.
-	 * @param string $transform_type Whether to a partial or complete transform.
+	 * @param string $transform_type Whether to do a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
-	protected function transform( $string, $regex, $transform_type = 'full' ) {
+	protected function transform( $text_string, $regex, $transform_type = 'full' ) {
 
 		switch ( $transform_type ) {
 			case 'case':
-				return strtolower( $string );
+				return strtolower( $text_string );
 
 			case 'punctuation':
-				return preg_replace( $regex, '_', $string );
+				return preg_replace( $regex, '_', $text_string );
 
 			case 'full':
 			default:
-				return preg_replace( $regex, '_', strtolower( $string ) );
+				return preg_replace( $regex, '_', strtolower( $text_string ) );
 		}
 	}
 
 	/**
 	 * Transform a complex string which may contain variable extrapolation.
 	 *
-	 * @param string $string         The target string.
+	 * @param string $text_string    The target string.
 	 * @param string $regex          The punctuation regular expression to use.
-	 * @param string $transform_type Whether to a partial or complete transform.
+	 * @param string $transform_type Whether to do a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
-	protected function transform_complex_string( $string, $regex, $transform_type = 'full' ) {
-		$output = preg_split( '`([\{\}\$\[\] ])`', $string, -1, \PREG_SPLIT_DELIM_CAPTURE );
+	protected function transform_complex_string( $text_string, $regex, $transform_type = 'full' ) {
+		$plain_text = TextStrings::stripEmbeds( $text_string );
+		$embeds     = TextStrings::getEmbeds( $text_string );
 
-		$is_variable = false;
-		$has_braces  = false;
-		$braces      = 0;
+		$transformed_text = $this->transform( $plain_text, $regex, $transform_type );
 
-		foreach ( $output as $i => $part ) {
-			if ( \in_array( $part, array( '$', '{' ), true ) ) {
-				$is_variable = true;
-				if ( '{' === $part ) {
-					$has_braces = true;
-					$braces++;
-				}
-				continue;
-			}
-
-			if ( true === $is_variable ) {
-				if ( '[' === $part ) {
-					$has_braces = true;
-					$braces++;
-				}
-				if ( \in_array( $part, array( '}', ']' ), true ) ) {
-					$braces--;
-				}
-				if ( false === $has_braces && ' ' === $part ) {
-					$is_variable  = false;
-					$output[ $i ] = $this->transform( $part, $regex, $transform_type );
-				}
-
-				if ( ( true === $has_braces && 0 === $braces ) && false === \in_array( $output[ ( $i + 1 ) ], array( '{', '[' ), true ) ) {
-					$has_braces  = false;
-					$is_variable = false;
-				}
-				continue;
-			}
-
-			$output[ $i ] = $this->transform( $part, $regex, $transform_type );
+		// Inject the embeds back into the text string.
+		foreach ( $embeds as $offset => $embed ) {
+			$transformed_text = substr_replace( $transformed_text, $embed, $offset, 0 );
 		}
 
-		return implode( '', $output );
+		return $transformed_text;
 	}
-
 }

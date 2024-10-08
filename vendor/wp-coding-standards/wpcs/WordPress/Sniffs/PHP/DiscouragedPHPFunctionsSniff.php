@@ -3,24 +3,22 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Discourages the use of various native PHP functions and suggests alternatives.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.14.0 `create_function` was moved to the PHP.RestrictedFunctions sniff.
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.14.0 `create_function` was moved to the PHP.RestrictedFunctions sniff.
  */
-class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to discourage.
@@ -48,7 +46,7 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'urlencode' => array(
 				'type'      => 'warning',
-				'message'   => '%s() should only be used when dealing with legacy applications rawurlencode() should now be used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
+				'message'   => '%s() should only be used when dealing with legacy applications rawurlencode() should now be used instead. See https://www.php.net/function.rawurlencode and http://www.faqs.org/rfcs/rfc3986.html',
 				'functions' => array(
 					'urlencode',
 				),
@@ -56,12 +54,10 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'runtime_configuration' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Changing configuration at runtime is rarely necessary.',
+				'message'   => '%s() found. Changing configuration values at runtime is strongly discouraged.',
 				'functions' => array(
 					'error_reporting',
-					'ini_alter',
 					'ini_restore',
-					'ini_set',
 					'apache_setenv',
 					'putenv',
 					'set_include_path',
@@ -101,5 +97,4 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

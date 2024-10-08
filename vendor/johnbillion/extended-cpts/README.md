@@ -1,12 +1,14 @@
-[![Build Status](https://travis-ci.org/johnbillion/extended-cpts.svg?branch=master)](https://travis-ci.org/johnbillion/extended-cpts)
-[![Stable Release](https://img.shields.io/packagist/v/johnbillion/extended-cpts.svg)](https://packagist.org/packages/johnbillion/extended-cpts)
-[![License](https://img.shields.io/badge/license-GPL_v2%2B-blue.svg)](https://github.com/johnbillion/extended-cpts/blob/master/LICENSE)
-[![PHP 7](https://img.shields.io/badge/php-7-blue.svg)](https://wordpress.org/support/update-php/)
-[![Documentation](https://img.shields.io/badge/documentation-wiki-blue.svg)](https://github.com/johnbillion/extended-cpts/wiki)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/johnbillion/extended-cpts/integration-tests.yml?branch=develop&style=flat-square)](https://github.com/johnbillion/extended-cpts/actions)
+[![Stable Release](https://img.shields.io/packagist/v/johnbillion/extended-cpts.svg?style=flat-square)](https://packagist.org/packages/johnbillion/extended-cpts)
+[![License](https://img.shields.io/badge/license-GPL_v2%2B-blue.svg?style=flat-square)](https://github.com/johnbillion/extended-cpts/blob/trunk/LICENSE)
+[![PHP 7 and 8](https://img.shields.io/badge/php-7%20/%208-blue.svg?style=flat-square)](https://wordpress.org/support/update-php/)
+[![Documentation](https://img.shields.io/badge/documentation-wiki-blue.svg?style=flat-square)](https://github.com/johnbillion/extended-cpts/wiki)
 
 # Extended CPTs #
 
 Extended CPTs is a library which provides extended functionality to WordPress custom post types and taxonomies. This allows developers to quickly build post types and taxonomies without having to write the same code again and again.
+
+Extended CPTs works with both the block editor and the classic editor.
 
 [See the wiki for full documentation.](https://github.com/johnbillion/extended-cpts/wiki)
 
@@ -57,25 +59,20 @@ Not your first time here? See [Recent Changes for Developers](https://github.com
 
 ## Minimum Requirements ##
 
-**PHP:** 7.0  
-**WordPress:** 4.8  
+* **PHP:** 7.4  
+  - Tested up to PHP 8.3
+* **WordPress:** 5.7  
+  - Tested up to WP 6.6
 
 ## Installation ##
 
-Extended CPTs is a developer library, not a plugin, which means you need to include it somewhere in your own project.
-You can use Composer:
+Extended CPTs is a developer library, not a plugin, which means you need to include it as a dependency in your project. Install it using Composer:
 
 ```bash
 composer require johnbillion/extended-cpts
 ```
 
-Or you can download the library and include it manually:
-
-```php
-require_once 'extended-cpts/extended-cpts.php';
-```
-
-Note that *Extended Taxonomies* is part of this library since version 4.0, so there's no need to include the separate *Extended Taxonomies* library.
+Other means of installation or usage, particularly bundling within a plugin, is not officially supported and done at your own risk.
 
 ## Usage ##
 
@@ -110,9 +107,6 @@ add_action( 'init', function() {
 		'archive' => [
 			'nopaging' => true,
 		],
-
-		# Add the post type to the 'Recently Published' section of the dashboard:
-		'dashboard_activity' => true,
 
 		# Add some custom columns to the admin screen:
 		'admin_cols' => [

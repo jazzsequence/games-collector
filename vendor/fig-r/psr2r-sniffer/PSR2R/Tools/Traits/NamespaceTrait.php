@@ -1,4 +1,5 @@
 <?php
+
 namespace PSR2R\Tools\Traits;
 
 use PHP_CodeSniffer\Files\File;
@@ -16,7 +17,7 @@ trait NamespaceTrait {
 	 *
 	 * @return bool
 	 */
-	protected function shouldIgnoreUse(File $phpcsFile, $stackPtr) {
+	protected function shouldIgnoreUse(File $phpcsFile, int $stackPtr): bool {
 		$tokens = $phpcsFile->getTokens();
 
 		// Ignore USE keywords inside closures.

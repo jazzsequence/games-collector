@@ -4,13 +4,13 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting;
 
-use PHP_CodeSniffer\Sniffs\AbstractVariableSniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Common;
 
 class VariableCommentSniff extends AbstractVariableSniff
@@ -30,15 +30,41 @@ class VariableCommentSniff extends AbstractVariableSniff
     {
         $tokens = $phpcsFile->getTokens();
         $ignore = [
-            T_PUBLIC,
-            T_PRIVATE,
-            T_PROTECTED,
-            T_VAR,
-            T_STATIC,
-            T_WHITESPACE,
+            T_PUBLIC            => T_PUBLIC,
+            T_PRIVATE           => T_PRIVATE,
+            T_PROTECTED         => T_PROTECTED,
+            T_VAR               => T_VAR,
+            T_STATIC            => T_STATIC,
+            T_READONLY          => T_READONLY,
+            T_WHITESPACE        => T_WHITESPACE,
+            T_STRING            => T_STRING,
+            T_NS_SEPARATOR      => T_NS_SEPARATOR,
+            T_NAMESPACE         => T_NAMESPACE,
+            T_NULLABLE          => T_NULLABLE,
+            T_TYPE_UNION        => T_TYPE_UNION,
+            T_TYPE_INTERSECTION => T_TYPE_INTERSECTION,
+            T_NULL              => T_NULL,
+            T_TRUE              => T_TRUE,
+            T_FALSE             => T_FALSE,
+            T_SELF              => T_SELF,
+            T_PARENT            => T_PARENT,
         ];
 
-        $commentEnd = $phpcsFile->findPrevious($ignore, ($stackPtr - 1), null, true);
+        for ($commentEnd = ($stackPtr - 1); $commentEnd >= 0; $commentEnd--) {
+            if (isset($ignore[$tokens[$commentEnd]['code']]) === true) {
+                continue;
+            }
+
+            if ($tokens[$commentEnd]['code'] === T_ATTRIBUTE_END
+                && isset($tokens[$commentEnd]['attribute_opener']) === true
+            ) {
+                $commentEnd = $tokens[$commentEnd]['attribute_opener'];
+                continue;
+            }
+
+            break;
+        }
+
         if ($commentEnd === false
             || ($tokens[$commentEnd]['code'] !== T_DOC_COMMENT_CLOSE_TAG
             && $tokens[$commentEnd]['code'] !== T_COMMENT)
@@ -109,7 +135,7 @@ class VariableCommentSniff extends AbstractVariableSniff
         // Check var type (can be multiple, separated by '|').
         $typeNames      = explode('|', $varType);
         $suggestedNames = [];
-        foreach ($typeNames as $i => $typeName) {
+        foreach ($typeNames as $typeName) {
             $suggestedName = Common::suggestType($typeName);
             if (in_array($suggestedName, $suggestedNames, true) === false) {
                 $suggestedNames[] = $suggestedName;

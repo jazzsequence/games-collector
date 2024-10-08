@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/phpcompatibility/phpcompatibility-wp/v/stable.png)](https://packagist.org/packages/phpcompatibility/phpcompatibility-wp)
 [![Latest Unstable Version](https://poser.pugx.org/phpcompatibility/phpcompatibility-wp/v/unstable.png)](https://packagist.org/packages/phpcompatibility/phpcompatibility-wp)
 [![License](https://poser.pugx.org/phpcompatibility/phpcompatibility-wp/license.png)](https://github.com/PHPCompatibility/PHPCompatibilityWP/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/PHPCompatibility/PHPCompatibilityWP.svg?branch=master)](https://travis-ci.org/PHPCompatibility/PHPCompatibilityWP)
+[![Build Status](https://github.com/PHPCompatibility/PHPCompatibilityWP/workflows/CI/badge.svg?branch=master)](https://github.com/PHPCompatibility/PHPCompatibilityWP/actions)
 
 # PHPCompatibilityWP
 
@@ -17,9 +17,9 @@ This WordPress specific ruleset prevents false positives from the [PHPCompatibil
 
 ## Requirements
 
-* [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
-    * PHP 5.3+ for use with [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) 2.3.0+.
-    * PHP 5.4+ for use with [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) 3.0.2+.
+* [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer).
+    * PHP 5.3+ for use with [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer) 2.3.0+.
+    * PHP 5.4+ for use with [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer) 3.0.2+.
 
     Use the latest stable release of PHP_CodeSniffer for the best results.
     The minimum _recommended_ version of PHP_CodeSniffer is version 2.6.0.
@@ -33,14 +33,13 @@ The only supported installation method is via [Composer](https://getcomposer.org
 
 If you don't have a Composer plugin installed to manage the `installed_paths` setting for PHP_CodeSniffer, run the following from the command-line:
 ```bash
-composer require --dev dealerdirect/phpcodesniffer-composer-installer:^0.5.0 phpcompatibility/phpcompatibility-wp:*
-composer install
+composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+composer require --dev dealerdirect/phpcodesniffer-composer-installer:"^0.7" phpcompatibility/phpcompatibility-wp:"*"
 ```
 
 If you already have a Composer PHP_CodeSniffer plugin installed, run:
 ```bash
-composer require --dev phpcompatibility/phpcompatibility-wp:*
-composer install
+composer require --dev phpcompatibility/phpcompatibility-wp:"*"
 ```
 
 Next, run:
@@ -86,10 +85,41 @@ All code within the PHPCompatibility organisation is released under the GNU Less
 
 ## Changelog
 
+### 2.1.5 - 2024-04-25
+
+- Ruleset: Updated for compatibility with WordPress 6.5. Thanks [@swissspidy]
+- The recommended version of the [Composer PHPCS plugin] is now `^1.0`.
+- Other housekeeping and documentation updates. Includes contributions from [@fredden] and [@johnbillion].
+
+### 2.1.4 - 2022-10-24
+
+- Composer: The package will now identify itself as a static analysis tool. Thanks [@GaryJones]!
+- Other housekeeping and minor documentation updates.
+
+### 2.1.3 - 2021-12-31
+
+- Ruleset: Updated for compatibility with WordPress 5.9.
+- README: Updated the installation instructions for [compatibility with Composer >= 2.2][composer22announce].
+- Minor housekeeping.
+
+[composer22announce]: https://blog.packagist.com/composer-2-2/#more-secure-plugin-execution
+
+### 2.1.2 - 2021-07-21
+
+- Ruleset: Updated for compatibility with WordPress 5.8.
+- Documentation: improved installation instructions. Props [Andy Fragen](https://github.com/afragen).
+
+### 2.1.1 - 2021-02-15
+
+- The recommended version of the [Composer PHPCS plugin] is now `^0.7.0`, which offers compatibility with Composer 2.0.
+- The ruleset is now also tested against PHP 7.4 and 8.0.
+    Note: full PHP 7.4 support is only available in combination with PHP_CodeSniffer >= 3.5.6.
+    Note: runtime PHP 8.0 support is only available in combination with PHP_CodeSniffer >= 3.5.7, full support is expected in PHP_CodeSniffer 3.6.0.
+
 ### 2.1.0 - 2019-08-29
 
 - Ruleset: Updated for the Sodium_Compat polyfill which is included in WordPress 5.2.
-- Composer: The recommended version of the [Composer PHPCS plugin](https://github.com/Dealerdirect/phpcodesniffer-composer-installer/) has been upped to `^0.5.0`.
+- Composer: The recommended version of the [Composer PHPCS plugin] has been upped to `^0.5.0`.
 - Documentation: Updated the ruleset inline documentation and the Readme to reflect the change in minimum PHP requirements for WordPress as of WP 5.2.
 - Documentation: Updated the ruleset inline documentation to include information on when each polyfill was added to/removed from WordPress.
 - CI: The rulesets are now also tested against PHP 7.3.
@@ -105,3 +135,10 @@ All code within the PHPCompatibility organisation is released under the GNU Less
 ### 1.0.0 - 2018-07-17
 
 Initial release of the PHPCompatibilityWP ruleset.
+
+[Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer/
+
+[@fredden]:     https://github.com/fredden
+[@GaryJones]:   https://github.com/GaryJones
+[@johnbillion]: https://github.com/johnbillion
+[@swissspidy]:  https://github.com/swissspidy

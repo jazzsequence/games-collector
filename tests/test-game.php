@@ -125,7 +125,10 @@ class GC_Test_Game extends WP_UnitTestCase {
 
 		$this->assertEquals(
 			GC\GamesCollector\Game\get_players_min_max( $post_id ),
-			[ 'min' => 2, 'max' => 4 ],
+			[
+				'min' => 2,
+				'max' => 4,
+			],
 			'Get players min/max did not return the correct number of players.'
 		);
 	}

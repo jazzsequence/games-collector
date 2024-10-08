@@ -21,7 +21,7 @@ class DocBlockParamSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [
 			T_FUNCTION,
 		];
@@ -30,7 +30,7 @@ class DocBlockParamSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function process(File $phpCsFile, $stackPointer) {
+	public function process(File $phpCsFile, $stackPointer): void {
 		$tokens = $phpCsFile->getTokens();
 
 		$docBlockEndIndex = $this->findRelatedDocBlock($phpCsFile, $stackPointer);
@@ -63,6 +63,7 @@ class DocBlockParamSniff extends AbstractSniff {
 
 			if ($tokens[$classNameIndex]['type'] !== 'T_DOC_COMMENT_STRING') {
 				$phpCsFile->addError('Missing type in param doc block', $i, 'MissingParamType');
+
 				continue;
 			}
 
@@ -89,6 +90,7 @@ class DocBlockParamSniff extends AbstractSniff {
 
 		if (count($docBlockParams) !== count($methodSignature)) {
 			$phpCsFile->addError('Doc Block params do not match method signature', $stackPointer, 'ParamTypeMismatch');
+
 			return;
 		}
 
@@ -129,6 +131,7 @@ class DocBlockParamSniff extends AbstractSniff {
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpCsFile
 	 * @param int $stackPtr
+*
 	 * @return array
 	 */
 	private function getMethodSignature(File $phpCsFile, $stackPtr) {
@@ -153,8 +156,11 @@ class DocBlockParamSniff extends AbstractSniff {
 			$possibleEqualIndex = $phpCsFile->findNext([T_EQUAL], $nextVariableIndex + 1, $nextVariableIndex + 2);
 			if ($possibleEqualIndex) {
 				$possibleDefaultValue =
-					$phpCsFile->findNext([T_STRING, T_TRUE, T_FALSE, T_NULL, T_ARRAY], $possibleEqualIndex + 1,
-						$possibleEqualIndex + 2);
+					$phpCsFile->findNext(
+						[T_STRING, T_TRUE, T_FALSE, T_NULL, T_ARRAY],
+						$possibleEqualIndex + 1,
+						$possibleEqualIndex + 2,
+					);
 				if ($possibleDefaultValue) {
 					$default = $possibleDefaultValue;
 				}
