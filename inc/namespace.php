@@ -43,7 +43,14 @@ function bootstrap() {
  * @since  1.1.0
  */
 function activate() {
-	if ( ! get_page_by_title( esc_html__( 'Games', 'games-collector' ) ) ) {
+	$existing_page = get_posts( [
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'title'          => esc_html__( 'Games', 'games-collector' ),
+	] );
+
+	if ( ! $existing_page ) {
 		wp_insert_post([
 			'post_type'    => 'page',
 			'post_title'   => esc_html__( 'Games', 'games-collector' ),

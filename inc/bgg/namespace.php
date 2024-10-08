@@ -378,7 +378,13 @@ function insert_game() {
 			$game = get_bgg_game( $game_id );
 
 			// Check if game already exists.
-			if ( get_page_by_title( $game['title'], OBJECT, 'gc_game' ) ) {
+			$existing_game = get_posts( [ 
+				'title' => $game['title'],
+				'post_type' => 'gc_game',
+				'numberposts' => 1,
+			] );
+
+			if ( count( $existing_game ) > 0 ) {
 				return wp_die(
 					esc_html__( 'A game with that title already exists. Please try again.', 'games-collector' ),
 					esc_html__( 'Duplicate game found', 'games-collector' ),
