@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Composer dependencies
-        run: composer install
       - name: Lint
-        run: composer lint
+        run: |
+          composer install
+          composer lint
   test:
     name: Test
     runs-on: ubuntu-latest
