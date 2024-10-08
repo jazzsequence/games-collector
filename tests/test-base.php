@@ -38,9 +38,14 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 		// Make sure the activation hook actually runs.
 		GC\GamesCollector\activate();
 
-		$page = get_page_by_title( 'Games' );
+		$page = get_posts( [ 
+			'post_title' => 'Games', 
+			'post_type' => 'page',
+			'numberposts' => 1,
+		] );
+
 		$this->assertTrue(
-			is_object( $page ),
+			is_object( $page[0] ),
 			'Games page was not created on activation.'
 		);
 	}

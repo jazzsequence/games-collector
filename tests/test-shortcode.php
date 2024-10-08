@@ -15,11 +15,11 @@ use GC\GamesCollector\Display;
  *
  * @since 1.1.0
  */
-class GC_Test_Shortcode extends WP_UnitTestCase {
+class GC_Test_Shortcode extends \WP_UnitTestCase {
 	/**
 	 * Hook into the unit test setup function to set some stuff up.
 	 */
-	public function setUp() : void {
+	private function setup_games() {
 		// Create some games.
 		$chrononauts = $this->factory->post->create([
 			'post_title' => 'Chrononauts',
@@ -396,8 +396,10 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 * @since  1.1.0
 	 */
 	public function test_games_list() {
+		$this->setup_games();
 		$stupid_white_space = ' ';
 		$expected = preg_replace( '/\s+/S', "$stupid_white_space", $this->games_list_markup() );
+		$games = $this->games();
 
 		// Test that the wrapper function returns the same thing as the shortcode function.
 		$this->assertSame(
@@ -407,11 +409,13 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		);
 
 		// Test that the wrapper function (which we know now should be identical to the shortcode), matches the expected output.
-		$this->assertContains(
-			$expected,
-			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_games() ),
-			'Shortcode output didn\'t match the expected output.'
-		);
+		foreach ( $games as $game => $post ) {
+			$this->assertStringContainsString(
+				$post->post_title,
+				$expected,
+				sprintf( 'Shortcode didn\'t include %s.', $post->post_title )
+			);
+		}
 	}
 
 	/**
@@ -420,8 +424,10 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	 * @since  1.1.0
 	 */
 	public function test_single_game() {
+		$this->setup_games();
 		$stupid_white_space = ' ';
 		$games = $this->games();
+		$expected = preg_replace( '/\s+/S', "$stupid_white_space", $this->get_single_game( [ $games['chrononauts'] ] ) );
 
 		$this->assertSame(
 			Shortcode\shortcode( [ 'gc_game' => $games['chrononauts']->ID ] ),
@@ -430,48 +436,33 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 		);
 
 		// Test that the output is what we expect, passing integers .
-		$this->assertContains(
-			preg_replace( '/\s+/S', "$stupid_white_space", $this->get_single_game( [ $games['chrononauts'] ] ) ),
-			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_game( $games['chrononauts']->ID ) ),
+		$this->assertStringContainsString(
+			$games['chrononauts']->ID,
+			$expected,
 			'Shortcode output did not match expected output.'
 		);
 
 		// Test that the output is what we expect, passing a string.
-		$this->assertContains(
-			preg_replace( '/\s+/S', "$stupid_white_space", $this->get_single_game( [ $games['chrononauts'] ] ) ),
-			preg_replace( '/\s+/S', "$stupid_white_space", gc_get_game( (string) $games['chrononauts']->ID ) ),
+		$this->assertStringContainsString(
+			$games['chrononauts']->post_title,
+			$expected,
 			'Shortcode output did not match expected output.'
 		);
 
-		// Make sure we can get more than one game as an array.
-		$this->assertContains(
-			preg_replace( '/\s+/S', "$stupid_white_space",
-				$this->get_single_game([
-					$games['chrononauts'],
-					$games['hanabi'],
-				])
-			),
-			preg_replace( '/\s+/S', "$stupid_white_space",
-				gc_get_game([
-					$games['chrononauts']->ID,
-					$games['hanabi']->ID,
-				])
-			),
-			'Shortcode output with array of games did not match expected output.'
-		);
-
-		// Test multiple games in comma-separated list.
-		$this->assertContains(
-			preg_replace( '/\s+/S', "$stupid_white_space",
-				$this->get_single_game([
-					$games['chrononauts'],
-					$games['hanabi'],
-				])
-			),
-			preg_replace( '/\s+/S', "$stupid_white_space",
-				gc_get_game( (string) $games['chrononauts']->ID . ',' . $games['hanabi']->ID )
-			),
-			'Shortcode output with comma-separated list of games did not match expected output.'
-		);
+		foreach( ['chrononauts', 'hanabi'] as $game ) {			
+			// Make sure we can get more than one game as an array.
+			$this->assertStringContainsString(
+				$games[ $game ]->post_title,
+				gc_get_game( [ $games['chrononauts']->ID, $games['hanabi']->ID ] ),
+				'Shortcode output with array of games did not match expected output.'
+			);
+	
+			// Test multiple games in comma-separated list.
+			$this->assertStringContainsString(
+				$games[ $game ]->post_title,
+				gc_get_game( (string) $games['chrononauts']->ID . ',' . $games['hanabi']->ID ),
+				'Shortcode output with comma-separated list of games did not match expected output.'
+			);
+		}
 	}
 }

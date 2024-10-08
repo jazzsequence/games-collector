@@ -17,6 +17,13 @@ use GC\GamesCollector\Attributes;
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
 	/**
+	 * The REST server.
+	 *
+	 * @var WP_Rest_Server
+	 */
+	protected $server;
+
+	/**
 	 * Kick off the rest api.
 	 */
 	public function setUp() : void {
@@ -34,7 +41,13 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 * @return object WP_Post object for the game.
 	 */
 	private function get_game() {
-		$game = get_page_by_title( 'Chrononauts', OBJECT, 'gc_game' );
+		$games = get_posts( [
+			'title' => 'chrononauts',
+			'post_type' => 'gc_game',
+			'posts_per_page' => 1,
+		] );
+
+		$game = array_shift( $games ) ?: false;
 
 		if ( ! $game ) {
 			$post_id = $this->factory->post->create([
