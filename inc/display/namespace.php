@@ -25,7 +25,8 @@ function get_game_title( $game ) {
 	$after  = '';
 
 	// Output a link if one was saved.
-	if ( $link = get_post_meta( $game->ID, '_gc_link', true ) ) {
+	$link = get_post_meta( $game->ID, '_gc_link', true );
+	if ( $link ) {
 		$before = '<a href="' . esc_url( $link ) . '">';
 		$after  = '</a>';
 	}
@@ -60,11 +61,11 @@ function get_game_info( $game_id ) {
 
 		<div class="game-info" id="game-<?php echo absint( $game_id ); ?>-info">
 			<?php
-			echo get_players( $game_id );      // WPCS: XSS ok, already sanitized.
-			echo get_playing_time( $game_id ); // WPCS: XSS ok, already sanitized.
-			echo get_age( $game_id );          // WPCS: XSS ok, already sanitized.
-			echo get_difficulty( $game_id );   // WPCS: XSS ok, already sanitized.
-			echo get_attributes( $game_id );   // WPCS: XSS ok, already sanitized.
+			echo get_players( $game_id );      // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo get_playing_time( $game_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo get_age( $game_id );          // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo get_difficulty( $game_id );   // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo get_attributes( $game_id );   // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</div>
 
@@ -90,7 +91,7 @@ function get_buttons() {
 	// Loop through terms to generate all those buttons. These won't be filterable.
 	$terms_buttons = '';
 	foreach ( $terms as $term ) {
-		$terms_buttons .= '<button data-filter=".gc_attribute-' . esc_attr( $term->slug ) . '">' . esc_attr( $term->name ) . '</button>';
+		$terms_buttons .= '<button data-filter=".gc_attribute-' . esc_attr( $term->slug ) . '">' . esc_attr( $term->name ) . '</button>'; // phpcs:ignore WordPressVIPMinimum.Security.ProperEscapingFunction.notAttrEscAttr
 	}
 
 	/**
@@ -274,7 +275,7 @@ function get_players( $game_id ) {
 		ob_start();
 		?>
 
-		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( $num_players ); ?></span>
+		<span class="gc-icon icon-game-players"><?php the_svg( 'players', false ); ?></span><span class="game-num-players" id="game-<?php echo absint( $game_id ); ?>-num-players"><?php echo esc_attr( $num_players ); // phpcs:ignore WordPressVIPMinimum.Security.ProperEscapingFunction.notAttrEscAttr ?></span>
 		<?php
 		$output = ob_get_clean();
 
@@ -302,7 +303,8 @@ function get_players( $game_id ) {
  * @uses                Game\get_difficulties
  */
 function get_difficulty( $game_id ) {
-	if ( $difficulty = get_post_meta( $game_id, '_gc_difficulty', true ) ) {
+	$difficulty = get_post_meta( $game_id, '_gc_difficulty', true );
+	if ( $difficulty ) {
 		ob_start();
 		?>
 		<span class="gc-icon icon-game-difficulty"><?php the_svg( 'difficulty', false ); ?></span><span class="game-difficulty" id="game-<?php echo absint( $game_id ); ?>-difficulty"><?php echo esc_html( Game\get_difficulties( $difficulty ) ); ?></span>
@@ -331,10 +333,16 @@ function get_difficulty( $game_id ) {
  * @return mixed        The HTML markup for playing time or false if not set.
  */
 function get_playing_time( $game_id ) {
-	if ( $playing_time = get_post_meta( $game_id, '_gc_time', true ) ) {
+	$playing_time = get_post_meta( $game_id, '_gc_time', true );
+	if ( $playing_time ) {
 		ob_start();
 		?>
-		<span class="gc-icon icon-game-time"><?php the_svg( 'time', false ); ?></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time"><?php echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); ?></span>
+		<span class="gc-icon icon-game-time"><?php the_svg( 'time', false ); ?></span><span class="game-playing-time" id="game-<?php echo absint( $game_id ); ?>-playing-time">
+			<?php 
+				// Translators: %s is the playing time in minutes.
+				echo esc_html( sprintf( __( '%s minutes', 'games-collector' ), $playing_time ) ); 
+			?>
+		</span>
 
 		<?php
 		$output = ob_get_clean();
@@ -359,7 +367,8 @@ function get_playing_time( $game_id ) {
  * @return mixed        The HTML markup for age or false if not set.
  */
 function get_age( $game_id ) {
-	if ( $age = get_post_meta( $game_id, '_gc_age', true ) ) {
+	$age = get_post_meta( $game_id, '_gc_age', true );
+	if ( $age ) {
 		ob_start();
 		?>
 		<span class="gc-icon icon-game-age"><?php the_svg( 'age', false ); ?></span><span class="game-age" id="game-<?php echo absint( $game_id ); ?>-age"><?php echo esc_html( sprintf( '%d+', $age ) ); ?></span>
@@ -479,5 +488,5 @@ function get_svg( $name = '', $encoded = true ) {
  * @param  bool   $encoded Whether to return the svg as a base64 encoded image (for background images) or the raw SVG XML.
  */
 function the_svg( $name = '', $encoded = true ) {
-	echo get_svg( $name, $encoded ); // WPCS: XSS ok.
+	echo get_svg( $name, $encoded ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }

@@ -17,7 +17,7 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 	 *
 	 * @since  1.0.0
 	 */
-	function test_plugin_loaded() {
+	public function test_plugin_loaded() {
 		$this->assertTrue(
 			function_exists( 'gc_the_games' ),
 			'Couldn\'t find function \'gc_the_games\'.'
@@ -34,7 +34,7 @@ class GC_Test_Game_Collector_Base extends WP_UnitTestCase {
 	 *
 	 * @since  1.1.0
 	 */
-	function test_games_page_created_on_activation() {
+	public function test_games_page_created_on_activation() {
 		// Make sure the activation hook actually runs.
 		GC\GamesCollector\activate();
 

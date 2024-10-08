@@ -22,8 +22,8 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		global $wp_rest_server;
-
-		$this->server = $wp_rest_server = new \WP_Rest_Server();
+		$wp_rest_server = new \WP_Rest_Server();
+		$this->server = $wp_rest_server;
 		do_action( 'rest_api_init' );
 	}
 
