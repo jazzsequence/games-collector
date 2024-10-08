@@ -6,6 +6,11 @@
 # Icon must end with two \r
 Icon
 
+# Ignore WP Unit Helpers
+bin/helpers.sh
+bin/install-local-tests.sh
+bin/install-wp-tests.sh
+bin/phpunit-test.sh
 
 # Thumbnails
 ._*
