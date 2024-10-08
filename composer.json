@@ -17,6 +17,7 @@
         "cmb2/cmb2": "^2.6"
     },
     "require-dev": {
+        "pantheon-systems/pantheon-wp-coding-standards": "^2.0",
         "pantheon-systems/wpunit-helpers": "^2.0"
     },
     "config": {
