@@ -3,15 +3,15 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
-use WordPress\PHPCSHelper;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\PHPCSHelper;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Makes sure WP internationalization functions are used properly.
@@ -27,7 +27,8 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This class now extends the AbstractFunctionRestrictionSniff.
+ * @since   1.0.0  This class now extends the WordPressCS native
+ *                 `AbstractFunctionRestrictionSniff` class.
  *                 The parent `exclude` property is, however, disabled as it
  *                 would disable the whole sniff.
  */
@@ -192,7 +193,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		// Allow overruling the text_domain set in a ruleset via the command line.
 		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
-			$this->text_domain = $cl_text_domain;
+			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $cl_text_domain ) ) );
 		}
 
 		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
@@ -389,8 +390,16 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			$this->check_argument_tokens( $argument_assertion_context );
 		}
 
-		// For _n*() calls, compare the singular and plural strings.
-		if ( false !== strpos( $this->i18n_functions[ $matched_content ], 'number' ) ) {
+		/*
+		 * For _n*() calls, compare the singular and plural strings.
+		 * If either of the arguments is missing, empty or has more than 1 token, skip out.
+		 * An error for that will already have been reported via the `check_argument_tokens()` method.
+		 */
+		if ( false !== strpos( $this->i18n_functions[ $matched_content ], 'number' )
+			&& isset( $argument_assertions[0]['tokens'], $argument_assertions[1]['tokens'] )
+			&& count( $argument_assertions[0]['tokens'] ) === 1
+			&& count( $argument_assertions[1]['tokens'] ) === 1
+		) {
 			$single_context = $argument_assertions[0];
 			$plural_context = $argument_assertions[1];
 
@@ -621,19 +630,54 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 *
 		 * Strip placeholders and surrounding quotes.
 		 */
-		$non_placeholder_content = trim( $this->strip_quotes( $content ) );
-		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $non_placeholder_content );
+		$content_without_quotes  = trim( $this->strip_quotes( $content ) );
+		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $content_without_quotes );
 
 		if ( '' === $non_placeholder_content ) {
 			$this->phpcsFile->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
+			return;
+		}
+
+		/*
+		 * NoHtmlWrappedStrings
+		 *
+		 * Strip surrounding quotes.
+		 */
+		$reader = new \XMLReader();
+		$reader->XML( $content_without_quotes, 'UTF-8', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_NOWARNING );
+
+		// Is the first node an HTML element?
+		if ( ! $reader->read() || \XMLReader::ELEMENT !== $reader->nodeType ) {
+			return;
+		}
+
+		// If the opening HTML element includes placeholders in its attributes, we don't warn.
+		// E.g. '<option id="%1$s" value="%2$s">Translatable option name</option>'.
+		$i = 0;
+		while ( $attr = $reader->getAttributeNo( $i ) ) {
+			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $attr ) === 1 ) {
+				return;
+			}
+
+			++$i;
+		}
+
+		// We don't flag strings wrapped in `<a href="...">...</a>`, as the link target might actually need localization.
+		if ( 'a' === $reader->name && $reader->getAttribute( 'href' ) ) {
+			return;
+		}
+
+		// Does the entire string only consist of this HTML node?
+		if ( $reader->readOuterXml() === $content_without_quotes ) {
+			$this->phpcsFile->addWarning( 'Strings should not be wrapped in HTML', $stack_ptr, 'NoHtmlWrappedStrings' );
 		}
 	}
 
 	/**
 	 * Check for the presence of a translators comment if one of the text strings contains a placeholder.
 	 *
-	 * @param int   $stack_ptr  The position of the gettext call token in the stack.
-	 * @param array $args       The function arguments.
+	 * @param int   $stack_ptr The position of the gettext call token in the stack.
+	 * @param array $args      The function arguments.
 	 * @return void
 	 */
 	protected function check_for_translator_comment( $stack_ptr, $args ) {

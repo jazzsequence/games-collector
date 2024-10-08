@@ -1,18 +1,59 @@
-language: php
-php:
-  - '7.1'
+# Setup caching
+cache:
+  directories:
+    - $HOME/.cache/composer/files
+    - $HOME/.npm
+    - node_modules
 
-install:
-  - composer install
-  - npm install
+branches:
+  only:
+    - master
 
-  # Install for ESLint tests
-  - cd packages/eslint-config-humanmade
-  - npm install
-
-  # Reset
-  - cd ../..
-
-script:
-  - vendor/bin/phpunit
-  - node packages/eslint-config-humanmade/fixtures/test-lint-config
+# Test in modern and recent versions of PHP & Node.
+# Run each code style tool in containers specific to that tool's language.
+jobs:
+  include:
+    - language: php
+      php: 7.2
+      install:
+        - composer install
+      script:
+        - vendor/bin/phpunit
+    - language: php
+      php: 7.3
+      install:
+        - composer install
+      script:
+        - vendor/bin/phpunit
+    - language: php
+      php: 7.4
+      install:
+        - composer install
+      script:
+        - vendor/bin/phpunit
+    - language: php
+      php: 8.0
+      install:
+        # For PHP 8.0+, we need to ignore platform reqs as PHPUnit 7 is still used.
+        - composer install --ignore-platform-reqs
+      script:
+        - vendor/bin/phpunit
+    - language: php
+      php: 8.1
+      install:
+        # For PHP 8.0+, we need to ignore platform reqs as PHPUnit 7 is still used.
+        - composer install --ignore-platform-reqs
+      script:
+        # For PHP 8.1+, we need to ignore the config file so that PHPUnit 7 doesn't try to read it and cause an error.
+        # Instead, we pass all required settings as part of the phpunit command.
+        - vendor/bin/phpunit --no-configuration --bootstrap=tests/bootstrap.php --dont-report-useless-tests tests/AllSniffs.php
+        - vendor/bin/phpunit --no-configuration --bootstrap=tests/bootstrap.php --dont-report-useless-tests tests/FixtureTests.php
+    - language: node_js
+      node_js: 16
+      install:
+        - npm install
+        - cd packages/eslint-config-humanmade
+        - npm install --legacy-peer-deps
+        - cd ../..
+      script:
+        - npm test

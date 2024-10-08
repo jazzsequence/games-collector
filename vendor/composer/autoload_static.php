@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit83bf692c093c858a3dd768b10598daca
 {
     public static $files = array (
-        'a2c48002d05f7782d8b603bd2bcb5252' => __DIR__ . '/..' . '/johnbillion/extended-cpts/extended-cpts.php',
+        'ac773ca18bc86f9208de2ed8068423eb' => __DIR__ . '/..' . '/johnbillion/extended-cpts/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -18,10 +18,15 @@ class ComposerStaticInit83bf692c093c858a3dd768b10598daca
         'E' => 
         array (
             'ExtCPTs\\Tests\\' => 14,
+            'ExtCPTs\\' => 8,
         ),
         'D' => 
         array (
             'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 55,
+        ),
+        'A' => 
+        array (
+            'Args\\' => 5,
         ),
     );
 
@@ -32,12 +37,24 @@ class ComposerStaticInit83bf692c093c858a3dd768b10598daca
         ),
         'ExtCPTs\\Tests\\' => 
         array (
-            0 => __DIR__ . '/..' . '/johnbillion/extended-cpts/tests/phpunit',
+            0 => __DIR__ . '/..' . '/johnbillion/extended-cpts/tests/integration',
+        ),
+        'ExtCPTs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/johnbillion/extended-cpts/src',
         ),
         'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 
         array (
             0 => __DIR__ . '/..' . '/dealerdirect/phpcodesniffer-composer-installer/src',
         ),
+        'Args\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/johnbillion/args/src',
+        ),
+    );
+
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -45,6 +62,7 @@ class ComposerStaticInit83bf692c093c858a3dd768b10598daca
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit83bf692c093c858a3dd768b10598daca::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit83bf692c093c858a3dd768b10598daca::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit83bf692c093c858a3dd768b10598daca::$classMap;
 
         }, null, ClassLoader::class);
     }

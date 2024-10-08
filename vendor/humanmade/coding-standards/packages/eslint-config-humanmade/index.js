@@ -7,6 +7,9 @@ module.exports = {
 	'extends': [
 		'eslint:recommended',
 		'react-app',
+		'plugin:import/errors',
+		'plugin:jsdoc/recommended',
+		'plugin:react-hooks/recommended',
 	],
 	'parserOptions': {
 		'ecmaVersion': 2018,
@@ -24,7 +27,13 @@ module.exports = {
 		} ],
 		'block-spacing': [ 'error' ],
 		'brace-style': [ 'error', '1tbs' ],
-		'comma-dangle': [ 'error', 'always-multiline' ],
+		'comma-dangle': [ 'error', {
+			'arrays': 'always-multiline',
+			'objects': 'always-multiline',
+			'imports': 'always-multiline',
+			'exports': 'always-multiline',
+			'functions': 'never',
+		} ],
 		'comma-spacing': [ 'error', {
 			'before': false,
 			'after': true,
@@ -32,6 +41,23 @@ module.exports = {
 		'eol-last': [ 'error', 'unix' ],
 		'eqeqeq': [ 'error' ],
 		'func-call-spacing': [ 'error' ],
+		'import/no-unresolved': [ 'off' ],
+		'import/order': [ 'error', {
+			'alphabetize': {
+				'order': 'asc',
+				'caseInsensitive': true
+			},
+			'groups': [ 'builtin', 'external', 'parent', 'sibling', 'index' ],
+			'newlines-between': 'always',
+			'pathGroups': [
+				{
+					'pattern': '@wordpress/**',
+					'group': 'external',
+					'position': 'after'
+				}
+			],
+			'pathGroupsExcludedImportTypes': [ 'builtin' ]
+		} ],
 		'indent': [ 'error', 'tab', {
 			'SwitchCase': 1,
 		} ],
@@ -74,6 +100,7 @@ module.exports = {
 		'object-curly-spacing': [ 'error', 'always' ],
 		'object-property-newline': [ 'error' ],
 		'quotes': [ 'error', 'single' ],
+		'semi': [ 'error', 'always' ],
 		'semi-spacing': [ 'error', {
 			'before': false,
 			'after': true,
@@ -93,12 +120,31 @@ module.exports = {
 				'!': true,
 			},
 		} ],
+		'template-curly-spacing': [ 'error', 'always' ],
 		'yoda': [ 'error', 'never' ],
+		'jsdoc/require-jsdoc': [ 'error', {
+			'require': {
+				'FunctionDeclaration': true,
+				'ClassDeclaration': true,
+				'ArrowFunctionExpression': true,
+				'FunctionExpression': true,
+			},
+		} ],
 		'react/jsx-curly-spacing': [ 'error', {
 			'when': 'always',
 			'children': true,
 		} ],
 		'react/jsx-wrap-multilines': [ 'error' ],
+		'react/jsx-curly-newline': [ 'warn', {
+			'multiline': 'consistent',
+			'singleline': 'consistent',
+		} ],
+		'react/jsx-boolean-value': [ 'error', 'never' ],
+		'react/jsx-sort-props': [ 'warn', {
+			'reservedFirst': [ 'key', 'ref' ],
+			'callbacksLast': true,
+			'ignoreCase': true,
+		} ],
 		'jsx-a11y/anchor-is-valid': [ 'error' ],
 	},
 };

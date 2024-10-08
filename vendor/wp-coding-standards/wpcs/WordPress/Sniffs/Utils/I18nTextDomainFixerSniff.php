@@ -3,14 +3,14 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Utils;
+namespace WordPressCS\WordPress\Sniffs\Utils;
 
-use WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Comprehensive I18n text domain fixer tool.
@@ -272,12 +272,6 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		if ( \T_COMMENT === $this->tokens[ $stackPtr ]['code']
-			&& strpos( $this->tokens[ $stackPtr ]['content'], '@codingStandardsChangeSetting' ) !== false
-		) {
-			return;
-		}
-
 		// Check if the old/new properties are correctly set. If not, bow out.
 		if ( ! is_string( $this->new_text_domain )
 			|| '' === $this->new_text_domain
@@ -360,7 +354,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 * @since 1.2.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
@@ -468,7 +462,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 * @since 1.2.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
 	 * @return void
@@ -538,7 +532,8 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_comments( $stackPtr ) {
 		if ( true === $this->header_found && ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {

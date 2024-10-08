@@ -1,4 +1,12 @@
 <?php
+/**
+ * Run tests on fixture files against our custom standards.
+ *
+ * This test suite runs our standards against files which have
+ * known errors or known passing conditions. We run these tests
+ * against said fixture files as it's closer to real-world conditions
+ * than isolated unit tests and provides another layer of security.
+ */
 
 namespace HM\CodingStandards\Tests;
 
@@ -86,7 +94,33 @@ class FixtureTests extends TestCase {
 		// See: https://github.com/humanmade/coding-standards/pull/88#issuecomment-464076803
 		$this->config->tabWidth = 4;
 
+		// We want to setup our tests to only load our standards in for testing.
+		$this->config->sniffs = [
+			'HM.Classes.OnlyClassInFile',
+			'HM.Debug.ESLint',
+			'HM.Files.ClassFileName',
+			'HM.Files.FunctionFileName',
+			'HM.Files.NamespaceDirectoryName',
+			'HM.Functions.NamespacedFunctions',
+			'HM.Layout.Order',
+			'HM.Namespaces.NoLeadingSlashOnUse',
+			'HM.Performance.SlowMetaQuery',
+			'HM.Performance.SlowOrderBy',
+			'HM.PHP.Isset',
+			'HM.Security.EscapeOutput',
+			'HM.Security.NonceVerification',
+			'HM.Security.ValidatedSanitizedInput',
+			'HM.Whitespace.MultipleEmptyLines',
+		];
+
 		$this->ruleset = new Ruleset( $this->config );
+
+		// Set configuration as needed too.
+		$this->ruleset->setSniffProperty( 'HM\\Sniffs\\Security\\EscapeOutputSniff', 'customAutoEscapedFunctions', [
+			'my_custom_func',
+			'another_func',
+		] );
+		$this->ruleset->setSniffProperty( 'HM\\Sniffs\\Security\\NonceVerificationSniff', 'allowQueryVariables', true );
 	}
 
 	/**
@@ -110,6 +144,7 @@ class FixtureTests extends TestCase {
 		$phpcsFile = new LocalFile( $file, $this->ruleset, $this->config );
 		$phpcsFile->process();
 
+		$rel_file = substr( $file, strlen( __DIR__ ) );
 		$foundErrors = $phpcsFile->getErrors();
 		$foundWarnings = $phpcsFile->getWarnings();
 
@@ -147,7 +182,7 @@ class FixtureTests extends TestCase {
 			}
 		}
 
-		$this->assertEquals( $expected, $found );
+		$this->assertEquals( $expected, $found, sprintf( 'File %s should only contain specified errors', $rel_file ) );
 		// var_dump( $foundErrors );
 	}
 }

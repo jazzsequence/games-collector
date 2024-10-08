@@ -4,13 +4,13 @@
  *
  * @author    Andy Grunwald <andygrunwald@gmail.com>
  * @copyright 2010-2014 Andy Grunwald
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\Generic\Sniffs\PHP;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 class CharacterBeforePHPOpeningTagSniff implements Sniff
 {
@@ -32,7 +32,7 @@ class CharacterBeforePHPOpeningTagSniff implements Sniff
     /**
      * Returns an array of tokens this test wants to listen for.
      *
-     * @return array
+     * @return array<int|string>
      */
     public function register()
     {
@@ -48,7 +48,7 @@ class CharacterBeforePHPOpeningTagSniff implements Sniff
      * @param int                         $stackPtr  The position of the current token in
      *                                               the stack passed in $tokens.
      *
-     * @return void
+     * @return int
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -56,7 +56,7 @@ class CharacterBeforePHPOpeningTagSniff implements Sniff
         if ($stackPtr > 0) {
             // Allow a byte-order mark.
             $tokens = $phpcsFile->getTokens();
-            foreach ($this->bomDefinitions as $bomName => $expectedBomHex) {
+            foreach ($this->bomDefinitions as $expectedBomHex) {
                 $bomByteLength = (strlen($expectedBomHex) / 2);
                 $htmlBomHex    = bin2hex(substr($tokens[0]['content'], 0, $bomByteLength));
                 if ($htmlBomHex === $expectedBomHex) {
@@ -66,7 +66,6 @@ class CharacterBeforePHPOpeningTagSniff implements Sniff
             }
 
             // Allow a shebang line.
-            $tokens = $phpcsFile->getTokens();
             if (substr($tokens[0]['content'], 0, 2) === '#!') {
                 $expected++;
             }

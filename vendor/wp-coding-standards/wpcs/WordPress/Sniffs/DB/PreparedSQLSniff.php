@@ -3,14 +3,14 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\DB;
+namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Sniff for prepared SQL.
@@ -69,6 +69,7 @@ class PreparedSQLSniff extends Sniff {
 		\T_INT_CAST                 => true,
 		\T_DOUBLE_CAST              => true,
 		\T_BOOL_CAST                => true,
+		\T_NS_SEPARATOR             => true,
 	);
 
 	/**
@@ -102,7 +103,7 @@ class PreparedSQLSniff extends Sniff {
 	 */
 	public function register() {
 
-		$this->ignored_tokens = $this->ignored_tokens + Tokens::$emptyTokens;
+		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		return array(
 			\T_VARIABLE,
@@ -151,7 +152,7 @@ class PreparedSQLSniff extends Sniff {
 					$this->phpcsFile->addError(
 						'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
 						$this->i,
-						'NotPrepared',
+						'InterpolatedNotPrepared',
 						array(
 							$bad_variable,
 							$this->tokens[ $this->i ]['content'],

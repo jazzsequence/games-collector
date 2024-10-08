@@ -238,3 +238,41 @@ if ($bar)
 if (true) $callable = function () {
     return true;
 };
+
+foreach ([] as $a)
+echo 'bar';
+{
+    echo 'baz';
+}
+
+// Issue 2822.
+$i = 10;
+while ($i > 0 && --$i);
+
+for ($i = 1, $j = 0; $i <= 10; $j += $i, print $i, $i++);
+
+if ($this->valid(fn(): bool => 2 > 1)) {
+}
+
+// Issue 3345.
+function testMultiCatch()
+{
+    if (true)
+        try {
+        } catch (\LogicException $e) {
+        } catch (\Exception $e) {
+        }
+}
+
+function testFinally()
+{
+    if (true)
+        try {
+        } catch (\LogicException $e) {
+        } finally {
+        }
+}
+
+if ($something) {
+    echo 'hello';
+} else /* comment */ if ($somethingElse) echo 'hi';

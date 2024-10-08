@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractClassRestrictionsSniff;
+use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
 
 /**
  * Restricts the use of deprecated WordPress classes and suggests alternatives.
@@ -28,7 +28,7 @@ use WordPress\AbstractClassRestrictionsSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 
@@ -48,6 +48,20 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			'alt'     => 'WP_User_Query',
 			'version' => '3.1.0',
 		),
+
+		// WP 4.9.0.
+		'Customize_New_Menu_Section' => array(
+			'version' => '4.9.0',
+		),
+		'WP_Customize_New_Menu_Control' => array(
+			'version' => '4.9.0',
+		),
+
+		// WP 5.3.0.
+		'Services_JSON' => array(
+			'alt'     => 'The PHP native JSON extension',
+			'version' => '5.3.0',
+		),
 	);
 
 
@@ -58,13 +72,11 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$keys                     = array_keys( $this->deprecated_classes );
-		$keys                     = array_map( 'strtolower', $keys );
-		$this->deprecated_classes = array_combine( $keys, $this->deprecated_classes );
+		$this->deprecated_classes = array_change_key_case( $this->deprecated_classes, CASE_LOWER );
 
 		return array(
 			'deprecated_classes' => array(
-				'classes' => $keys,
+				'classes' => array_keys( $this->deprecated_classes ),
 			),
 		);
 	}
@@ -73,8 +85,8 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
-	 *                                always be 'deprecated_functions'.
+	 * @param string $group_name      The name of the group which was matched. Will
+	 *                                always be 'deprecated_classes'.
 	 * @param string $matched_content The token content (class name) which was matched.
 	 *
 	 * @return void

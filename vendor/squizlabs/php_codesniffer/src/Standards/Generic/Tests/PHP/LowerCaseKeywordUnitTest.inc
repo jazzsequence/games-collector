@@ -28,4 +28,30 @@ class X extends Y {
         Self::n();
     }
 }
+FN ($x) => $x;
+$r = Match ($x) {
+    1 => 1,
+    2 => 2,
+    DEFAULT, => 3,
+};
+
+class Reading {
+    Public READOnly int $var;
+}
+
+EnuM ENUM: string
+{
+    Case HEARTS;
+}
+
+new Class {};
+new clasS extends stdClass {};
+new class {};
+
+if (isset($a) && !empty($a)) { unset($a); }
+if (ISSET($a) && !Empty($a)) { UnSeT($a); }
+eval('foo');
+eVaL('foo');
+
+__HALT_COMPILER(); // An exception due to phar support.
 function

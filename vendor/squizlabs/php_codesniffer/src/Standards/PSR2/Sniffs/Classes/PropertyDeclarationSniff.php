@@ -4,14 +4,15 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\PSR2\Sniffs\Classes;
 
+use Exception;
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
-use PHP_CodeSniffer\Files\File;
 
 class PropertyDeclarationSniff extends AbstractVariableSniff
 {
@@ -41,6 +42,7 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
         $find   = Tokens::$scopeModifiers;
         $find[] = T_VARIABLE;
         $find[] = T_VAR;
+        $find[] = T_READONLY;
         $find[] = T_SEMICOLON;
         $find[] = T_OPEN_CURLY_BRACKET;
 
@@ -65,10 +67,51 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
             if (empty($propertyInfo) === true) {
                 return;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Turns out not to be a property after all.
             return;
         }
+
+        if ($propertyInfo['type'] !== '') {
+            $typeToken = $propertyInfo['type_end_token'];
+            $error     = 'There must be 1 space after the property type declaration; %s found';
+            if ($tokens[($typeToken + 1)]['code'] !== T_WHITESPACE) {
+                $data = ['0'];
+                $fix  = $phpcsFile->addFixableError($error, $typeToken, 'SpacingAfterType', $data);
+                if ($fix === true) {
+                    $phpcsFile->fixer->addContent($typeToken, ' ');
+                }
+            } else if ($tokens[($typeToken + 1)]['content'] !== ' ') {
+                $next = $phpcsFile->findNext(T_WHITESPACE, ($typeToken + 1), null, true);
+                if ($tokens[$next]['line'] !== $tokens[$typeToken]['line']) {
+                    $found = 'newline';
+                } else {
+                    $found = $tokens[($typeToken + 1)]['length'];
+                }
+
+                $data = [$found];
+
+                $nextNonWs = $phpcsFile->findNext(Tokens::$emptyTokens, ($typeToken + 1), null, true);
+                if ($nextNonWs !== $next) {
+                    $phpcsFile->addError($error, $typeToken, 'SpacingAfterType', $data);
+                } else {
+                    $fix = $phpcsFile->addFixableError($error, $typeToken, 'SpacingAfterType', $data);
+                    if ($fix === true) {
+                        if ($found === 'newline') {
+                            $phpcsFile->fixer->beginChangeset();
+                            for ($x = ($typeToken + 1); $x < $next; $x++) {
+                                $phpcsFile->fixer->replaceToken($x, '');
+                            }
+
+                            $phpcsFile->fixer->addContent($typeToken, ' ');
+                            $phpcsFile->fixer->endChangeset();
+                        } else {
+                            $phpcsFile->fixer->replaceToken(($typeToken + 1), ' ');
+                        }
+                    }
+                }
+            }//end if
+        }//end if
 
         if ($propertyInfo['scope_specified'] === false) {
             $error = 'Visibility must be declared on property "%s"';
@@ -76,30 +119,70 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
             $phpcsFile->addError($error, $stackPtr, 'ScopeMissing', $data);
         }
 
+        /*
+         * Note: per PSR-PER section 4.6, the order should be:
+         * - Inheritance modifier: `abstract` or `final`.
+         * - Visibility modifier: `public`, `protected`, or `private`.
+         * - Scope modifier: `static`.
+         * - Mutation modifier: `readonly`.
+         * - Type declaration.
+         * - Name.
+         *
+         * Ref: https://www.php-fig.org/per/coding-style/#46-modifier-keywords
+         *
+         * At this time (PHP 8.2), inheritance modifiers cannot be applied to properties and
+         * the `static` and `readonly` modifiers are mutually exclusive and cannot be used together.
+         *
+         * Based on that, the below modifier keyword order checks are sufficient (for now).
+         */
+
         if ($propertyInfo['scope_specified'] === true && $propertyInfo['is_static'] === true) {
             $scopePtr  = $phpcsFile->findPrevious(Tokens::$scopeModifiers, ($stackPtr - 1));
             $staticPtr = $phpcsFile->findPrevious(T_STATIC, ($stackPtr - 1));
-            if ($scopePtr < $staticPtr) {
-                return;
-            }
+            if ($scopePtr > $staticPtr) {
+                $error = 'The static declaration must come after the visibility declaration';
+                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'StaticBeforeVisibility');
+                if ($fix === true) {
+                    $phpcsFile->fixer->beginChangeset();
 
-            $error = 'The static declaration must come after the visibility declaration';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'StaticBeforeVisibility');
-            if ($fix === true) {
-                $phpcsFile->fixer->beginChangeset();
+                    for ($i = ($scopePtr + 1); $scopePtr < $stackPtr; $i++) {
+                        if ($tokens[$i]['code'] !== T_WHITESPACE) {
+                            break;
+                        }
 
-                for ($i = ($scopePtr + 1); $scopePtr < $stackPtr; $i++) {
-                    if ($tokens[$i]['code'] !== T_WHITESPACE) {
-                        break;
+                        $phpcsFile->fixer->replaceToken($i, '');
                     }
 
-                    $phpcsFile->fixer->replaceToken($i, '');
+                    $phpcsFile->fixer->replaceToken($scopePtr, '');
+                    $phpcsFile->fixer->addContentBefore($staticPtr, $propertyInfo['scope'].' ');
+
+                    $phpcsFile->fixer->endChangeset();
                 }
+            }
+        }//end if
 
-                $phpcsFile->fixer->replaceToken($scopePtr, '');
-                $phpcsFile->fixer->addContentBefore($staticPtr, $propertyInfo['scope'].' ');
+        if ($propertyInfo['scope_specified'] === true && $propertyInfo['is_readonly'] === true) {
+            $scopePtr    = $phpcsFile->findPrevious(Tokens::$scopeModifiers, ($stackPtr - 1));
+            $readonlyPtr = $phpcsFile->findPrevious(T_READONLY, ($stackPtr - 1));
+            if ($scopePtr > $readonlyPtr) {
+                $error = 'The readonly declaration must come after the visibility declaration';
+                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'ReadonlyBeforeVisibility');
+                if ($fix === true) {
+                    $phpcsFile->fixer->beginChangeset();
 
-                $phpcsFile->fixer->endChangeset();
+                    for ($i = ($scopePtr + 1); $scopePtr < $stackPtr; $i++) {
+                        if ($tokens[$i]['code'] !== T_WHITESPACE) {
+                            break;
+                        }
+
+                        $phpcsFile->fixer->replaceToken($i, '');
+                    }
+
+                    $phpcsFile->fixer->replaceToken($scopePtr, '');
+                    $phpcsFile->fixer->addContentBefore($readonlyPtr, $propertyInfo['scope'].' ');
+
+                    $phpcsFile->fixer->endChangeset();
+                }
             }
         }//end if
 

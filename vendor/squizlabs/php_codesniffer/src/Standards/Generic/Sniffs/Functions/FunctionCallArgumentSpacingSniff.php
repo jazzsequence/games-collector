@@ -4,13 +4,13 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\Generic\Sniffs\Functions;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class FunctionCallArgumentSpacingSniff implements Sniff
@@ -20,7 +20,7 @@ class FunctionCallArgumentSpacingSniff implements Sniff
     /**
      * Returns an array of tokens this test wants to listen for.
      *
-     * @return array
+     * @return array<int|string>
      */
     public function register()
     {
@@ -30,6 +30,7 @@ class FunctionCallArgumentSpacingSniff implements Sniff
             T_UNSET,
             T_SELF,
             T_STATIC,
+            T_PARENT,
             T_VARIABLE,
             T_CLOSE_CURLY_BRACKET,
             T_CLOSE_PARENTHESIS,
@@ -82,23 +83,50 @@ class FunctionCallArgumentSpacingSniff implements Sniff
             return;
         }
 
+        $this->checkSpacing($phpcsFile, $stackPtr, $openBracket);
+
+    }//end process()
+
+
+    /**
+     * Checks the spacing around commas.
+     *
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile   The file being scanned.
+     * @param int                         $stackPtr    The position of the current token in the
+     *                                                 stack passed in $tokens.
+     * @param int                         $openBracket The position of the opening bracket
+     *                                                 in the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function checkSpacing(File $phpcsFile, $stackPtr, $openBracket)
+    {
+        $tokens = $phpcsFile->getTokens();
+
         $closeBracket  = $tokens[$openBracket]['parenthesis_closer'];
         $nextSeparator = $openBracket;
 
         $find = [
             T_COMMA,
-            T_VARIABLE,
             T_CLOSURE,
+            T_FN,
             T_ANON_CLASS,
             T_OPEN_SHORT_ARRAY,
+            T_MATCH,
         ];
 
         while (($nextSeparator = $phpcsFile->findNext($find, ($nextSeparator + 1), $closeBracket)) !== false) {
             if ($tokens[$nextSeparator]['code'] === T_CLOSURE
                 || $tokens[$nextSeparator]['code'] === T_ANON_CLASS
+                || $tokens[$nextSeparator]['code'] === T_MATCH
             ) {
-                // Skip closures.
+                // Skip closures, anon class declarations and match control structures.
                 $nextSeparator = $tokens[$nextSeparator]['scope_closer'];
+                continue;
+            } else if ($tokens[$nextSeparator]['code'] === T_FN) {
+                // Skip arrow functions, but don't skip the arrow function closer as it is likely to
+                // be the comma separating it from the next function call argument (or the parenthesis closer).
+                $nextSeparator = ($tokens[$nextSeparator]['scope_closer'] - 1);
                 continue;
             } else if ($tokens[$nextSeparator]['code'] === T_OPEN_SHORT_ARRAY) {
                 // Skips arrays using short notation.
@@ -118,7 +146,7 @@ class FunctionCallArgumentSpacingSniff implements Sniff
                 if ($tokens[($nextSeparator - 1)]['code'] === T_WHITESPACE) {
                     $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($nextSeparator - 2), null, true);
                     if (isset(Tokens::$heredocTokens[$tokens[$prev]['code']]) === false) {
-                        $error = 'Space found before comma in function call';
+                        $error = 'Space found before comma in argument list';
                         $fix   = $phpcsFile->addFixableError($error, $nextSeparator, 'SpaceBeforeComma');
                         if ($fix === true) {
                             $phpcsFile->fixer->beginChangeset();
@@ -136,10 +164,13 @@ class FunctionCallArgumentSpacingSniff implements Sniff
                 }//end if
 
                 if ($tokens[($nextSeparator + 1)]['code'] !== T_WHITESPACE) {
-                    $error = 'No space found after comma in function call';
-                    $fix   = $phpcsFile->addFixableError($error, $nextSeparator, 'NoSpaceAfterComma');
-                    if ($fix === true) {
-                        $phpcsFile->fixer->addContent($nextSeparator, ' ');
+                    // Ignore trailing comma's after last argument as that's outside the scope of this sniff.
+                    if (($nextSeparator + 1) !== $closeBracket) {
+                        $error = 'No space found after comma in argument list';
+                        $fix   = $phpcsFile->addFixableError($error, $nextSeparator, 'NoSpaceAfterComma');
+                        if ($fix === true) {
+                            $phpcsFile->fixer->addContent($nextSeparator, ' ');
+                        }
                     }
                 } else {
                     // If there is a newline in the space, then they must be formatting
@@ -148,7 +179,7 @@ class FunctionCallArgumentSpacingSniff implements Sniff
                     if ($tokens[$next]['line'] === $tokens[$nextSeparator]['line']) {
                         $space = $tokens[($nextSeparator + 1)]['length'];
                         if ($space > 1) {
-                            $error = 'Expected 1 space after comma in function call; %s found';
+                            $error = 'Expected 1 space after comma in argument list; %s found';
                             $data  = [$space];
                             $fix   = $phpcsFile->addFixableError($error, $nextSeparator, 'TooMuchSpaceAfterComma', $data);
                             if ($fix === true) {
@@ -157,32 +188,10 @@ class FunctionCallArgumentSpacingSniff implements Sniff
                         }
                     }
                 }//end if
-            } else {
-                // Token is a variable.
-                $nextToken = $phpcsFile->findNext(Tokens::$emptyTokens, ($nextSeparator + 1), $closeBracket, true);
-                if ($nextToken !== false) {
-                    if ($tokens[$nextToken]['code'] === T_EQUAL) {
-                        if (($tokens[($nextToken - 1)]['code']) !== T_WHITESPACE) {
-                            $error = 'Expected 1 space before = sign of default value';
-                            $fix   = $phpcsFile->addFixableError($error, $nextToken, 'NoSpaceBeforeEquals');
-                            if ($fix === true) {
-                                $phpcsFile->fixer->addContentBefore($nextToken, ' ');
-                            }
-                        }
-
-                        if ($tokens[($nextToken + 1)]['code'] !== T_WHITESPACE) {
-                            $error = 'Expected 1 space after = sign of default value';
-                            $fix   = $phpcsFile->addFixableError($error, $nextToken, 'NoSpaceAfterEquals');
-                            if ($fix === true) {
-                                $phpcsFile->fixer->addContent($nextToken, ' ');
-                            }
-                        }
-                    }
-                }
             }//end if
         }//end while
 
-    }//end process()
+    }//end checkSpacing()
 
 
 }//end class

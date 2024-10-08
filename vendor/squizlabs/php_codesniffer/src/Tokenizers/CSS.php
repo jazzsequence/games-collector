@@ -4,14 +4,14 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tokenizers;
 
-use PHP_CodeSniffer\Util;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Exceptions\TokenizerException;
+use PHP_CodeSniffer\Util;
 
 class CSS extends PHP
 {
@@ -22,7 +22,7 @@ class CSS extends PHP
      *
      * Pre-checks the content to see if it looks minified.
      *
-     * @param string                  $content The content to tokenize,
+     * @param string                  $content The content to tokenize.
      * @param \PHP_CodeSniffer\Config $config  The config data for the run.
      * @param string                  $eolChar The EOL char used in the content.
      *
@@ -180,14 +180,14 @@ class CSS extends PHP
             if ($token['code'] === T_COMMENT
                 && $multiLineComment === false
                 && (substr($token['content'], 0, 2) === '//'
-                || $token['content']{0} === '#')
+                || $token['content'][0] === '#')
             ) {
                 $content = ltrim($token['content'], '#/');
 
                 // Guard against PHP7+ syntax errors by stripping
                 // leading zeros so the content doesn't look like an invalid int.
                 $leadingZero = false;
-                if ($content{0} === '0') {
+                if ($content[0] === '0') {
                     $content     = '1'.$content;
                     $leadingZero = true;
                 }
@@ -196,14 +196,18 @@ class CSS extends PHP
 
                 // The first and last tokens are the open/close tags.
                 array_shift($commentTokens);
-                array_pop($commentTokens);
+                $closeTag = array_pop($commentTokens);
+
+                while ($closeTag['content'] !== '?'.'>') {
+                    $closeTag = array_pop($commentTokens);
+                }
 
                 if ($leadingZero === true) {
                     $commentTokens[0]['content'] = substr($commentTokens[0]['content'], 1);
                     $content = substr($content, 1);
                 }
 
-                if ($token['content']{0} === '#') {
+                if ($token['content'][0] === '#') {
                     // The # character is not a comment in CSS files, so
                     // determine what it means in this context.
                     $firstContent = $commentTokens[0]['content'];
