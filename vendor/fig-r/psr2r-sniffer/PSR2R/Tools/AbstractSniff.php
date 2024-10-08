@@ -8,20 +8,39 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 abstract class AbstractSniff implements Sniff {
 
 	/**
-	 * @var array These markers must remain as inline comments
+	 * @var array<string> These markers must remain as inline comments
 	 */
 	protected static $phpStormMarkers = ['@noinspection'];
 
-	/** @noinspection MoreThanThreeArgumentsInspection */
+	/**
+	 * Checks if the given token is of this token code/type.
+	 *
+	 * @param array|string|int $search
+	 * @param array $token
+*
+	 * @return bool
+	 */
+	protected function isGivenKind($search, array $token) {
+		$search = (array)$search;
+		if (in_array($token['code'], $search, true)) {
+			return true;
+		}
+		if (in_array($token['type'], $search, true)) {
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Checks if the given token scope contains a single or multiple token codes/types.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param string|int|array $search
+	 * @param array|string|int $search
 	 * @param int $start
 	 * @param int $end
 	 * @param bool $skipNested
+*
 	 * @return bool
 	 */
 	protected function contains(File $phpcsFile, $search, $start, $end, $skipNested = true) {
@@ -30,14 +49,17 @@ abstract class AbstractSniff implements Sniff {
 		for ($i = $start; $i <= $end; $i++) {
 			if ($skipNested && $tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
 				$i = $tokens[$i]['parenthesis_closer'];
+
 				continue;
 			}
 			if ($skipNested && $tokens[$i]['code'] === T_OPEN_SHORT_ARRAY) {
 				$i = $tokens[$i]['bracket_closer'];
+
 				continue;
 			}
 			if ($skipNested && $tokens[$i]['code'] === T_OPEN_CURLY_BRACKET) {
 				$i = $tokens[$i]['bracket_closer'];
+
 				continue;
 			}
 
@@ -50,29 +72,12 @@ abstract class AbstractSniff implements Sniff {
 	}
 
 	/**
-	 * Checks if the given token is of this token code/type.
-	 *
-	 * @param array|int|string $search
-	 * @param array $token
-	 * @return bool
-	 */
-	protected function isGivenKind($search, array $token) {
-		$search = (array)$search;
-		if (in_array($token['code'], $search, true)) {
-			return true;
-		}
-		if (in_array($token['type'], $search, true)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Checks if the given token scope requires brackets when used standalone.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openingBraceIndex
 	 * @param int $closingBraceIndex
+*
 	 * @return bool
 	 */
 	protected function needsBrackets(File $phpcsFile, $openingBraceIndex, $closingBraceIndex) {
@@ -95,9 +100,10 @@ abstract class AbstractSniff implements Sniff {
 		for ($i = $openingBraceIndex + 1; $i < $closingBraceIndex; $i++) {
 			if ($tokens[$i]['type'] === 'T_OPEN_PARENTHESIS') {
 				$i = $tokens[$i]['parenthesis_closer'];
+
 				continue;
 			}
-			if (in_array($tokens[$i]['code'], $whitelistedCodes, false)) {
+			if (in_array($tokens[$i]['code'], $whitelistedCodes)) {
 				continue;
 			}
 
@@ -113,19 +119,25 @@ abstract class AbstractSniff implements Sniff {
 	 *
 	 * @return int|null Stackpointer value of docblock end tag, or null if cannot be found
 	 */
-	protected function findRelatedDocBlock(File $phpCsFile, $stackPointer) {
+	protected function findRelatedDocBlock(File $phpCsFile, int $stackPointer): ?int {
 		$tokens = $phpCsFile->getTokens();
 
-		$line = $tokens[$stackPointer]['line'];
-		$beginningOfLine = $stackPointer;
-		while (!empty($tokens[$beginningOfLine - 1]) && $tokens[$beginningOfLine - 1]['line'] === $line) {
-			$beginningOfLine--;
+		$beginningOfLine = $this->getFirstTokenOfLine($tokens, $stackPointer);
+
+		$prevContentIndex = $phpCsFile->findPrevious(T_WHITESPACE, $beginningOfLine - 1, null, true);
+		if (!$prevContentIndex) {
+			return null;
+		}
+		if ($tokens[$prevContentIndex]['type'] === 'T_ATTRIBUTE_END') {
+			$beginningOfLine = $this->getFirstTokenOfLine($tokens, $prevContentIndex);
 		}
 
-		if (!empty($tokens[$beginningOfLine - 2]) &&
-			$tokens[$beginningOfLine - 2]['type'] === 'T_DOC_COMMENT_CLOSE_TAG'
-		) {
+		if (!empty($tokens[$beginningOfLine - 2]) && $tokens[$beginningOfLine - 2]['type'] === 'T_DOC_COMMENT_CLOSE_TAG') {
 			return $beginningOfLine - 2;
+		}
+
+		if (!empty($tokens[$beginningOfLine - 3]) && $tokens[$beginningOfLine - 3]['type'] === 'T_DOC_COMMENT_CLOSE_TAG') {
+			return $beginningOfLine - 3;
 		}
 
 		return null;
@@ -135,6 +147,7 @@ abstract class AbstractSniff implements Sniff {
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $index
 	 * @param int $count
+*
 	 * @return void
 	 */
 	protected function outdent(File $phpcsFile, $index, $count = 1) {
@@ -149,37 +162,25 @@ abstract class AbstractSniff implements Sniff {
 	}
 
 	/**
-	 * @param string $content
-	 * @param bool $correctLength
-	 * @return string
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $index
+	 * @param int $count
+*
+	 * @return void
 	 */
-	protected function getIndentationCharacter($content, $correctLength = false) {
-		if (strpos($content, "\n")) {
-			$parts = explode("\n", $content);
-			array_shift($parts);
-		} else {
-			$parts = (array)$content;
-		}
+	protected function indent(File $phpcsFile, $index, $count = 1) {
+		$tokens = $phpcsFile->getTokens();
+		$char = $this->getIndentationCharacter($tokens[$index]['content'], true);
 
-		$char = "\t";
-		$countTabs = $countSpaces = 0;
-		/** @noinspection PhpUnusedLocalVariableInspection */
-		foreach ($parts as $part) {
-			$countTabs += substr_count($content, $char);
-			$countSpaces += (int)(substr_count($content, ' ') / 4);
-		}
-
-		if ($countSpaces > 3 && $countSpaces > $countTabs) {
-			$char = $correctLength ? '    ' : ' ';
-		}
-
-		return $char;
+		$content = str_repeat($char, $count) . $tokens[$index]['content'];
+		$phpcsFile->fixer->replaceToken($index, $content);
 	}
 
 	/**
 	 * @param string $search
 	 * @param string $replace
 	 * @param string $subject
+*
 	 * @return string
 	 */
 	protected function strReplaceOnce($search, $replace, $subject) {
@@ -192,24 +193,11 @@ abstract class AbstractSniff implements Sniff {
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $index
-	 * @param int $count
-	 * @return void
-	 */
-	protected function indent(File $phpcsFile, $index, $count = 1) {
-		$tokens = $phpcsFile->getTokens();
-		$char = $this->getIndentationCharacter($tokens[$index]['content'], true);
-
-		$content = str_repeat($char, $count) . $tokens[$index]['content'];
-		$phpcsFile->fixer->replaceToken($index, $content);
-	}
-
-	/**
 	 * Get level of indentation, 0 based.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $index
+*
 	 * @return int
 	 */
 	protected function getIndentationLevel(File $phpcsFile, $index) {
@@ -228,8 +216,37 @@ abstract class AbstractSniff implements Sniff {
 	}
 
 	/**
+	 * @param string $content
+	 * @param bool $correctLength
+*
+	 * @return string
+	 */
+	protected function getIndentationCharacter($content, $correctLength = false) {
+		if (strpos($content, "\n")) {
+			$parts = explode("\n", $content);
+			array_shift($parts);
+		} else {
+			$parts = (array)$content;
+		}
+
+		$char = "\t";
+		$countTabs = $countSpaces = 0;
+		foreach ($parts as $part) {
+			$countTabs += substr_count($content, $char);
+			$countSpaces += (int)(substr_count($content, ' ') / 4);
+		}
+
+		if ($countSpaces > 3 && $countSpaces > $countTabs) {
+			$char = $correctLength ? '    ' : ' ';
+		}
+
+		return $char;
+	}
+
+	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $index
+*
 	 * @return string
 	 */
 	protected function getIndentationWhitespace(File $phpcsFile, $index) {
@@ -237,9 +254,7 @@ abstract class AbstractSniff implements Sniff {
 
 		$firstIndex = $this->getFirstTokenOfLine($tokens, $index);
 		$whitespace = '';
-		if ($tokens[$firstIndex]['type'] === 'T_WHITESPACE' ||
-			$tokens[$firstIndex]['type'] === 'T_DOC_COMMENT_WHITESPACE'
-		) {
+		if ($tokens[$firstIndex]['type'] === 'T_WHITESPACE' || $tokens[$firstIndex]['type'] === 'T_DOC_COMMENT_WHITESPACE') {
 			$whitespace = $tokens[$firstIndex]['content'];
 		}
 
@@ -247,8 +262,28 @@ abstract class AbstractSniff implements Sniff {
 	}
 
 	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $index
+*
+	 * @return int
+	 */
+	protected function getIndentationColumn(File $phpcsFile, $index) {
+		$tokens = $phpcsFile->getTokens();
+
+		$firstIndex = $this->getFirstTokenOfLine($tokens, $index);
+
+		$nextIndex = $phpcsFile->findNext(T_WHITESPACE, ($firstIndex + 1), null, true);
+		if ($tokens[$nextIndex]['line'] !== $tokens[$index]['line']) {
+			return 0;
+		}
+
+		return $tokens[$nextIndex]['column'] - 1;
+	}
+
+	/**
 	 * @param array $tokens
 	 * @param int $index
+*
 	 * @return int
 	 */
 	protected function getFirstTokenOfLine(array $tokens, $index) {
@@ -263,24 +298,8 @@ abstract class AbstractSniff implements Sniff {
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $index
-	 * @return int
-	 */
-	protected function getIndentationColumn(File $phpcsFile, $index) {
-		$tokens = $phpcsFile->getTokens();
-
-		$firstIndex = $this->getFirstTokenOfLine($tokens, $index);
-
-		$nextIndex = $phpcsFile->findNext(T_WHITESPACE, $firstIndex + 1, null, true);
-		if ($tokens[$nextIndex]['line'] !== $tokens[$index]['line']) {
-			return 0;
-		}
-		return $tokens[$nextIndex]['column'] - 1;
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpCsFile
+*
 	 * @return bool
 	 */
 	protected function hasNamespace(File $phpCsFile) {
@@ -289,6 +308,7 @@ abstract class AbstractSniff implements Sniff {
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpCsFile
+*
 	 * @return int|null
 	 */
 	protected function findNamespaceIndex(File $phpCsFile) {
@@ -296,11 +316,13 @@ abstract class AbstractSniff implements Sniff {
 		if (!$namespacePosition) {
 			return null;
 		}
+
 		return $namespacePosition;
 	}
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+*
 	 * @return array
 	 */
 	protected function getNamespaceInfo(File $phpcsFile) {
@@ -344,6 +366,7 @@ abstract class AbstractSniff implements Sniff {
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpCsFile
 	 * @param int $stackPtr
+*
 	 * @return bool
 	 */
 	protected function isPhpStormMarker(File $phpCsFile, $stackPtr) {
@@ -361,6 +384,7 @@ abstract class AbstractSniff implements Sniff {
 				return true;
 			}
 		}
+
 		return false;
 	}
 

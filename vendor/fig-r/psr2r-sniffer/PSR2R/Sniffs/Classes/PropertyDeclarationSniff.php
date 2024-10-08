@@ -2,6 +2,7 @@
 
 namespace PSR2R\Sniffs\Classes;
 
+use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
@@ -9,15 +10,16 @@ use PHP_CodeSniffer\Util\Tokens;
 /**
  * Verifies that properties are declared correctly.
  *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 class PropertyDeclarationSniff extends AbstractVariableSniff {
+
 	/**
 	 * @inheritDoc
 	 */
@@ -45,11 +47,47 @@ class PropertyDeclarationSniff extends AbstractVariableSniff {
 			$phpcsFile->addError($error, $stackPtr, 'Multiple');
 		}
 
-		$modifier = $phpcsFile->findPrevious(Tokens::$scopeModifiers, $stackPtr);
-		if (($modifier === false) || ($tokens[$modifier]['line'] !== $tokens[$stackPtr]['line'])) {
+		try {
+			$propertyInfo = $phpcsFile->getMemberProperties($stackPtr);
+			if (empty($propertyInfo) === true) {
+				return;
+			}
+		} catch (Exception $e) {
+			// Turns out not to be a property after all.
+			return;
+		}
+
+		if ($propertyInfo['scope_specified'] === false) {
 			$error = 'Visibility must be declared on property "%s"';
 			$data = [$tokens[$stackPtr]['content']];
 			$phpcsFile->addError($error, $stackPtr, 'ScopeMissing', $data);
+		}
+
+		if ($propertyInfo['scope_specified'] === true && $propertyInfo['is_static'] === true) {
+			$scopePtr = $phpcsFile->findPrevious(Tokens::$scopeModifiers, ($stackPtr - 1));
+			$staticPtr = $phpcsFile->findPrevious(T_STATIC, ($stackPtr - 1));
+			if ($scopePtr < $staticPtr) {
+				return;
+			}
+
+			$error = 'The static declaration must come after the visibility declaration';
+			$fix = $phpcsFile->addFixableError($error, $stackPtr, 'StaticBeforeVisibility');
+			if ($fix === true) {
+				$phpcsFile->fixer->beginChangeset();
+
+				for ($i = ($scopePtr + 1); $scopePtr < $stackPtr; $i++) {
+					if ($tokens[$i]['code'] !== T_WHITESPACE) {
+						break;
+					}
+
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+
+				$phpcsFile->fixer->replaceToken($scopePtr, '');
+				$phpcsFile->fixer->addContentBefore($staticPtr, $propertyInfo['scope'] . ' ');
+
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 
@@ -57,18 +95,14 @@ class PropertyDeclarationSniff extends AbstractVariableSniff {
 	 * @inheritDoc
 	 */
 	protected function processVariable(File $phpcsFile, $stackPtr) {
-		/*
-            We don't care about normal variables.
-        */
+		// We don't care about normal variables.
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function processVariableInString(File $phpcsFile, $stackPtr) {
-		/*
-            We don't care about normal variables.
-        */
+		// We don't care about normal variables.
 	}
 
 }

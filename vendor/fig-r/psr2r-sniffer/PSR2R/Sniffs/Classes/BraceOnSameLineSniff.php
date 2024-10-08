@@ -16,6 +16,18 @@ class BraceOnSameLineSniff implements Sniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [
+			T_CLASS,
+			T_INTERFACE,
+			T_TRAIT,
+			T_FUNCTION,
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 		$errorData = [strtolower($tokens[$stackPtr]['content'])];
@@ -45,18 +57,16 @@ class BraceOnSameLineSniff implements Sniff {
 
 			return;
 		}
-	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [
-			T_CLASS,
-			T_INTERFACE,
-			T_TRAIT,
-			T_FUNCTION,
-		];
+		if ($lastContent === $curlyBrace - 1) {
+			$error = 'Opening brace of a %s must have one whitespace after closing parentheses';
+			$fix = $phpcsFile->addFixableError($error, $curlyBrace, 'OpenBraceWhitespace', $errorData);
+			if ($fix === true) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($lastContent, ' ');
+				$phpcsFile->fixer->endChangeset();
+			}
+		}
 	}
 
 }

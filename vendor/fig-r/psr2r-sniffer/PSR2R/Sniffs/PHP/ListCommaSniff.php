@@ -18,6 +18,13 @@ class ListCommaSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [T_LIST];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
@@ -36,23 +43,17 @@ class ListCommaSniff extends AbstractSniff {
 				$this->clearRange(
 					$phpcsFile,
 					$markIndex,
-					$closeIndex - 1
+					$closeIndex - 1,
 				);
 			}
 		}
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_LIST];
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $startIndex
 	 * @param int $endIndex
+*
 	 * @return void
 	 */
 	protected function clearRange(File $phpcsFile, $startIndex, $endIndex) {

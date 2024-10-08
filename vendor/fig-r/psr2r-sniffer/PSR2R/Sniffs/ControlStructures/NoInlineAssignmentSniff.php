@@ -14,10 +14,19 @@ class NoInlineAssignmentSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		// We skip T_FOR, T_WHILE for now as they can have valid inline assignment
+		return [T_FOREACH, T_IF, T_SWITCH, T_OBJECT_OPERATOR, T_DOUBLE_COLON];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 		if ($tokens[$stackPtr]['code'] === T_OBJECT_OPERATOR || $tokens[$stackPtr]['code'] === T_DOUBLE_COLON) {
 			$this->checkMethodCalls($phpcsFile, $stackPtr);
+
 			return;
 		}
 
@@ -25,16 +34,9 @@ class NoInlineAssignmentSniff extends AbstractSniff {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		// We skip T_FOR, T_WHILE for now as they can have valid inline assignment
-		return [T_FOREACH, T_IF, T_SWITCH, T_OBJECT_OPERATOR, T_DOUBLE_COLON];
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function checkMethodCalls(File $phpcsFile, $stackPtr) {
@@ -61,6 +63,7 @@ class NoInlineAssignmentSniff extends AbstractSniff {
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function checkConditions($phpcsFile, $stackPtr) {
@@ -106,18 +109,21 @@ class NoInlineAssignmentSniff extends AbstractSniff {
 			// We need to skip for complex assignments
 			if ($this->isGivenKind(Tokens::$booleanOperators, $tokens[$currentToken])) {
 				$hasInlineAssignment = false;
+
 				break;
 			}
 
 			// Negations we also cannot handle just yet
 			if ($tokens[$currentToken]['code'] === T_BOOLEAN_NOT) {
 				$hasInlineAssignment = false;
+
 				break;
 			}
 
 			// Comparison inside is also more complex
 			if ($this->isGivenKind(Tokens::$comparisonTokens, $tokens[$currentToken])) {
 				$hasInlineAssignment = false;
+
 				break;
 			}
 

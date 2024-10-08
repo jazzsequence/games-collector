@@ -6,9 +6,15 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'VariableAnalysis\\' => array($vendorDir . '/sirbrillig/phpcs-variable-analysis/VariableAnalysis'),
+    'Spryker\\' => array($vendorDir . '/spryker/code-sniffer/Spryker'),
+    'SprykerStrict\\' => array($vendorDir . '/spryker/code-sniffer/SprykerStrict'),
+    'SlevomatCodingStandard\\' => array($vendorDir . '/slevomat/coding-standard/SlevomatCodingStandard'),
+    'Pantheon\\WPUnitHelpers\\' => array($vendorDir . '/pantheon-systems/wpunit-helpers/src'),
     'PSR2R\\' => array($vendorDir . '/fig-r/psr2r-sniffer/PSR2R'),
+    'PHPStan\\PhpDocParser\\' => array($vendorDir . '/phpstan/phpdoc-parser/src'),
+    'PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => array($vendorDir . '/dealerdirect/phpcodesniffer-composer-installer/src'),
     'ExtCPTs\\Tests\\' => array($vendorDir . '/johnbillion/extended-cpts/tests/integration'),
     'ExtCPTs\\' => array($vendorDir . '/johnbillion/extended-cpts/src'),
-    'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => array($vendorDir . '/dealerdirect/phpcodesniffer-composer-installer/src'),
     'Args\\' => array($vendorDir . '/johnbillion/args/src'),
 );

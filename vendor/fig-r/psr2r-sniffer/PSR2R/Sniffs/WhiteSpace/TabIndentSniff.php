@@ -8,7 +8,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 /**
  * Check for any line starting with 4 spaces - which would indicate space indenting.
  *
- * @author  Mark Scherer
+ * @author Mark Scherer
  * @license MIT
  */
 class TabIndentSniff implements Sniff {
@@ -23,6 +23,13 @@ class TabIndentSniff implements Sniff {
 		'JS',
 		'CSS',
 	];
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [T_WHITESPACE, T_DOC_COMMENT_OPEN_TAG];
+	}
 
 	/**
 	 * @inheritDoc
@@ -45,6 +52,7 @@ class TabIndentSniff implements Sniff {
 					$this->fixSpace($phpcsFile, $i, $tokens);
 				}
 			}
+
 			return;
 		}
 
@@ -57,20 +65,14 @@ class TabIndentSniff implements Sniff {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_WHITESPACE, T_DOC_COMMENT_OPEN_TAG];
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
 	 * @param array $tokens
+	 *
 	 * @return void
 	 */
 	protected function fixTab(File $phpcsFile, $stackPtr, $tokens) {
-		$content = $tokens[$stackPtr]['content'];
+		$content = $tokens[$stackPtr]['orig_content'] ?? $tokens[$stackPtr]['content'];
 		$tabs = 0;
 		while (strpos($content, '    ') === 0) {
 			$content = substr($content, 4);
@@ -90,6 +92,7 @@ class TabIndentSniff implements Sniff {
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
 	 * @param array $tokens
+	 *
 	 * @return void
 	 */
 	protected function fixSpace(File $phpcsFile, $stackPtr, $tokens) {

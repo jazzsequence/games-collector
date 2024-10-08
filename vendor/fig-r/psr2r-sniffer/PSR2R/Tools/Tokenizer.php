@@ -5,6 +5,7 @@ namespace PSR2R\Tools;
 use Exception;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Reporter;
 use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Runner;
 
@@ -14,6 +15,11 @@ if (!class_exists(Config::class) && file_exists($manualAutoload)) {
 }
 
 class Tokenizer {
+
+	/**
+	 * @var string
+	 */
+	public const STANDARD = 'PSR2R/ruleset.xml';
 
 	/**
 	 * @var string
@@ -32,6 +38,7 @@ class Tokenizer {
 
 	/**
 	 * @param array $argv
+*
 	 * @throws \Exception
 	 */
 	public function __construct($argv) {
@@ -43,7 +50,7 @@ class Tokenizer {
 
 		$this->root = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
 		$this->path = $file;
-		$this->verbose = !empty($argv[2]) && in_array($argv[2], ['--verbose', '-v']);
+		$this->verbose = !empty($argv[2]) && in_array($argv[2], ['--verbose', '-v'], true);
 	}
 
 	/**
@@ -72,6 +79,7 @@ class Tokenizer {
 
 	/**
 	 * @param string $path Path
+*
 	 * @return array Tokens
 	 */
 	protected function _getTokens($path) {
@@ -79,9 +87,11 @@ class Tokenizer {
 
 		define('PHP_CODESNIFFER_CBF', false);
 
-		$config = new Config(['--standard=PSR2']);
+		$config = new Config();
 		$phpcs->config = $config;
+		$phpcs->config->standards = [$this->root . static::STANDARD];
 		$phpcs->init();
+		$phpcs->reporter = new Reporter($config);
 
 		$ruleset = new Ruleset($config);
 
@@ -95,6 +105,7 @@ class Tokenizer {
 	/**
 	 * @param int $row Current row
 	 * @param array $tokens Tokens array
+*
 	 * @return array
 	 */
 	protected function _tokenize($row, $tokens) {
@@ -133,6 +144,7 @@ class Tokenizer {
 		if ($this->verbose) {
 			return $pieces;
 		}
+
 		return [implode(' ', $pieces)];
 	}
 

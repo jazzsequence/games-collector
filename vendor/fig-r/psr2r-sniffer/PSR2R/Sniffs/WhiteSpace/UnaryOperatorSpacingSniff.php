@@ -16,6 +16,13 @@ class UnaryOperatorSpacingSniff implements Sniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [T_INC, T_DEC, T_MINUS, T_PLUS, T_NONE, T_ASPERAND, T_BITWISE_AND];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
@@ -36,12 +43,14 @@ class UnaryOperatorSpacingSniff implements Sniff {
 			if ($fix) {
 				$phpcsFile->fixer->replaceToken($stackPtr + 1, '');
 			}
+
 			return;
 		}
 
 		if ($tokens[$stackPtr]['code'] === T_DEC || $tokens[$stackPtr]['code'] === T_INC) {
 			$this->checkBefore($phpcsFile, $stackPtr);
 			$this->checkAfter($phpcsFile, $stackPtr);
+
 			return;
 		}
 
@@ -52,7 +61,7 @@ class UnaryOperatorSpacingSniff implements Sniff {
 			$tokens[$stackPtr]['column'] * -1,
 			true,
 			null,
-			true
+			true,
 		);
 		$operatorSuffixAllowed = in_array(
 			$tokens[$lastSyntaxItem]['code'],
@@ -66,7 +75,7 @@ class UnaryOperatorSpacingSniff implements Sniff {
 				T_VARIABLE,
 				T_STRING,
 			],
-			false
+			false,
 		);
 
 		if ($operatorSuffixAllowed === false
@@ -81,15 +90,9 @@ class UnaryOperatorSpacingSniff implements Sniff {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_INC, T_DEC, T_MINUS, T_PLUS, T_NONE, T_ASPERAND, T_BITWISE_AND];
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function checkBefore(File $phpcsFile, $stackPtr) {
@@ -101,8 +104,11 @@ class UnaryOperatorSpacingSniff implements Sniff {
 				return;
 			}
 
-			$fix = $phpcsFile->addFixableError('No whitespace should be between variable and incrementer.', $stackPtr,
-				'WhitespaceIncrementer');
+			$fix = $phpcsFile->addFixableError(
+				'No whitespace should be between variable and incrementer.',
+				$stackPtr,
+				'WhitespaceIncrementer',
+			);
 			if ($fix) {
 				$phpcsFile->fixer->replaceToken($stackPtr - 1, '');
 			}
@@ -112,6 +118,7 @@ class UnaryOperatorSpacingSniff implements Sniff {
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function checkAfter(File $phpcsFile, $stackPtr) {
@@ -123,8 +130,11 @@ class UnaryOperatorSpacingSniff implements Sniff {
 				return;
 			}
 
-			$fix = $phpcsFile->addFixableError('No whitespace should be between incrementer and variable.', $stackPtr,
-				'WhitespaceVariable');
+			$fix = $phpcsFile->addFixableError(
+				'No whitespace should be between incrementer and variable.',
+				$stackPtr,
+				'WhitespaceVariable',
+			);
 			if ($fix) {
 				$phpcsFile->fixer->replaceToken($stackPtr + 1, '');
 			}

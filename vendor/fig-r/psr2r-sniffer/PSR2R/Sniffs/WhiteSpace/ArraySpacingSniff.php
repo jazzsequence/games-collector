@@ -17,6 +17,13 @@ class ArraySpacingSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [T_OPEN_SHORT_ARRAY];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
@@ -26,15 +33,9 @@ class ArraySpacingSniff extends AbstractSniff {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_OPEN_SHORT_ARRAY];
-	}
-
-	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function checkBeginning(File $phpcsFile, $stackPtr) {
@@ -57,6 +58,7 @@ class ArraySpacingSniff extends AbstractSniff {
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
+*
 	 * @return void
 	 */
 	protected function checkEnding(File $phpcsFile, $stackPtr) {

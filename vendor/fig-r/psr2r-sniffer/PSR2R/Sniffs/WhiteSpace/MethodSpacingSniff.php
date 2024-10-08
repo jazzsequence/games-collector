@@ -16,6 +16,13 @@ class MethodSpacingSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
+	public function register(): array {
+		return [T_FUNCTION];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
@@ -48,6 +55,7 @@ class MethodSpacingSniff extends AbstractSniff {
 		$nextContentIndex = $phpcsFile->findNext(T_WHITESPACE, $braceStartIndex + 1, null, true);
 		if ($nextContentIndex === $braceEndIndex) {
 			$this->assertNoAdditionalNewlinesForEmptyBody($phpcsFile, $braceStartIndex, $braceEndIndex);
+
 			return;
 		}
 
@@ -68,13 +76,6 @@ class MethodSpacingSniff extends AbstractSniff {
 				$phpcsFile->fixer->replaceToken($lastContentIndex + 1, '');
 			}
 		}
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		return [T_FUNCTION];
 	}
 
 	/**
