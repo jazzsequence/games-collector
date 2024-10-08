@@ -19,7 +19,7 @@ class GC_Test_Shortcode extends WP_UnitTestCase {
 	/**
 	 * Hook into the unit test setup function to set some stuff up.
 	 */
-	public function setUp() {
+	public function setUp() : void {
 		// Create some games.
 		$chrononauts = $this->factory->post->create([
 			'post_title' => 'Chrononauts',

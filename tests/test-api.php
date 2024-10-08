@@ -19,7 +19,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	/**
 	 * Kick off the rest api.
 	 */
-	public function setUp() {
+	public function setUp() : void {
 		parent::setUp();
 		global $wp_rest_server;
 		$wp_rest_server = new \WP_Rest_Server();
