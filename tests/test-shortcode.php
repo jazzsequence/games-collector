@@ -449,7 +449,7 @@ class GC_Test_Shortcode extends \WP_UnitTestCase {
 			'Shortcode output did not match expected output.'
 		);
 
-		foreach( ['chrononauts', 'hanabi'] as $game ) {			
+		foreach ( [ 'chrononauts', 'hanabi' ] as $game ) {         
 			// Make sure we can get more than one game as an array.
 			$this->assertStringContainsString(
 				$games[ $game ]->post_title,

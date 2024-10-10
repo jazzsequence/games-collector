@@ -3,7 +3,7 @@
  * Plugin Name: Games Collector
  * Plugin URI:  https://github.com/jazzsequence/games-collector
  * Description: Catalog all your tabletop (or other) games in your WordPress site and display a list of games in your collection.
- * Version:     1.3.4
+ * Version:     1.3.6
  * Author:      Chris Reynolds
  * Author URI:  https://jazzsequence.com
  * Donate link: https://paypal.me/jazzsequence
@@ -43,16 +43,32 @@ namespace GC\GamesCollector;
  * @since 1.1.0
  */
 function autoload_init() {
+	$cmb2_path = maybe_get_cmb2_path();
+
 	// Add in some specific includes and vendor libraries.
 	$files = [
-		__DIR__ . '/vendor/cmb2/cmb2/init.php',
 		__DIR__ . '/inc/namespace.php',
 		__DIR__ . '/inc/functions.php',
 	];
 
+	// Only add CMB2 if we found it.
+	if ( $cmb2_path ) {
+		$files[] = $cmb2_path;
+	}
+
 	// Check for extended cpts, load it if it hasn't already been loaded.
 	if ( ! function_exists( 'register_extended_post_type' ) ) {
-		$files[] = __DIR__ . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		$plugin_vendor = __DIR__ . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		$root_vendor = ABSPATH . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		
+		// Check if extended cpts exists. If not, deactivate the plugin.
+		$exists = file_exists( $plugin_vendor ) || file_exists( $root_vendor );
+		if ( $exists ) {
+			$files[] = $exists ? $plugin_vendor : $root_vendor;
+		} else {
+			// If it's not loaded, deactivate the plugin.
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
 	}
 
 	// Autoload the namespaces.
@@ -68,6 +84,42 @@ function autoload_init() {
 }
 
 /**
+ * Try to get the path to the CMB2 library.
+ *
+ * @since 1.3.6
+ */
+function maybe_get_cmb2_path() {
+	// If the CMB2 library is already loaded, we don't need to load it.
+	if ( function_exists( 'cmb2_bootstrap' ) ) {
+		return '';
+	}
+
+	// Maybe load from the vendor directory.
+	if ( file_exists( __DIR__ . '/vendor/cmb2/init.php' ) ) {
+		return __DIR__ . '/vendor/cmb2/init.php';
+	}
+
+	// Maybe load from the root /vendor directory.
+	if ( file_exists( ABSPATH . '/vendor/cmb2/init.php' ) ) {
+		return ABSPATH . '/vendor/cmb2/init.php';
+	}
+
+	// Was it installed as a plugin?
+	if ( file_exists( WP_PLUGIN_DIR . '/cmb2/init.php' ) ) {
+		// Activate the plugin.
+		activate_plugin( 'cmb2' );
+	}
+
+	// Last chance, maybe it's in the mu-plugins directory. If it's here, it should already be activated.
+	if ( file_exists( WPMU_PLUGIN_DIR . '/cmb2/init.php' ) ) {
+		return WPMU_PLUGIN_DIR . '/cmb2/init.php';
+	}
+
+	// If we got here, we couldn't find CMB2.
+	return '';
+}
+
+/**
  * Main initialization function.
  *
  * @since 1.1.0
@@ -75,6 +127,12 @@ function autoload_init() {
 function init() {
 	// Load all the required files.
 	autoload_init();
+
+	// If CMB2 was not loaded, deactivate ourself.
+	if ( ! function_exists( 'cmb2_bootstrap' ) ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		return;
+	}
 
 	// Register activation hook.
 	register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
