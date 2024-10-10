@@ -47,10 +47,14 @@ function autoload_init() {
 
 	// Add in some specific includes and vendor libraries.
 	$files = [
-		$cmb2_path,
 		__DIR__ . '/inc/namespace.php',
 		__DIR__ . '/inc/functions.php',
 	];
+
+	// Only add CMB2 if we found it.
+	if ( $cmb2_path ) {
+		$files[] = $cmb2_path;
+	}
 
 	// Check for extended cpts, load it if it hasn't already been loaded.
 	if ( ! function_exists( 'register_extended_post_type' ) ) {
