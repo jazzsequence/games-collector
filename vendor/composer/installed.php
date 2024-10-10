@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'jazzsequence/games-collector',
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'reference' => '4deaa55152aa1117c0cf2d4fe3c183f1ee852a68',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '0dd5d612c2011e2ce8a248ca927488078970e1e5',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -65,9 +65,9 @@
             'dev_requirement' => false,
         ),
         'jazzsequence/games-collector' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'reference' => '4deaa55152aa1117c0cf2d4fe3c183f1ee852a68',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '0dd5d612c2011e2ce8a248ca927488078970e1e5',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
