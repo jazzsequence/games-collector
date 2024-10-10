@@ -112,6 +112,12 @@ function init() {
 	// Load all the required files.
 	autoload_init();
 
+	// If CMB2 was not loaded, deactivate ourself.
+	if ( ! function_exists( 'cmb2_bootstrap' ) ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		return;
+	}
+
 	// Register activation hook.
 	register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
