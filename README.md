@@ -41,6 +41,12 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 
 ## Changelog ##
 
+### 1.3.6 ###
+* Added handling for when CMB2 (or Extended CPTs) is not loaded correctly. [[#73](https://github.com/jazzsequence/games-collector/pull/73)]
+
+### 1.3.5 ###
+* Added actual `composer.json` file so the plugin could be installed via Packagist. [[#71](https://github.com/jazzsequence/games-collector/pull/71)]
+
 ### 1.3.4 ###
 * use the jQuery implementation of Isotope
 
