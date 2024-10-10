@@ -7,7 +7,7 @@
 **Tags:**  
 **Requires at least:** 4.4  
 **Tested up to:**      5.2.4  
-**Stable tag:**        1.3.4  
+**Stable tag:**        1.3.6  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
 **Demo:**              https://jazzsequence.com/games/
