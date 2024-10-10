@@ -43,9 +43,11 @@ namespace GC\GamesCollector;
  * @since 1.1.0
  */
 function autoload_init() {
+	$cmb2_path = maybe_get_cmb2_path();
+
 	// Add in some specific includes and vendor libraries.
 	$files = [
-		__DIR__ . '/vendor/cmb2/cmb2/init.php',
+		$cmb2_path,
 		__DIR__ . '/inc/namespace.php',
 		__DIR__ . '/inc/functions.php',
 	];
