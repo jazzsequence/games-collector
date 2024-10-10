@@ -58,7 +58,17 @@ function autoload_init() {
 
 	// Check for extended cpts, load it if it hasn't already been loaded.
 	if ( ! function_exists( 'register_extended_post_type' ) ) {
-		$files[] = __DIR__ . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		$plugin_vendor = __DIR__ . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		$root_vendor = ABSPATH . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		
+		// Check if extended cpts exists. If not, deactivate the plugin.
+		$exists = file_exists( $plugin_vendor ) || file_exists( $root_vendor );
+		if ( $exists ) {
+			$files[] = $exists ? $plugin_vendor : $root_vendor;
+		} else {
+			// If it's not loaded, deactivate the plugin.
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
 	}
 
 	// Autoload the namespaces.
