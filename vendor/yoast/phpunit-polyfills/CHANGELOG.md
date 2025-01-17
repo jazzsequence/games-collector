@@ -2,12 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
-This projects adheres to [Keep a CHANGELOG](http://keepachangelog.com/) and uses [Semantic Versioning](http://semver.org/).
+This projects adheres to [Keep a CHANGELOG](http://keepachangelog.com/) and uses [Semantic Versioning](https://semver.org/).
 
 
 ## [Unreleased]
 
 _Nothing yet._
+
+## [3.1.1] - 2025-01-12
+
+### Fixed
+* AssertContainsOnly::assertContainsNotOnlyInstancesOf(): incorrect parameter name. PR [#235]
+
+### Changed
+* General housekeeping.
+
+[#235]: https://github.com/Yoast/PHPUnit-Polyfills/pull/235
+
+
+## [3.1.0] - 2025-01-08
+
+### Added
+* `Yoast\PHPUnitPolyfills\Polyfills\AssertContainsOnly` trait to polyfill the specialized `Assert::assertContains[Not]Only*()` methods as introduced in PHPUnit 11.5.0. PR [#225].
+
+### Changed
+* README: fix links which were broken due to an upstream branch removal. PR [#213].
+* README: fixed a few broken badges.
+* General housekeeping.
+
+[#213]: https://github.com/Yoast/PHPUnit-Polyfills/pull/213
+[#225]: https://github.com/Yoast/PHPUnit-Polyfills/pull/225
+
 
 ## [3.0.0] - 2024-09-07
 
@@ -62,6 +87,15 @@ _In practical terms, the net effect of this is that tests on PHP 8.1 will run on
 [#200]: https://github.com/Yoast/PHPUnit-Polyfills/pull/200
 
 [readme-on-expectuserdeprecation]: https://github.com/Yoast/PHPUnit-Polyfills/tree/3.x?tab=readme-ov-file#phpunit--1100-yoastphpunitpolyfillspolyfillsexpectuserdeprecation
+
+
+## [2.0.3] - 2025-01-08
+
+This is a maintenance release.
+
+### Changed
+* README: fixed a few broken badges.
+* General housekeeping.
 
 
 ## [2.0.2] - 2024-09-07
@@ -142,6 +176,15 @@ Projects which don't use any of the new or removed functionality in their test s
 [#110]: https://github.com/Yoast/PHPUnit-Polyfills/pull/110
 [#116]: https://github.com/Yoast/PHPUnit-Polyfills/pull/116
 [#130]: https://github.com/Yoast/PHPUnit-Polyfills/pull/130
+
+
+## [1.1.3] - 2025-01-08
+
+This is a maintenance release.
+
+### Changed
+* README: fixed a few broken badges.
+* General housekeeping.
 
 
 ## [1.1.2] - 2024-09-07
@@ -323,11 +366,15 @@ As of version 2.15.0 of the `shivammathur/setup-php` action for GitHub Actions, 
 Initial release.
 
 
-[Unreleased]: https://github.com/Yoast/PHPUnit-Polyfills/compare/3.x...HEAD
-[3.0.0]: https://github.com/Yoast/PHPUnit-Polyfills/compare/2.0.2...3.0.0
+[Unreleased]: https://github.com/Yoast/PHPUnit-Polyfills/compare/main...HEAD
+[3.1.1]: https://github.com/Yoast/PHPUnit-Polyfills/compare/3.1.0...3.1.1
+[3.1.0]: https://github.com/Yoast/PHPUnit-Polyfills/compare/3.0.0...3.1.0
+[3.0.0]: https://github.com/Yoast/PHPUnit-Polyfills/compare/2.0.3...3.0.0
+[2.0.3]: https://github.com/Yoast/PHPUnit-Polyfills/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/Yoast/PHPUnit-Polyfills/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/Yoast/PHPUnit-Polyfills/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/Yoast/PHPUnit-Polyfills/compare/1.1.2...2.0.0
+[2.0.0]: https://github.com/Yoast/PHPUnit-Polyfills/compare/1.1.3...2.0.0
+[1.1.3]: https://github.com/Yoast/PHPUnit-Polyfills/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/Yoast/PHPUnit-Polyfills/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/Yoast/PHPUnit-Polyfills/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/Yoast/PHPUnit-Polyfills/compare/1.0.5...1.1.0

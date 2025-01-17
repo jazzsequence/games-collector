@@ -72,7 +72,7 @@ function get_bgg_search_results( $query ) {
 	$response = wp_remote_get( bgg_search( $query ) );
 	$results  = [];
 
-	if ( isset( $response['response'] ) && 200 === $response['response']['code'] ) {
+	if ( ! is_wp_error( $response ) && isset( $response['response'] ) && 200 === $response['response']['code'] ) {
 		$xml  = simplexml_load_string( wp_remote_retrieve_body( $response ) );
 
 		if ( isset( $xml->boardgame ) ) {

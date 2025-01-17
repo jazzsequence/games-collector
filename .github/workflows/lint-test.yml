@@ -11,10 +11,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Lint
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist --no-cache -vvv
+      - name: Why?
         run: |
-          composer install
-          composer lint
+          if [ -z "$(ls -A vendor/automattic/vipwpcs)" ]; then
+            echo "VIPWPCS is empty"
+            git clone https://github.com/Automattic/VIP-Coding-Standards.git vendor/automattic/vipwpcs
+          else
+            echo "VIPWPCS is not empty"
+          fi
+      - name: Lint
+        run: composer lint
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -32,6 +40,5 @@ jobs:
         run: | 
           composer install
           chmod +x bin/*.sh
-          bash ./bin/phpunit-test.sh
       - name: Test
-        run: composer test
+        run: bash ./bin/phpunit-test.sh
