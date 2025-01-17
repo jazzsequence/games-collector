@@ -16,6 +16,8 @@ jobs:
       - name: Why?
         run: |
           composer why automattic/vipwpcs
+          vendor/bin/phpcs -i
+          ls -la vendor/automattic/vipwpcs
       - name: Lint
         run: composer lint
   test:
