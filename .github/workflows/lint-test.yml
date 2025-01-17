@@ -15,8 +15,12 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
       - name: List Registered PHPCS Standards
         run: |
+          if vendor/bin/phpcs -i | grep -q 'WordPressVIPMinimum'; then
+            echo "WordPressVIPMinimum standard is installed.";
+          else
+            vendor/bin/phpcs --config-set installed_paths vendor/automattic/vipwpcs
+          fi
           vendor/bin/phpcs -i
-          composer show | grep vipwpcs
       - name: Lint
         run: composer lint
   test:
