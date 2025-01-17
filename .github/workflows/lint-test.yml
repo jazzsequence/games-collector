@@ -15,9 +15,12 @@ jobs:
         run: composer install --no-interaction --prefer-dist --no-cache -vvv
       - name: Why?
         run: |
-          composer why automattic/vipwpcs
-          vendor/bin/phpcs -i
-          ls -la vendor/automattic/vipwpcs
+          if [ -z "$(ls -A vendor/automattic/vipwpcs)" ]; then
+            echo "VIPWPCS is empty"
+            git clone https://github.com/Automattic/VIP-Coding-Standards.git vendor/automattic/vipwpcs
+          else
+            echo "VIPWPCS is not empty"
+          fi
       - name: Lint
         run: composer lint
   test:
