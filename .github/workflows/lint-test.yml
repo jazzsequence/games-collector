@@ -14,7 +14,9 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
       - name: List Registered PHPCS Standards
-        run: vendor/bin/phpcs -i      
+        run: |
+          vendor/bin/phpcs -i
+          composer show | grep vipwpcs
       - name: Lint
         run: composer lint
   test:
