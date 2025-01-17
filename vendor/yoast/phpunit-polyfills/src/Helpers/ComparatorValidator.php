@@ -19,9 +19,11 @@ use Yoast\PHPUnitPolyfills\Exceptions\InvalidComparisonMethodException;
  * ---------------------------------------------------------------------------------------------
  *
  * @internal
+ *
+ * @since 3.0.0
  */
 final class ComparatorValidator {
-	
+
 	/**
 	 * Asserts that a custom object comparison method complies with the requirements set by PHPUnit.
 	 *
