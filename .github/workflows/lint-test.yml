@@ -26,9 +26,15 @@ jobs:
               vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,$VIPWPCS_PATH"
             fi
           fi
+          echo "dumping phpcs -i"
           vendor/bin/phpcs -i
+          echo "dumping phpcs config"
           vendor/bin/phpcs --config-show
+          echo "show composer config"
           composer show -t
+          echo "debug automattic/vipwpcs/WordPressVIPMinimum"
+          ls -la vendor/automattic/vipwpcs/
+          ls -la vendor/automattic/vipwpcs/WordPressVIPMinimum
           cat vendor/automattic/vipwpcs/WordPressVIPMinimum/ruleset.xml
       - name: Lint
         run: composer lint
