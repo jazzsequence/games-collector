@@ -11,8 +11,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Dependencies
-        run: composer install
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: List Registered PHPCS Standards
+        run: vendor/bin/phpcs -i      
       - name: Lint
         run: composer lint
   test:
