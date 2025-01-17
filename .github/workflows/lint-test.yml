@@ -18,15 +18,18 @@ jobs:
       - name: Append VIPWPCS Path
         run: |
           CURRENT_PATHS=$(vendor/bin/phpcs --config-show | grep installed_paths | awk '{print $2}')
+          VIPWPCS_PATH="vendor/automattic/vipwpcs/WordPressVIPMinimum"
           if [ -z "$CURRENT_PATHS" ]; then
-            vendor/bin/phpcs --config-set installed_paths vendor/automattic/vipwpcs
+            vendor/bin/phpcs --config-set installed_paths "$VIPWPCS_PATH"
           else
-            vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,vendor/automattic/vipwpcs"
+            if ! echo "$CURRENT_PATHS" | grep -q "$VIPWPCS_PATH"; then
+              vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,$VIPWPCS_PATH"
+            fi
           fi
           vendor/bin/phpcs -i
           vendor/bin/phpcs --config-show
           composer show -t
-          cat vendor/automattic/vipwpcs/ruleset.xml
+          cat vendor/automattic/vipwpcs/WordPressVIPMinimum/ruleset.xml
       - name: Lint
         run: composer lint
   test:
