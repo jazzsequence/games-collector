@@ -13,23 +13,20 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-      - name: Ensure VIPWPCS Standard is Installed
+      - name: Check VIPWPCS Directory
+        run: ls -la vendor/automattic/vipwpcs
+      - name: Append VIPWPCS Path
         run: |
-            # Get the current installed_paths
-            CURRENT_PATHS=$(vendor/bin/phpcs --config-show | grep installed_paths | awk '{print $2}')
-
-            # Define all required paths
-            REQUIRED_PATHS="vendor/automattic/vipwpcs,vendor/pantheon-systems/pantheon-wp-coding-standards"
-
-            # If CURRENT_PATHS is empty, set it to all required paths
-            if [ -z "$CURRENT_PATHS" ]; then
-              vendor/bin/phpcs --config-set installed_paths "$REQUIRED_PATHS"
-            else
-              vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,vendor/automattic/vipwpcs"
-            fi
-            
-            # List registered standards
-            vendor/bin/phpcs -i
+          CURRENT_PATHS=$(vendor/bin/phpcs --config-show | grep installed_paths | awk '{print $2}')
+          if [ -z "$CURRENT_PATHS" ]; then
+            vendor/bin/phpcs --config-set installed_paths vendor/automattic/vipwpcs
+          else
+            vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,vendor/automattic/vipwpcs"
+          fi
+          vendor/bin/phpcs -i
+          vendor/bin/phpcs --config-show
+          composer show -t
+          cat vendor/automattic/vipwpcs/ruleset.xml
       - name: Lint
         run: composer lint
   test:
