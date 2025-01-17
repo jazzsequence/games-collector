@@ -13,29 +13,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-      - name: Check VIPWPCS Directory
-        run: ls -la vendor/automattic/vipwpcs
-      - name: Append VIPWPCS Path
-        run: |
-          CURRENT_PATHS=$(vendor/bin/phpcs --config-show | grep installed_paths | awk '{print $2}')
-          VIPWPCS_PATH="vendor/automattic/vipwpcs/WordPressVIPMinimum"
-          if [ -z "$CURRENT_PATHS" ]; then
-            vendor/bin/phpcs --config-set installed_paths "$VIPWPCS_PATH"
-          else
-            if ! echo "$CURRENT_PATHS" | grep -q "$VIPWPCS_PATH"; then
-              vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,$VIPWPCS_PATH"
-            fi
-          fi
-          echo "dumping phpcs -i"
-          vendor/bin/phpcs -i
-          echo "dumping phpcs config"
-          vendor/bin/phpcs --config-show
-          echo "show composer config"
-          composer show -t
-          echo "debug automattic/vipwpcs/WordPressVIPMinimum"
-          ls -la vendor/automattic/vipwpcs/
-          ls -la vendor/automattic/vipwpcs/WordPressVIPMinimum
-          cat vendor/automattic/vipwpcs/WordPressVIPMinimum/ruleset.xml
       - name: Lint
         run: composer lint
   test:
