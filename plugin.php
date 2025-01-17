@@ -65,9 +65,12 @@ function autoload_init() {
 		$exists = file_exists( $plugin_vendor ) || file_exists( $root_vendor );
 		if ( $exists ) {
 			$files[] = $exists ? $plugin_vendor : $root_vendor;
-		} else {
+		} elseif ( function_exists( 'deactivate_plugins' ) ) {
 			// If it's not loaded, deactivate the plugin.
 			deactivate_plugins( plugin_basename( __FILE__ ) );
+		} else {
+			// Something else happened, bail now.
+			return \WP_Error( 'init_error', __( 'Error initializing the plugin. Could not find extended-cpts library and could not deactivate the plugin. Giving up.', 'games-collector' ) );
 		}
 	}
 
@@ -129,7 +132,7 @@ function init() {
 	autoload_init();
 
 	// If CMB2 was not loaded, deactivate ourself.
-	if ( ! function_exists( 'cmb2_bootstrap' ) ) {
+	if ( ! function_exists( 'cmb2_bootstrap' ) && function_exists( 'deactivate_plugins' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		return;
 	}
