@@ -32,6 +32,5 @@ jobs:
         run: | 
           composer install
           chmod +x bin/*.sh
-          bash ./bin/phpunit-test.sh
       - name: Test
-        run: composer test
+        run: bash ./bin/phpunit-test.sh
