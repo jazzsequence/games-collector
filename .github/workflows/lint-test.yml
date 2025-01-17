@@ -13,11 +13,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --no-cache -vvv
-      - name: Reinstall VIPWPCS
+      - name: Why?
         run: |
-          composer remove automattic/vipwpcs
-          composer require --dev automattic/vipwpcs --no-cache
-          ls -la vendor/automattic/vipwpcs
+          composer why automattic/vipwpcs
       - name: Lint
         run: composer lint
   test:
