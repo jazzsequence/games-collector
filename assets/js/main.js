@@ -1,1 +1,95 @@
-window.GamesCollector={},function(e,t,i){i.init=function(){i.meetsRequirements&&(i.cache(),i.bindEvents())},i.cache=function(){i.$c={window:t(e),buttons:t(".games-filter-group"),grid:t(".games-collector-list"),playersFilter:t(".players-filter-select"),difficultyFilter:t(".difficulty-filter-select")}},i.bindEvents=function(){i.$c.buttons.on("click","button",i.filterCategories),i.$c.playersFilter.on("change",i.filterDropdown),i.$c.difficultyFilter.on("change",i.filterDropdown)},i.meetsRequirements=function(){return i.$c.grid.length},i.filterCategories=function(){filterValue=t(this).attr("data-filter"),i.filter(filterValue)},i.filterDropdown=function(){i.filter(this.value)},i.filter=function(e){i.$c.grid.isotope({itemSelector:".game-single",vertical:{horizontalAlignment:0},filter:e})},t(i.init)}(window,jQuery,window.GamesCollector);
+/******/ (() => { // webpackBootstrap
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
+(() => {
+"use strict";
+/**
+ * Games Collector Frontend
+ *
+ * All the js that isn't relating to Isotope.
+ */
+
+// Load the frontend styles.
+
+})();
+
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other entry modules.
+(() => {
+/**
+ * Games Collector Isotope handler.
+ */
+window.GamesCollector = {};
+(function (window, $, plugin) {
+  /**
+   * Constructor
+   */
+  plugin.init = function () {
+    if (plugin.meetsRequirements) {
+      plugin.cache();
+      plugin.bindEvents();
+    }
+  };
+
+  /**
+   * Cache all the things.
+   */
+  plugin.cache = function () {
+    plugin.$c = {
+      window: $(window),
+      buttons: $('.games-filter-group'),
+      grid: $('.games-collector-list'),
+      playersFilter: $('.players-filter-select'),
+      difficultyFilter: $('.difficulty-filter-select')
+    };
+  };
+
+  /**
+   * Combine all events.
+   */
+  plugin.bindEvents = function () {
+    plugin.$c.buttons.on('click', 'button', plugin.filterCategories);
+    plugin.$c.playersFilter.on('change', plugin.filterDropdown);
+    plugin.$c.difficultyFilter.on('change', plugin.filterDropdown);
+  };
+
+  /**
+   * Check if we meet the requirements.
+   */
+  plugin.meetsRequirements = function () {
+    return plugin.$c.grid.length;
+  };
+
+  /**
+   * Filter based on category buttons.
+   */
+  plugin.filterCategories = function () {
+    filterValue = $(this).attr('data-filter');
+    plugin.filter(filterValue);
+  };
+
+  /**
+   * Filter based on dropdowns.
+   */
+  plugin.filterDropdown = function () {
+    plugin.filter(this.value);
+  };
+
+  /**
+   * Run Isotope to filter the list.
+   */
+  plugin.filter = function (filterValue) {
+    plugin.$c.grid.isotope({
+      itemSelector: '.game-single',
+      vertical: {
+        horizontalAlignment: 0
+      },
+      filter: filterValue
+    });
+  };
+
+  // Engage!
+  $(plugin.init);
+})(window, jQuery, window.GamesCollector);
+})();
+
+/******/ })()
+;
