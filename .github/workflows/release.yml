@@ -54,7 +54,7 @@ jobs:
       - name: Build assets
         if: steps.tag_check.outputs.exists == 'false'
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       - name: Create plugin zip
