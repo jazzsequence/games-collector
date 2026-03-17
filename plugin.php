@@ -40,6 +40,8 @@
 
 namespace GC\GamesCollector;
 
+define( 'GC_VERSION', '2.0.0' );
+
 /**
  * Handles autoloading the namespaces and other required files.
  *
