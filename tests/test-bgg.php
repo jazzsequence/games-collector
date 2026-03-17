@@ -39,6 +39,159 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Register the BGG HTTP mock before each test.
+	 */
+	public function setUp(): void {
+		parent::setUp();
+		add_filter( 'pre_http_request', [ __CLASS__, 'mock_bgg_http' ], 10, 3 );
+	}
+
+	/**
+	 * Remove the BGG HTTP mock after each test.
+	 */
+	public function tearDown(): void {
+		remove_filter( 'pre_http_request', [ __CLASS__, 'mock_bgg_http' ], 10 );
+		parent::tearDown();
+	}
+
+	/**
+	 * Intercept all BGG HTTP requests and return fixture data.
+	 *
+	 * Prevents tests from making real network calls to boardgamegeek.com.
+	 * BGG now requires a registered Bearer token for API access; mocking
+	 * ensures the test suite remains self-contained and deterministic.
+	 *
+	 * @since 2.0.0
+	 * @param  mixed  $preempt Whether to preempt (false = don't intercept).
+	 * @param  array  $args    Request arguments (may contain 'filename' for streaming).
+	 * @param  string $url     Request URL.
+	 * @return mixed           Preempted response array, or original $preempt.
+	 */
+	public static function mock_bgg_http( $preempt, $args, $url ) {
+		if ( false === strpos( $url, 'boardgamegeek.com' ) && false === strpos( $url, 'geekdo-images.com' ) ) {
+			return $preempt;
+		}
+
+		// BGG v1 search endpoint.
+		if ( false !== strpos( $url, '/xmlapi/search' ) ) {
+			return [
+				'response'      => [
+					'code' => 200,
+					'message' => 'OK',
+				],
+				'headers'       => [],
+				'body'          => self::bgg_search_xml(),
+				'cookies'       => [],
+				'http_response' => null,
+			];
+		}
+
+		// BGG v2 game detail endpoint.
+		if ( false !== strpos( $url, '/xmlapi2/thing' ) ) {
+			return [
+				'response'      => [
+					'code' => 200,
+					'message' => 'OK',
+				],
+				'headers'       => [],
+				'body'          => self::bgg_game_xml(),
+				'cookies'       => [],
+				'http_response' => null,
+			];
+		}
+
+		// BGG CDN image download (called by media_sideload_image via download_url).
+		if ( false !== strpos( $url, 'geekdo-images.com' ) ) {
+			$image = self::minimal_png();
+
+			/*
+			 * download_url() passes 'filename' in the request args so WordPress
+			 * can stream the response to disk. Write our PNG fixture there so
+			 * media_sideload_image can process it normally.
+			 */
+			if ( ! empty( $args['filename'] ) ) {
+				// phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
+				file_put_contents( $args['filename'], $image );
+			}
+
+			return [
+				'response'      => [
+					'code' => 200,
+					'message' => 'OK',
+				],
+				'headers'       => [],
+				'body'          => $image,
+				'cookies'       => [],
+				'http_response' => null,
+			];
+		}
+
+		return $preempt;
+	}
+
+	/**
+	 * Fixture: BGG v1 search XML for 'hero realms'.
+	 *
+	 * @since 2.0.0
+	 * @return string
+	 */
+	private static function bgg_search_xml(): string {
+		return '<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<boardgames termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
+  <boardgame objectid="218">
+    <yearpublished>2016</yearpublished>
+    <minplayers>2</minplayers>
+    <maxplayers>4</maxplayers>
+    <playingtime>20</playingtime>
+    <name primary="true" sortindex="1">Hero Realms</name>
+  </boardgame>
+  <boardgame objectid="219">
+    <yearpublished>2017</yearpublished>
+    <name primary="true" sortindex="1">Hero Realms: Character Pack - Cleric</name>
+  </boardgame>
+</boardgames>';
+	}
+
+	/**
+	 * Fixture: BGG v2 game detail XML.
+	 *
+	 * Returns Dominion (ID 36218) data, which is what the existing tests assert.
+	 *
+	 * @since 2.0.0
+	 * @return string
+	 */
+	private static function bgg_game_xml(): string {
+		return '<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<items version="2" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
+  <item type="boardgame" id="36218">
+    <thumbnail>https://cf.geekdo-images.com/thumb/dominion.jpg</thumbnail>
+    <image>https://cf.geekdo-images.com/original/dominion.jpg</image>
+    <name type="primary" sortindex="1" value="Dominion"/>
+    <description>A card game about deck building.</description>
+    <minplayers value="2"/>
+    <maxplayers value="4"/>
+    <minplaytime value="30"/>
+    <maxplaytime value="30"/>
+    <minage value="13"/>
+    <link type="boardgamecategory" id="1081" value="Card Game"/>
+    <link type="boardgamecategory" id="1052" value="Medieval"/>
+    <link type="boardgamemechanic" id="2664" value="Deck Building"/>
+  </item>
+</items>';
+	}
+
+	/**
+	 * Fixture: minimal valid 1×1 PNG for image sideload tests.
+	 *
+	 * @since 2.0.0
+	 * @return string Binary PNG content.
+	 */
+	private static function minimal_png(): string {
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+		return base64_decode( 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQAABjE+ibYAAAAASUVORK5CYII=' );
+	}
+
+	/**
 	 * Get the queried game from search results.
 	 *
 	 * @since  1.2.0
