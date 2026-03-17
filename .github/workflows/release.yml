@@ -34,6 +34,46 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Set up Node.js
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Build assets
+        if: steps.tag_check.outputs.exists == 'false'
+        run: |
+          npm ci
+          npm run build
+
+      - name: Create plugin zip
+        if: steps.tag_check.outputs.exists == 'false'
+        run: |
+          PLUGIN_SLUG="games-collector"
+          mkdir -p "/tmp/${PLUGIN_SLUG}"
+          rsync -av \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitignore' \
+            --exclude='.scrutinizer.yml' \
+            --exclude='.travis.yml' \
+            --exclude='node_modules' \
+            --exclude='vendor' \
+            --exclude='tests' \
+            --exclude='assets/sass' \
+            --exclude='composer.json' \
+            --exclude='composer.lock' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            --exclude='webpack.config.js' \
+            --exclude='phpcs.xml' \
+            --exclude='phpunit.xml.dist' \
+            ./ "/tmp/${PLUGIN_SLUG}/"
+          cd /tmp
+          zip -r "${PLUGIN_SLUG}.zip" "${PLUGIN_SLUG}"
+          echo "zip_path=/tmp/${PLUGIN_SLUG}.zip" >> "$GITHUB_ENV"
+
       - name: Create tag
         if: steps.tag_check.outputs.exists == 'false'
         run: |
@@ -50,4 +90,5 @@ jobs:
           gh release create "${{ steps.version.outputs.tag }}" \
             --title "Release ${{ steps.version.outputs.tag }}" \
             --generate-notes \
-            --latest
+            --latest \
+            "${zip_path}#games-collector.zip"
