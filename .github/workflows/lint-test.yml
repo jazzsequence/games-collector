@@ -29,6 +29,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Setup PHP with coverage
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: pcov
       - name: Setup WP-CLI
         uses: godaddy-wordpress/setup-wp-cli@1
       - name: Install dependencies
@@ -37,5 +44,8 @@ jobs:
         run: |
           chmod +x bin/*.sh
           composer test:setup
-      - name: Test
-        run: composer test
+      - name: Test with coverage
+        run: composer test:coverage
+      - name: Upload coverage to Scrutinizer
+        run: |
+          vendor/bin/ocular code-coverage:upload --format=php-clover --revision=${{ github.sha }} coverage.xml

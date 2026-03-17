@@ -76,7 +76,7 @@ function register_settings_page() {
 			sprintf(
 				/* translators: 1: opening anchor tag, 2: closing anchor tag */
 				__( 'Required for BGG game search and import. %1$sRegister your application%2$s on BoardGameGeek to obtain a token. The token can also be defined as a constant in wp-config.php: <code>define( \'GC_BGG_API_TOKEN\', \'your-token-here\' );</code>', 'games-collector' ),
-				'<a href="https://boardgamegeek.com/using_the_xml_api" target="_blank" rel="noopener noreferrer">',
+				'<a href="https://boardgamegeek.com/applications" target="_blank" rel="noopener noreferrer">',
 				'</a>'
 			),
 			[
@@ -130,7 +130,7 @@ function maybe_show_api_token_notice() {
 				__( 'Games Collector requires a BoardGameGeek API token for game search and import. %1$sAdd your token in Settings%2$s, or %3$sregister for a free API token%4$s on BoardGameGeek.', 'games-collector' ),
 				'<a href="' . esc_url( $settings_url ) . '">',
 				'</a>',
-				'<a href="https://boardgamegeek.com/using_the_xml_api" target="_blank" rel="noopener noreferrer">',
+				'<a href="https://boardgamegeek.com/applications" target="_blank" rel="noopener noreferrer">',
 				'</a>'
 			),
 			[
