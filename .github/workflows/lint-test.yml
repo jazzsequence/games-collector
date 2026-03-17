@@ -11,27 +11,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
       - name: Lint
-        run: |
-          composer install
-          composer lint
+        run: composer lint
   test:
     name: Test
     runs-on: ubuntu-latest
-    services:
-      mariadb:
-        image: mariadb:10.6
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Start MariaDB
+      - name: Start MySQL
         run: sudo systemctl start mysql
       - name: Setup WP-CLI
         uses: godaddy-wordpress/setup-wp-cli@1
-      - name: Install Composer dependencies
-        run: | 
-          composer install
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run tests
+        run: |
           chmod +x bin/*.sh
           bash ./bin/phpunit-test.sh
-      - name: Test
-        run: composer test
