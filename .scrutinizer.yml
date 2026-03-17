@@ -1,7 +1,7 @@
 tools:
-    php_sim: true
-    php_pdepend: false
     php_analyzer: true
+    php_sim: false
+    php_pdepend: false
 
 filter:
     excluded_paths:
