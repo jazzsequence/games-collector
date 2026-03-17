@@ -1,5 +1,5 @@
 # Games Collector #
-[![Lint & Test](https://github.com/jazzsequence/games-collector/actions/workflows/lint-test.yml/badge.svg?branch=develop)](https://github.com/jazzsequence/games-collector/actions/workflows/lint-test.yml) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jazzsequence/games-collector/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/jazzsequence/games-collector/?branch=develop) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![Lint & Test](https://github.com/jazzsequence/games-collector/actions/workflows/lint-test.yml/badge.svg?branch=develop)](https://github.com/jazzsequence/games-collector/actions/workflows/lint-test.yml) [![Code Coverage](https://scrutinizer-ci.com/g/jazzsequence/games-collector/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/jazzsequence/games-collector/?branch=develop) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 
 **Contributors:**      [jazzsequence](https://github.com/jazzsequence)  
