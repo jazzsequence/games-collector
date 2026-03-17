@@ -24,6 +24,9 @@
         "automattic/vipwpcs": "^3.0"
     },
     "config": {
+        "platform": {
+            "php": "8.3"
+        },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "pantheon-systems/wpunit-helpers": true
