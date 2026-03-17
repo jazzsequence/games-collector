@@ -46,4 +46,4 @@ jobs:
         run: composer test:coverage
       - name: Upload coverage to Scrutinizer
         run: |
-          vendor/bin/ocular code-coverage:upload --format=php-clover coverage.xml
+          vendor/bin/ocular code-coverage:upload --format=php-clover --revision=${{ github.sha }} coverage.xml
