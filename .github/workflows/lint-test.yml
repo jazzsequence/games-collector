@@ -11,27 +11,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
       - name: Lint
-        run: |
-          composer install
-          composer lint
+        run: composer lint
   test:
     name: Test
     runs-on: ubuntu-latest
     services:
       mariadb:
         image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Start MariaDB
-        run: sudo systemctl start mysql
       - name: Setup WP-CLI
         uses: godaddy-wordpress/setup-wp-cli@1
-      - name: Install Composer dependencies
-        run: | 
-          composer install
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Set up WordPress test suite
+        run: |
           chmod +x bin/*.sh
-          bash ./bin/phpunit-test.sh
+          composer test:setup
       - name: Test
         run: composer test
