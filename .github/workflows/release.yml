@@ -41,20 +41,20 @@ jobs:
           php-version: '8.3'
           coverage: none
 
+      - name: Install PHP dependencies
+        if: steps.tag_check.outputs.exists == 'false'
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Set up Node.js
         if: steps.tag_check.outputs.exists == 'false'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install PHP dependencies
-        if: steps.tag_check.outputs.exists == 'false'
-        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
       - name: Build assets
         if: steps.tag_check.outputs.exists == 'false'
         run: |
-          npm install --legacy-peer-deps
+          npm install
           npm run build
 
       - name: Create plugin zip
