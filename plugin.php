@@ -10,6 +10,9 @@
  * License:     GPLv3
  * Text Domain: games-collector
  * Domain Path: /languages
+ * Requires at least: 4.4
+ * Tested up to: 6.9
+ * Requires PHP: 7.4
  *
  * @link https://github.com/jazzsequence/games-collector
  *
