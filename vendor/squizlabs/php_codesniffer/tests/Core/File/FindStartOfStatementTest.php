@@ -710,45 +710,45 @@ final class FindStartOfStatementTest extends AbstractMethodUnitTest
             // These were already working correctly.
             'Closure function keyword should be start of closure - closure keyword'                   => [
                 'testMarker'     => '/* test437ClosureDeclaration */',
-                'target'         => T_CLOSURE,
+                'targets'        => T_CLOSURE,
                 'expectedTarget' => T_CLOSURE,
             ],
             'Open curly is a statement/expression opener - open curly'                                => [
                 'testMarker'     => '/* test437ClosureDeclaration */',
-                'target'         => T_OPEN_CURLY_BRACKET,
+                'targets'        => T_OPEN_CURLY_BRACKET,
                 'expectedTarget' => T_OPEN_CURLY_BRACKET,
             ],
 
             'Echo should be start for expression - echo keyword'                                      => [
                 'testMarker'     => '/* test437EchoNestedWithinClosureWithinMatch */',
-                'target'         => T_ECHO,
+                'targets'        => T_ECHO,
                 'expectedTarget' => T_ECHO,
             ],
             'Echo should be start for expression - variable'                                          => [
                 'testMarker'     => '/* test437EchoNestedWithinClosureWithinMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_ECHO,
             ],
             'Echo should be start for expression - comma'                                             => [
                 'testMarker'     => '/* test437EchoNestedWithinClosureWithinMatch */',
-                'target'         => T_COMMA,
+                'targets'        => T_COMMA,
                 'expectedTarget' => T_ECHO,
             ],
 
             // These were not working correctly and would previously return the close curly of the match expression.
             'First token after comma in echo expression should be start for expression - text string' => [
                 'testMarker'     => '/* test437EchoNestedWithinClosureWithinMatch */',
-                'target'         => T_CONSTANT_ENCAPSED_STRING,
+                'targets'        => T_CONSTANT_ENCAPSED_STRING,
                 'expectedTarget' => T_CONSTANT_ENCAPSED_STRING,
             ],
             'First token after comma in echo expression - PHP_EOL constant'                           => [
                 'testMarker'     => '/* test437EchoNestedWithinClosureWithinMatch */',
-                'target'         => T_STRING,
+                'targets'        => T_STRING,
                 'expectedTarget' => T_STRING,
             ],
             'First token after comma in echo expression - semicolon'                                  => [
                 'testMarker'     => '/* test437EchoNestedWithinClosureWithinMatch */',
-                'target'         => T_SEMICOLON,
+                'targets'        => T_SEMICOLON,
                 'expectedTarget' => T_STRING,
             ],
         ];
@@ -791,44 +791,44 @@ final class FindStartOfStatementTest extends AbstractMethodUnitTest
         return [
             'Array item itself should be start for first array item'                       => [
                 'testMarker'     => '/* test437NestedLongArrayWithinMatch */',
-                'target'         => T_LNUMBER,
+                'targets'        => T_LNUMBER,
                 'expectedTarget' => T_LNUMBER,
             ],
             'Array item itself should be start for second array item'                      => [
                 'testMarker'     => '/* test437NestedLongArrayWithinMatch */',
-                'target'         => T_DNUMBER,
+                'targets'        => T_DNUMBER,
                 'expectedTarget' => T_DNUMBER,
             ],
             'Array item itself should be start for third array item'                       => [
                 'testMarker'     => '/* test437NestedLongArrayWithinMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
 
             'Parameter itself should be start for first param passed to function call'     => [
                 'testMarker'     => '/* test437NestedFunctionCallWithinMatch */',
-                'target'         => T_LNUMBER,
+                'targets'        => T_LNUMBER,
                 'expectedTarget' => T_LNUMBER,
             ],
             'Parameter itself should be start for second param passed to function call'    => [
                 'testMarker'     => '/* test437NestedFunctionCallWithinMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
             'Parameter itself should be start for third param passed to function call'     => [
                 'testMarker'     => '/* test437NestedFunctionCallWithinMatch */',
-                'target'         => T_DNUMBER,
+                'targets'        => T_DNUMBER,
                 'expectedTarget' => T_DNUMBER,
             ],
 
             'Parameter itself should be start for first param declared in arrow function'  => [
                 'testMarker'     => '/* test437NestedArrowFunctionWithinMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
             'Parameter itself should be start for second param declared in arrow function' => [
                 'testMarker'     => '/* test437FnSecondParamWithinMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
         ];
@@ -872,44 +872,44 @@ final class FindStartOfStatementTest extends AbstractMethodUnitTest
         return [
             'Array item itself should be start for first array item'                       => [
                 'testMarker'     => '/* test437NestedLongArrayWithinNestedMatch */',
-                'target'         => T_LNUMBER,
+                'targets'        => T_LNUMBER,
                 'expectedTarget' => T_LNUMBER,
             ],
             'Array item itself should be start for second array item'                      => [
                 'testMarker'     => '/* test437NestedLongArrayWithinNestedMatch */',
-                'target'         => T_DNUMBER,
+                'targets'        => T_DNUMBER,
                 'expectedTarget' => T_DNUMBER,
             ],
             'Array item itself should be start for third array item'                       => [
                 'testMarker'     => '/* test437NestedLongArrayWithinNestedMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
 
             'Parameter itself should be start for first param passed to function call'     => [
                 'testMarker'     => '/* test437NestedFunctionCallWithinNestedMatch */',
-                'target'         => T_LNUMBER,
+                'targets'        => T_LNUMBER,
                 'expectedTarget' => T_LNUMBER,
             ],
             'Parameter itself should be start for second param passed to function call'    => [
                 'testMarker'     => '/* test437NestedFunctionCallWithinNestedMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
             'Parameter itself should be start for third param passed to function call'     => [
                 'testMarker'     => '/* test437NestedFunctionCallWithinNestedMatch */',
-                'target'         => T_DNUMBER,
+                'targets'        => T_DNUMBER,
                 'expectedTarget' => T_DNUMBER,
             ],
 
             'Parameter itself should be start for first param declared in arrow function'  => [
                 'testMarker'     => '/* test437NestedArrowFunctionWithinNestedMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
             'Parameter itself should be start for second param declared in arrow function' => [
                 'testMarker'     => '/* test437FnSecondParamWithinNestedMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
         ];
@@ -952,17 +952,17 @@ final class FindStartOfStatementTest extends AbstractMethodUnitTest
         return [
             'Array item itself should be start for first array item'  => [
                 'testMarker'     => '/* test437NestedShortArrayWithinMatch */',
-                'target'         => T_LNUMBER,
+                'targets'        => T_LNUMBER,
                 'expectedTarget' => T_LNUMBER,
             ],
             'Array item itself should be start for second array item' => [
                 'testMarker'     => '/* test437NestedShortArrayWithinMatch */',
-                'target'         => T_DNUMBER,
+                'targets'        => T_DNUMBER,
                 'expectedTarget' => T_DNUMBER,
             ],
             'Array item itself should be start for third array item'  => [
                 'testMarker'     => '/* test437NestedShortArrayWithinMatch */',
-                'target'         => T_VARIABLE,
+                'targets'        => T_VARIABLE,
                 'expectedTarget' => T_VARIABLE,
             ],
         ];

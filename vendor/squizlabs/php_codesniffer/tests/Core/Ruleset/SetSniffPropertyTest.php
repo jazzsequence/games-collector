@@ -11,7 +11,7 @@ namespace PHP_CodeSniffer\Tests\Core\Ruleset;
 
 use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Tests\ConfigDouble;
-use PHP_CodeSniffer\Tests\Core\Ruleset\AbstractRulesetTestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
 /**
@@ -19,7 +19,7 @@ use ReflectionObject;
  *
  * @covers \PHP_CodeSniffer\Ruleset::setSniffProperty
  */
-final class SetSniffPropertyTest extends AbstractRulesetTestCase
+final class SetSniffPropertyTest extends TestCase
 {
 
 
@@ -34,8 +34,8 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
      */
     public function testSniffPropertiesGetSetWhenAllowed($name)
     {
-        $sniffCode  = "TestStandard.SetProperty.{$name}";
-        $sniffClass = 'Fixtures\TestStandard\Sniffs\SetProperty\\'.$name.'Sniff';
+        $sniffCode  = "Fixtures.SetProperty.{$name}";
+        $sniffClass = 'Fixtures\Sniffs\SetProperty\\'.$name.'Sniff';
         $properties = [
             'arbitrarystring' => 'arbitraryvalue',
             'arbitraryarray'  => [
@@ -135,8 +135,15 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
      */
     public function testSetPropertyThrowsErrorOnInvalidProperty()
     {
-        $exceptionMsg = 'Ruleset invalid. Property "indentation" does not exist on sniff Generic.Arrays.ArrayIndent';
-        $this->expectRuntimeExceptionMessage($exceptionMsg);
+        $exceptionClass = 'PHP_CodeSniffer\Exceptions\RuntimeException';
+        $exceptionMsg   = 'Ruleset invalid. Property "indentation" does not exist on sniff Generic.Arrays.ArrayIndent';
+        if (method_exists($this, 'expectException') === true) {
+            $this->expectException($exceptionClass);
+            $this->expectExceptionMessage($exceptionMsg);
+        } else {
+            // PHPUnit < 5.2.0.
+            $this->setExpectedException($exceptionClass, $exceptionMsg);
+        }
 
         // Set up the ruleset.
         $standard = __DIR__.'/SetPropertyThrowsErrorOnInvalidPropertyTest.xml';
@@ -155,8 +162,15 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
      */
     public function testSetPropertyThrowsErrorWhenPropertyOnlyAllowedViaAttribute()
     {
-        $exceptionMsg = 'Ruleset invalid. Property "arbitrarystring" does not exist on sniff TestStandard.SetProperty.NotAllowedViaAttribute';
-        $this->expectRuntimeExceptionMessage($exceptionMsg);
+        $exceptionClass = 'PHP_CodeSniffer\Exceptions\RuntimeException';
+        $exceptionMsg   = 'Ruleset invalid. Property "arbitrarystring" does not exist on sniff Fixtures.SetProperty.NotAllowedViaAttribute';
+        if (method_exists($this, 'expectException') === true) {
+            $this->expectException($exceptionClass);
+            $this->expectExceptionMessage($exceptionMsg);
+        } else {
+            // PHPUnit < 5.2.0.
+            $this->setExpectedException($exceptionClass, $exceptionMsg);
+        }
 
         // Set up the ruleset.
         $standard = __DIR__.'/SetPropertyNotAllowedViaAttributeTest.xml';
@@ -203,39 +217,6 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
 
 
     /**
-     * Test that attempting to set a property for a sniff which isn't registered will be ignored.
-     *
-     * @return void
-     */
-    public function testDirectCallIgnoredPropertyForUnusedSniff()
-    {
-        $sniffCode  = 'Generic.Formatting.SpaceAfterCast';
-        $sniffClass = 'PHP_CodeSniffer\\Standards\\Generic\\Sniffs\\Formatting\\SpaceAfterCastSniff';
-
-        // Set up the ruleset.
-        $config  = new ConfigDouble(['--standard=PSR1']);
-        $ruleset = new Ruleset($config);
-
-        $ruleset->setSniffProperty(
-            $sniffClass,
-            'ignoreNewlines',
-            [
-                'scope' => 'sniff',
-                'value' => true,
-            ]
-        );
-
-        // Verify that there are sniffs registered.
-        $this->assertGreaterThan(0, count($ruleset->sniffCodes), 'No sniff codes registered');
-
-        // Verify that our target sniff has NOT been registered after attempting to set the property.
-        $this->assertArrayNotHasKey($sniffCode, $ruleset->sniffCodes, 'Unused sniff was registered in sniffCodes, but shouldn\'t have been');
-        $this->assertArrayNotHasKey($sniffClass, $ruleset->sniffs, 'Unused sniff was registered in sniffs, but shouldn\'t have been');
-
-    }//end testDirectCallIgnoredPropertyForUnusedSniff()
-
-
-    /**
      * Test that setting a property via a direct call to the Ruleset::setSniffProperty() method
      * sets the property correctly when using the new $settings array format.
      *
@@ -244,8 +225,8 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
     public function testDirectCallWithNewArrayFormatSetsProperty()
     {
         $name       = 'AllowedAsDeclared';
-        $sniffCode  = "TestStandard.SetProperty.{$name}";
-        $sniffClass = 'Fixtures\TestStandard\Sniffs\SetProperty\\'.$name.'Sniff';
+        $sniffCode  = "Fixtures.SetProperty.{$name}";
+        $sniffClass = 'Fixtures\Sniffs\SetProperty\\'.$name.'Sniff';
 
         // Set up the ruleset.
         $standard = __DIR__."/SetProperty{$name}Test.xml";
@@ -295,8 +276,8 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
     public function testDirectCallWithOldArrayFormatSetsProperty($propertyValue)
     {
         $name       = 'AllowedAsDeclared';
-        $sniffCode  = "TestStandard.SetProperty.{$name}";
-        $sniffClass = 'Fixtures\TestStandard\Sniffs\SetProperty\\'.$name.'Sniff';
+        $sniffCode  = "Fixtures.SetProperty.{$name}";
+        $sniffClass = 'Fixtures\Sniffs\SetProperty\\'.$name.'Sniff';
 
         // Set up the ruleset.
         $standard = __DIR__."/SetProperty{$name}Test.xml";
@@ -402,7 +383,7 @@ final class SetSniffPropertyTest extends AbstractRulesetTestCase
         }
 
         $name       = 'AllowedAsDeclared';
-        $sniffClass = 'Fixtures\TestStandard\Sniffs\SetProperty\\'.$name.'Sniff';
+        $sniffClass = 'Fixtures\Sniffs\SetProperty\\'.$name.'Sniff';
 
         // Set up the ruleset.
         $standard = __DIR__."/SetProperty{$name}Test.xml";

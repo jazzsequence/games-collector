@@ -38,8 +38,6 @@ namespace Yoast\PHPUnitPolyfills\Polyfills;
  * @link https://github.com/sebastianbergmann/phpunit/issues/4088
  * @link https://github.com/sebastianbergmann/phpunit/issues/4089
  * @link https://github.com/sebastianbergmann/phpunit/issues/4090
- *
- * @since 0.1.0
  */
 trait AssertionRenames {
 

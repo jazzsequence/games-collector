@@ -11,16 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Composer Dependencies
-        run: composer install --no-interaction --prefer-dist --no-cache -vvv
-      - name: Why?
-        run: |
-          if [ -z "$(ls -A vendor/automattic/vipwpcs)" ]; then
-            echo "VIPWPCS is empty"
-            git clone https://github.com/Automattic/VIP-Coding-Standards.git vendor/automattic/vipwpcs
-          else
-            echo "VIPWPCS is not empty"
-          fi
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
       - name: Lint
         run: composer lint
   test:
@@ -29,16 +21,21 @@ jobs:
     services:
       mariadb:
         image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Start MariaDB
-        run: sudo systemctl start mysql
       - name: Setup WP-CLI
         uses: godaddy-wordpress/setup-wp-cli@1
-      - name: Install Composer dependencies
-        run: | 
-          composer install
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Set up WordPress test suite
+        run: |
           chmod +x bin/*.sh
+          composer test:setup
       - name: Test
-        run: bash ./bin/phpunit-test.sh
+        run: composer test

@@ -30,7 +30,7 @@ abstract class AbstractMethodAnnotationSniff extends AbstractClassDetectionSpryk
     /**
      * @var string
      */
-    public $namespaces = 'Pyz,SprykerEco,SprykerMiddleware,SprykerSdk,Spryker,SprykerFeature';
+    public $namespaces = 'Pyz,SprykerEco,SprykerMiddleware,SprykerSdk,Spryker';
 
     /**
      * @var bool

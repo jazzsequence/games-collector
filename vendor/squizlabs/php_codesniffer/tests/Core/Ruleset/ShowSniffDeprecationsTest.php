@@ -11,7 +11,7 @@ namespace PHP_CodeSniffer\Tests\Core\Ruleset;
 
 use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Tests\ConfigDouble;
-use PHP_CodeSniffer\Tests\Core\Ruleset\AbstractRulesetTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests PHPCS native handling of sniff deprecations.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Core\Ruleset\AbstractRulesetTestCase;
  * @covers \PHP_CodeSniffer\Ruleset::hasSniffDeprecations
  * @covers \PHP_CodeSniffer\Ruleset::showSniffDeprecations
  */
-final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
+final class ShowSniffDeprecationsTest extends TestCase
 {
 
 
@@ -67,7 +67,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
 
 
     /**
-     * Test that the listing with deprecated sniffs will not show when specific command-line options are being used [1].
+     * Test that the listing with deprecated sniffs will not show when specific command-line options are being used.
      *
      * @param string        $standard       The standard to use for the test.
      * @param array<string> $additionalArgs Optional. Additional arguments to pass.
@@ -102,62 +102,24 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
     public static function dataDeprecatedSniffsListDoesNotShow()
     {
         return [
-            'Standard not using deprecated sniffs: PSR1'     => [
+            'Standard not using deprecated sniffs: PSR1'                   => [
                 'standard' => 'PSR1',
             ],
-            'Standard using deprecated sniffs; explain mode' => [
+            'Standard using deprecated sniffs; explain mode'               => [
                 'standard'       => __DIR__.'/ShowSniffDeprecationsTest.xml',
                 'additionalArgs' => ['-e'],
             ],
-            'Standard using deprecated sniffs; quiet mode'   => [
+            'Standard using deprecated sniffs; quiet mode'                 => [
                 'standard'       => __DIR__.'/ShowSniffDeprecationsTest.xml',
                 'additionalArgs' => ['-q'],
             ],
-        ];
-
-    }//end dataDeprecatedSniffsListDoesNotShow()
-
-
-    /**
-     * Test that the listing with deprecated sniffs will not show when specific command-line options are being used [2].
-     *
-     * {@internal Separate test method for the same thing as this test will only work in CS mode.}
-     *
-     * @param string        $standard       The standard to use for the test.
-     * @param array<string> $additionalArgs Optional. Additional arguments to pass.
-     *
-     * @dataProvider dataDeprecatedSniffsListDoesNotShowNeedsCsMode
-     *
-     * @return void
-     */
-    public function testDeprecatedSniffsListDoesNotShowNeedsCsMode($standard, $additionalArgs=[])
-    {
-        if (PHP_CODESNIFFER_CBF === true) {
-            $this->markTestSkipped('This test needs CS mode to run');
-        }
-
-        $this->testDeprecatedSniffsListDoesNotShow($standard, $additionalArgs);
-
-    }//end testDeprecatedSniffsListDoesNotShowNeedsCsMode()
-
-
-    /**
-     * Data provider.
-     *
-     * @see testDeprecatedSniffsListDoesNotShowNeedsCsMode()
-     *
-     * @return array<string, array<string, string|array<string>>>
-     */
-    public static function dataDeprecatedSniffsListDoesNotShowNeedsCsMode()
-    {
-        return [
             'Standard using deprecated sniffs; documentation is requested' => [
                 'standard'       => __DIR__.'/ShowSniffDeprecationsTest.xml',
                 'additionalArgs' => ['--generator=text'],
             ],
         ];
 
-    }//end dataDeprecatedSniffsListDoesNotShowNeedsCsMode()
+    }//end dataDeprecatedSniffsListDoesNotShow()
 
 
     /**
@@ -179,12 +141,12 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
 
         $restrictions = [];
         $sniffs       = [
-            'TestStandard.SetProperty.AllowedAsDeclared',
-            'TestStandard.SetProperty.AllowedViaStdClass',
+            'Fixtures.SetProperty.AllowedAsDeclared',
+            'Fixtures.SetProperty.AllowedViaStdClass',
         ];
         foreach ($sniffs as $sniffCode) {
             $parts     = explode('.', strtolower($sniffCode));
-            $sniffName = $parts[0].'\\sniffs\\'.$parts[1].'\\'.$parts[2].'sniff';
+            $sniffName = $parts[0].'\sniffs\\'.$parts[1].'\\'.$parts[2].'sniff';
             $restrictions[strtolower($sniffName)] = true;
         }
 
@@ -196,7 +158,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
             $sniffFiles[] = $sniffFile;
         }
 
-        $ruleset->registerSniffs($sniffFiles, $restrictions, []);
+        $ruleset->registerSniffs($allSniffs, $restrictions, []);
         $ruleset->populateTokenListeners();
 
         $this->expectOutputString('');
@@ -225,15 +187,15 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
 
         $exclusions = [];
         $exclude    = [
-            'TestStandard.Deprecated.WithLongReplacement',
-            'TestStandard.Deprecated.WithoutReplacement',
-            'TestStandard.Deprecated.WithReplacement',
-            'TestStandard.Deprecated.WithReplacementContainingLinuxNewlines',
-            'TestStandard.Deprecated.WithReplacementContainingNewlines',
+            'Fixtures.Deprecated.WithLongReplacement',
+            'Fixtures.Deprecated.WithoutReplacement',
+            'Fixtures.Deprecated.WithReplacement',
+            'Fixtures.Deprecated.WithReplacementContainingLinuxNewlines',
+            'Fixtures.Deprecated.WithReplacementContainingNewlines',
         ];
         foreach ($exclude as $sniffCode) {
             $parts     = explode('.', strtolower($sniffCode));
-            $sniffName = $parts[0].'\\sniffs\\'.$parts[1].'\\'.$parts[2].'sniff';
+            $sniffName = $parts[0].'\sniffs\\'.$parts[1].'\\'.$parts[2].'sniff';
             $exclusions[strtolower($sniffName)] = true;
         }
 
@@ -245,7 +207,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
             $sniffFiles[] = $sniffFile;
         }
 
-        $ruleset->registerSniffs($sniffFiles, [], $exclusions);
+        $ruleset->registerSniffs($allSniffs, [], $exclusions);
         $ruleset->populateTokenListeners();
 
         $this->expectOutputString('');
@@ -272,9 +234,9 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
         $config   = new ConfigDouble(["--standard=$standard", '--no-colors']);
         $ruleset  = new Ruleset($config);
 
-        $expected  = 'WARNING: The ShowSniffDeprecationsTest standard uses 5 deprecated sniffs'.PHP_EOL;
+        $expected  = 'WARNING: The SniffDeprecationTest standard uses 5 deprecated sniffs'.PHP_EOL;
         $expected .= '--------------------------------------------------------------------------------'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithLongReplacement'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithLongReplacement'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0.'.PHP_EOL;
         $expected .= '   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel'.PHP_EOL;
         $expected .= '   vestibulum nunc. Sed luctus dolor tortor, eu euismod purus pretium sed.'.PHP_EOL;
@@ -285,12 +247,12 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
         $expected .= '   dictum. Suspendisse dictum egestas sapien, eget ullamcorper metus elementum'.PHP_EOL;
         $expected .= '   semper. Vestibulum sem justo, consectetur ac tincidunt et, finibus eget'.PHP_EOL;
         $expected .= '   libero.'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithoutReplacement'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithoutReplacement'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.4.0 and will be removed in v4.0.0.'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithReplacement'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithReplacement'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0.'.PHP_EOL;
         $expected .= '   Use the Stnd.Category.OtherSniff sniff instead.'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithReplacementContainingLinuxNewlines'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithReplacementContainingLinuxNewlines'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0.'.PHP_EOL;
         $expected .= '   Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.PHP_EOL;
         $expected .= '   Fusce vel vestibulum nunc. Sed luctus dolor tortor, eu euismod purus pretium'.PHP_EOL;
@@ -300,7 +262,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
         $expected .= '   eros sapien at sem.'.PHP_EOL;
         $expected .= '   Sed pulvinar aliquam malesuada. Aliquam erat volutpat. Mauris gravida rutrum'.PHP_EOL;
         $expected .= '   lectus at egestas.'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithReplacementContainingNewlines'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithReplacementContainingNewlines'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0.'.PHP_EOL;
         $expected .= '   Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.PHP_EOL;
         $expected .= '   Fusce vel vestibulum nunc. Sed luctus dolor tortor, eu euismod purus pretium'.PHP_EOL;
@@ -359,16 +321,16 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
      */
     public static function dataReportWidthIsRespected()
     {
-        $summaryLine = 'WARNING: The ShowSniffDeprecationsTest standard uses 1 deprecated sniff'.PHP_EOL;
+        $summaryLine = 'WARNING: The SniffDeprecationTest standard uses 1 deprecated sniff'.PHP_EOL;
 
         // phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- Test readability is more important.
         return [
             'Report width small: 40; with truncated sniff name and wrapped header and footer lines' => [
                 'reportWidth'    => 40,
-                'expectedOutput' => 'WARNING: The ShowSniffDeprecationsTest'.PHP_EOL
+                'expectedOutput' => 'WARNING: The SniffDeprecationTest'.PHP_EOL
                     .'standard uses 1 deprecated sniff'.PHP_EOL
                     .'----------------------------------------'.PHP_EOL
-                    .'-  TestStandard.Deprecated.WithLongR...'.PHP_EOL
+                    .'-  Fixtures.Deprecated.WithLongRepla...'.PHP_EOL
                     .'   This sniff has been deprecated since'.PHP_EOL
                     .'   v3.8.0 and will be removed in'.PHP_EOL
                     .'   v4.0.0. Lorem ipsum dolor sit amet,'.PHP_EOL
@@ -396,7 +358,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
             'Report width default: 80'                                                              => [
                 'reportWidth'    => 80,
                 'expectedOutput' => $summaryLine.str_repeat('-', 80).PHP_EOL
-                    .'-  TestStandard.Deprecated.WithLongReplacement'.PHP_EOL
+                    .'-  Fixtures.Deprecated.WithLongReplacement'.PHP_EOL
                     .'   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0.'.PHP_EOL
                     .'   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel'.PHP_EOL
                     .'   vestibulum nunc. Sed luctus dolor tortor, eu euismod purus pretium sed.'.PHP_EOL
@@ -414,7 +376,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
                 // Length = 4 padding + 75 base line + 587 custom message.
                 'reportWidth'    => 666,
                 'expectedOutput' => $summaryLine.str_repeat('-', 666).PHP_EOL
-                    .'-  TestStandard.Deprecated.WithLongReplacement'.PHP_EOL
+                    .'-  Fixtures.Deprecated.WithLongReplacement'.PHP_EOL
                     .'   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel vestibulum nunc. Sed luctus dolor tortor, eu euismod purus pretium sed. Fusce egestas congue massa semper cursus. Donec quis pretium tellus. In lacinia, augue ut ornare porttitor, diam nunc faucibus purus, et accumsan eros sapien at sem. Sed pulvinar aliquam malesuada. Aliquam erat volutpat. Mauris gravida rutrum lectus at egestas. Fusce tempus elit in tincidunt dictum. Suspendisse dictum egestas sapien, eget ullamcorper metus elementum semper. Vestibulum sem justo, consectetur ac tincidunt et, finibus eget libero.'
                     .PHP_EOL.PHP_EOL
                     .'Deprecated sniffs are still run, but will stop working at some point in the future.'.PHP_EOL.PHP_EOL,
@@ -422,7 +384,7 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
             'Report width wide: 1000; delimiter line length should match longest line'              => [
                 'reportWidth'    => 1000,
                 'expectedOutput' => $summaryLine.str_repeat('-', 666).PHP_EOL
-                    .'-  TestStandard.Deprecated.WithLongReplacement'.PHP_EOL
+                    .'-  Fixtures.Deprecated.WithLongReplacement'.PHP_EOL
                     .'   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel vestibulum nunc. Sed luctus dolor tortor, eu euismod purus pretium sed. Fusce egestas congue massa semper cursus. Donec quis pretium tellus. In lacinia, augue ut ornare porttitor, diam nunc faucibus purus, et accumsan eros sapien at sem. Sed pulvinar aliquam malesuada. Aliquam erat volutpat. Mauris gravida rutrum lectus at egestas. Fusce tempus elit in tincidunt dictum. Suspendisse dictum egestas sapien, eget ullamcorper metus elementum semper. Vestibulum sem justo, consectetur ac tincidunt et, finibus eget libero.'
                     .PHP_EOL.PHP_EOL
                     .'Deprecated sniffs are still run, but will stop working at some point in the future.'.PHP_EOL.PHP_EOL,
@@ -447,11 +409,11 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
         $config   = new ConfigDouble(["--standard=$standard", '--no-colors']);
         $ruleset  = new Ruleset($config);
 
-        $expected  = 'WARNING: The ShowSniffDeprecationsTest standard uses 2 deprecated sniffs'.PHP_EOL;
+        $expected  = 'WARNING: The SniffDeprecationTest standard uses 2 deprecated sniffs'.PHP_EOL;
         $expected .= '--------------------------------------------------------------------------------'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithoutReplacement'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithoutReplacement'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.4.0 and will be removed in v4.0.0.'.PHP_EOL;
-        $expected .= '-  TestStandard.Deprecated.WithReplacement'.PHP_EOL;
+        $expected .= '-  Fixtures.Deprecated.WithReplacement'.PHP_EOL;
         $expected .= '   This sniff has been deprecated since v3.8.0 and will be removed in v4.0.0.'.PHP_EOL;
         $expected .= '   Use the Stnd.Category.OtherSniff sniff instead.'.PHP_EOL.PHP_EOL;
         $expected .= 'Deprecated sniffs are still run, but will stop working at some point in the'.PHP_EOL;
@@ -464,12 +426,12 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
         // Verify that the sniffs have been registered to run.
         $this->assertCount(2, $ruleset->sniffCodes, 'Incorrect number of sniff codes registered');
         $this->assertArrayHasKey(
-            'TestStandard.Deprecated.WithoutReplacement',
+            'Fixtures.Deprecated.WithoutReplacement',
             $ruleset->sniffCodes,
             'WithoutReplacement sniff not registered'
         );
         $this->assertArrayHasKey(
-            'TestStandard.Deprecated.WithReplacement',
+            'Fixtures.Deprecated.WithReplacement',
             $ruleset->sniffCodes,
             'WithReplacement sniff not registered'
         );
@@ -490,7 +452,15 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
      */
     public function testExceptionIsThrownOnIncorrectlyImplementedInterface($standard, $exceptionMessage)
     {
-        $this->expectRuntimeExceptionMessage($exceptionMessage);
+        $exception = 'PHP_CodeSniffer\Exceptions\RuntimeException';
+        if (method_exists($this, 'expectException') === true) {
+            // PHPUnit 5+.
+            $this->expectException($exception);
+            $this->expectExceptionMessage($exceptionMessage);
+        } else {
+            // PHPUnit 4.
+            $this->setExpectedException($exception, $exceptionMessage);
+        }
 
         // Set up the ruleset.
         $standard = __DIR__.'/'.$standard;
@@ -514,23 +484,23 @@ final class ShowSniffDeprecationsTest extends AbstractRulesetTestCase
         return [
             'getDeprecationVersion() does not return a string' => [
                 'standard'         => 'ShowSniffDeprecationsInvalidDeprecationVersionTest.xml',
-                'exceptionMessage' => 'The Fixtures\TestStandard\Sniffs\DeprecatedInvalid\InvalidDeprecationVersionSniff::getDeprecationVersion() method must return a non-empty string, received double',
+                'exceptionMessage' => 'The Fixtures\Sniffs\DeprecatedInvalid\InvalidDeprecationVersionSniff::getDeprecationVersion() method must return a non-empty string, received double',
             ],
             'getRemovalVersion() does not return a string'     => [
                 'standard'         => 'ShowSniffDeprecationsInvalidRemovalVersionTest.xml',
-                'exceptionMessage' => 'The Fixtures\TestStandard\Sniffs\DeprecatedInvalid\InvalidRemovalVersionSniff::getRemovalVersion() method must return a non-empty string, received array',
+                'exceptionMessage' => 'The Fixtures\Sniffs\DeprecatedInvalid\InvalidRemovalVersionSniff::getRemovalVersion() method must return a non-empty string, received array',
             ],
             'getDeprecationMessage() does not return a string' => [
                 'standard'         => 'ShowSniffDeprecationsInvalidDeprecationMessageTest.xml',
-                'exceptionMessage' => 'The Fixtures\TestStandard\Sniffs\DeprecatedInvalid\InvalidDeprecationMessageSniff::getDeprecationMessage() method must return a string, received object',
+                'exceptionMessage' => 'The Fixtures\Sniffs\DeprecatedInvalid\InvalidDeprecationMessageSniff::getDeprecationMessage() method must return a string, received object',
             ],
             'getDeprecationVersion() returns an empty string'  => [
                 'standard'         => 'ShowSniffDeprecationsEmptyDeprecationVersionTest.xml',
-                'exceptionMessage' => 'The Fixtures\TestStandard\Sniffs\DeprecatedInvalid\EmptyDeprecationVersionSniff::getDeprecationVersion() method must return a non-empty string, received ""',
+                'exceptionMessage' => 'The Fixtures\Sniffs\DeprecatedInvalid\EmptyDeprecationVersionSniff::getDeprecationVersion() method must return a non-empty string, received ""',
             ],
             'getRemovalVersion() returns an empty string'      => [
                 'standard'         => 'ShowSniffDeprecationsEmptyRemovalVersionTest.xml',
-                'exceptionMessage' => 'The Fixtures\TestStandard\Sniffs\DeprecatedInvalid\EmptyRemovalVersionSniff::getRemovalVersion() method must return a non-empty string, received ""',
+                'exceptionMessage' => 'The Fixtures\Sniffs\DeprecatedInvalid\EmptyRemovalVersionSniff::getRemovalVersion() method must return a non-empty string, received ""',
             ],
         ];
 

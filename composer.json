@@ -14,13 +14,13 @@
     "require": {
         "johnbillion/extended-cpts": "^5.0",
         "harvesthq/chosen": "^1.8",
-        "cmb2/cmb2": "^2.6"
+        "cmb2/cmb2": "~2.10.1"
     },
     "require-dev": {
-        "pantheon-systems/pantheon-wp-coding-standards": "^2.0",
-        "pantheon-systems/wpunit-helpers": "^2.0",
+        "pantheon-systems/pantheon-wp-coding-standards": "^3.0",
+        "pantheon-systems/wpunit-helpers": "^2.0.3",
         "phpunit/phpunit": "^9",
-        "yoast/phpunit-polyfills": "^4.0",
+        "yoast/phpunit-polyfills": "^3.0",
         "automattic/vipwpcs": "^3.0"
     },
     "config": {
@@ -45,7 +45,8 @@
         ],
         "phpunit": "vendor/bin/phpunit --do-not-cache-result",
         "test": "@phpunit",
+        "test:setup": "bash bin/install-wp-tests.sh --dbpass=root",
         "test:install": "bin/install-local-tests.sh --skip-db=true",
-        "test:install:withdb": "bin/install-local-tests.sh"        
+        "test:install:withdb": "bin/install-local-tests.sh"
     }
 }

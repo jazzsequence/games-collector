@@ -777,14 +777,12 @@ final class Tokens
      * For example T_CLASS tokens appear very infrequently in a file, and
      * therefore have a high weighting.
      *
-     * If there are no weightings for any of the specified tokens, the first token
-     * seen in the passed array will be returned.
+     * Returns false if there are no weightings for any of the specified tokens.
      *
      * @param array<int|string> $tokens The token types to get the highest weighted
      *                                  type for.
      *
-     * @return int The highest weighted token.
-     *             On equal "weight", returns the first token of that particular weight.
+     * @return int|false The highest weighted token.
      */
     public static function getHighestWeightedToken(array $tokens)
     {

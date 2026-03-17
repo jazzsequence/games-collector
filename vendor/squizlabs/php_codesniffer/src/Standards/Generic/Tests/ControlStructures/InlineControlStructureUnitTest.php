@@ -81,7 +81,7 @@ final class InlineControlStructureUnitTest extends AbstractSniffUnitTest
                 278 => 1,
             ];
 
-        case 'InlineControlStructureUnitTest.1.js':
+        case 'InlineControlStructureUnitTest.js':
             return [
                 3  => 1,
                 7  => 1,

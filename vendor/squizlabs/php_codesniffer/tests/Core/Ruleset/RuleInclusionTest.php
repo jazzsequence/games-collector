@@ -11,14 +11,15 @@ namespace PHP_CodeSniffer\Tests\Core\Ruleset;
 
 use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Tests\ConfigDouble;
-use PHP_CodeSniffer\Tests\Core\Ruleset\AbstractRulesetTestCase;
+use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 
 /**
  * Tests for the \PHP_CodeSniffer\Ruleset class.
  *
  * @covers \PHP_CodeSniffer\Ruleset
  */
-final class RuleInclusionTest extends AbstractRulesetTestCase
+final class RuleInclusionTest extends TestCase
 {
 
     /**
@@ -46,37 +47,35 @@ final class RuleInclusionTest extends AbstractRulesetTestCase
     /**
      * Initialize the config and ruleset objects based on the `RuleInclusionTest.xml` ruleset file.
      *
-     * @before
+     * @beforeClass
      *
      * @return void
      */
     public static function initializeConfigAndRuleset()
     {
-        if (self::$standard === '') {
-            $standard       = __DIR__.'/'.basename(__FILE__, '.php').'.xml';
-            self::$standard = $standard;
+        $standard       = __DIR__.'/'.basename(__FILE__, '.php').'.xml';
+        self::$standard = $standard;
 
-            // On-the-fly adjust the ruleset test file to be able to test
-            // sniffs included with relative paths.
-            $contents       = file_get_contents($standard);
-            self::$contents = $contents;
+        // On-the-fly adjust the ruleset test file to be able to test
+        // sniffs included with relative paths.
+        $contents       = file_get_contents($standard);
+        self::$contents = $contents;
 
-            $repoRootDir = basename(dirname(dirname(dirname(__DIR__))));
+        $repoRootDir = basename(dirname(dirname(dirname(__DIR__))));
 
-            $newPath = $repoRootDir;
-            if (DIRECTORY_SEPARATOR === '\\') {
-                $newPath = str_replace('\\', '/', $repoRootDir);
-            }
+        $newPath = $repoRootDir;
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $newPath = str_replace('\\', '/', $repoRootDir);
+        }
 
-            $adjusted = str_replace('%path_root_dir%', $newPath, $contents);
+        $adjusted = str_replace('%path_root_dir%', $newPath, $contents);
 
-            if (file_put_contents($standard, $adjusted) === false) {
-                self::markTestSkipped('On the fly ruleset adjustment failed');
-            }
+        if (file_put_contents($standard, $adjusted) === false) {
+            self::markTestSkipped('On the fly ruleset adjustment failed');
+        }
 
-            $config        = new ConfigDouble(["--standard=$standard"]);
-            self::$ruleset = new Ruleset($config);
-        }//end if
+        $config        = new ConfigDouble(["--standard=$standard"]);
+        self::$ruleset = new Ruleset($config);
 
     }//end initializeConfigAndRuleset()
 
@@ -102,7 +101,7 @@ final class RuleInclusionTest extends AbstractRulesetTestCase
      */
     public function testHasSniffCodes()
     {
-        $this->assertCount(49, self::$ruleset->sniffCodes);
+        $this->assertCount(48, self::$ruleset->sniffCodes);
 
     }//end testHasSniffCodes()
 
@@ -320,10 +319,6 @@ final class RuleInclusionTest extends AbstractRulesetTestCase
                 'PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff',
             ],
             [
-                'Squiz.Files.FileExtension',
-                'PHP_CodeSniffer\Standards\Squiz\Sniffs\Files\FileExtensionSniff',
-            ],
-            [
                 'Generic.NamingConventions.CamelCapsFunctionName',
                 'PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions\CamelCapsFunctionNameSniff',
             ],
@@ -351,7 +346,10 @@ final class RuleInclusionTest extends AbstractRulesetTestCase
     public function testSettingProperties($sniffClass, $propertyName, $expectedValue)
     {
         $this->assertArrayHasKey($sniffClass, self::$ruleset->sniffs);
-        $this->assertXObjectHasProperty($propertyName, self::$ruleset->sniffs[$sniffClass]);
+
+        $hasProperty = (new ReflectionObject(self::$ruleset->sniffs[$sniffClass]))->hasProperty($propertyName);
+        $errorMsg    = sprintf('Property %s does not exist on sniff class %s', $propertyName, $sniffClass);
+        $this->assertTrue($hasProperty, $errorMsg);
 
         $actualValue = self::$ruleset->sniffs[$sniffClass]->$propertyName;
         $this->assertSame($expectedValue, $actualValue);
@@ -440,7 +438,10 @@ final class RuleInclusionTest extends AbstractRulesetTestCase
     public function testSettingInvalidPropertiesOnStandardsAndCategoriesSilentlyFails($sniffClass, $propertyName)
     {
         $this->assertArrayHasKey($sniffClass, self::$ruleset->sniffs, 'Sniff class '.$sniffClass.' not listed in registered sniffs');
-        $this->assertXObjectNotHasProperty($propertyName, self::$ruleset->sniffs[$sniffClass]);
+
+        $hasProperty = (new ReflectionObject(self::$ruleset->sniffs[$sniffClass]))->hasProperty($propertyName);
+        $errorMsg    = sprintf('Property %s registered for sniff %s which does not support it', $propertyName, $sniffClass);
+        $this->assertFalse($hasProperty, $errorMsg);
 
     }//end testSettingInvalidPropertiesOnStandardsAndCategoriesSilentlyFails()
 
@@ -466,10 +467,6 @@ final class RuleInclusionTest extends AbstractRulesetTestCase
             'Set property for complete category: PSR12 OperatorSpacing'      => [
                 'sniffClass'   => 'PHP_CodeSniffer\Standards\PSR12\Sniffs\Operators\OperatorSpacingSniff',
                 'propertyName' => 'setforallincategory',
-            ],
-            'Set property for all sniffs in included category directory'     => [
-                'sniffClass'   => 'PHP_CodeSniffer\Standards\Squiz\Sniffs\Files\FileExtensionSniff',
-                'propertyName' => 'setforsquizfilessniffs',
             ],
         ];
 

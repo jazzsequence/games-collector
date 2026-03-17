@@ -15,7 +15,6 @@ namespace PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractScopeSniff;
-use PHP_CodeSniffer\Util\Tokens;
 
 class ConstructorNameSniff extends AbstractScopeSniff
 {
@@ -91,41 +90,27 @@ class ConstructorNameSniff extends AbstractScopeSniff
         }
 
         // Stop if the constructor doesn't have a body, like when it is abstract.
-        if (isset($tokens[$stackPtr]['scope_opener'], $tokens[$stackPtr]['scope_closer']) === false) {
+        if (isset($tokens[$stackPtr]['scope_closer']) === false) {
             return;
         }
 
-        $parentClassName = $phpcsFile->findExtendedClassName($currScope);
+        $parentClassName = strtolower($phpcsFile->findExtendedClassName($currScope));
         if ($parentClassName === false) {
             return;
         }
 
-        $parentClassNameLc = strtolower($parentClassName);
-
         $endFunctionIndex = $tokens[$stackPtr]['scope_closer'];
-        $startIndex       = $tokens[$stackPtr]['scope_opener'];
-        while (($doubleColonIndex = $phpcsFile->findNext(T_DOUBLE_COLON, ($startIndex + 1), $endFunctionIndex)) !== false) {
-            $nextNonEmpty = $phpcsFile->findNext(Tokens::$emptyTokens, ($doubleColonIndex + 1), null, true);
-            if ($tokens[$nextNonEmpty]['code'] !== T_STRING
-                || strtolower($tokens[$nextNonEmpty]['content']) !== $parentClassNameLc
-            ) {
-                $startIndex = $nextNonEmpty;
-                continue;
-            }
-
-            $prevNonEmpty = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($doubleColonIndex - 1), null, true);
-            if ($tokens[$prevNonEmpty]['code'] === T_PARENT
-                || $tokens[$prevNonEmpty]['code'] === T_SELF
-                || $tokens[$prevNonEmpty]['code'] === T_STATIC
-                || ($tokens[$prevNonEmpty]['code'] === T_STRING
-                && strtolower($tokens[$prevNonEmpty]['content']) === $parentClassNameLc)
+        $startIndex       = $stackPtr;
+        while (($doubleColonIndex = $phpcsFile->findNext(T_DOUBLE_COLON, $startIndex, $endFunctionIndex)) !== false) {
+            if ($tokens[($doubleColonIndex + 1)]['code'] === T_STRING
+                && strtolower($tokens[($doubleColonIndex + 1)]['content']) === $parentClassName
             ) {
                 $error = 'PHP4 style calls to parent constructors are not allowed; use "parent::__construct()" instead';
-                $phpcsFile->addError($error, $nextNonEmpty, 'OldStyleCall');
+                $phpcsFile->addError($error, ($doubleColonIndex + 1), 'OldStyleCall');
             }
 
-            $startIndex = $nextNonEmpty;
-        }//end while
+            $startIndex = ($doubleColonIndex + 1);
+        }
 
     }//end processTokenWithinScope()
 

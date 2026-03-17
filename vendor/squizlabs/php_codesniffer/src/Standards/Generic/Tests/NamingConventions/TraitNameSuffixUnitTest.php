@@ -25,22 +25,14 @@ final class TraitNameSuffixUnitTest extends AbstractSniffUnitTest
      * The key of the array should represent the line number and the value
      * should represent the number of errors that should occur on that line.
      *
-     * @param string $testFile The name of the test file to process.
-     *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='')
+    public function getErrorList()
     {
-        switch ($testFile) {
-        case 'TraitNameSuffixUnitTest.1.inc':
-            return [
-                3 => 1,
-                9 => 1,
-            ];
-
-        default:
-            return [];
-        }
+        return [
+            3 => 1,
+            9 => 1,
+        ];
 
     }//end getErrorList()
 

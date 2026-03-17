@@ -5,7 +5,6 @@ namespace Yoast\PHPUnitPolyfills\TestCases;
 use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertArrayWithListKeys;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertClosedResource;
-use Yoast\PHPUnitPolyfills\Polyfills\AssertContainsOnly;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertEqualsSpecializations;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertFileEqualsSpecializations;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertIgnoringLineEndings;
@@ -28,14 +27,11 @@ use Yoast\PHPUnitPolyfills\Polyfills\ExpectUserDeprecation;
  * methods to get round the signature change in PHPUnit 8.
  *
  * When using this TestCase, the snakecase method names need to be used to overload a fixture method.
- *
- * @since 0.1.0
  */
 abstract class TestCase extends PHPUnit_TestCase {
 
 	use AssertArrayWithListKeys;
 	use AssertClosedResource;
-	use AssertContainsOnly;
 	use AssertEqualsSpecializations;
 	use AssertFileEqualsSpecializations;
 	use AssertIgnoringLineEndings;
@@ -79,8 +75,6 @@ abstract class TestCase extends PHPUnit_TestCase {
 	 *
 	 * This method is called before the execution of a test starts and after setUp() is called.
 	 *
-	 * @since 0.2.0
-	 *
 	 * @return void
 	 */
 	protected function assertPreConditions() {
@@ -92,8 +86,6 @@ abstract class TestCase extends PHPUnit_TestCase {
 	 * Performs assertions shared by all tests of a test case.
 	 *
 	 * This method is called before the execution of a test ends and before tearDown() is called.
-	 *
-	 * @since 0.2.0
 	 *
 	 * @return void
 	 */

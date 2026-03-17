@@ -146,7 +146,7 @@ class DisallowYodaConditionsSniff implements Sniff
             $end   = $tokens[$arrayToken]['parenthesis_closer'];
         } else {
             // Shouldn't be possible but may happen if external sniffs are using this method.
-            return true; // @codeCoverageIgnore
+            return true;
         }
 
         $staticTokens  = Tokens::$emptyTokens;

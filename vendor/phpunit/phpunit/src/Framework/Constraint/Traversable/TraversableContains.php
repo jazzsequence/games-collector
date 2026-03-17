@@ -10,6 +10,7 @@
 namespace PHPUnit\Framework\Constraint;
 
 use function is_array;
+
 use function sprintf;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 

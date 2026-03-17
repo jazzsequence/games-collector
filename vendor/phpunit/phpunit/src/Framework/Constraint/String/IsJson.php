@@ -10,6 +10,7 @@
 namespace PHPUnit\Framework\Constraint;
 
 use function json_decode;
+
 use function json_last_error;
 use function sprintf;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;

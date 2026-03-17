@@ -18,8 +18,6 @@ use Yoast\PHPUnitPolyfills\Autoload;
  *
  * @link https://github.com/sebastianbergmann/phpunit/pull/5231
  * @link https://github.com/sebastianbergmann/phpunit/issues/5478
- *
- * @since 2.0.0
  */
 trait AssertObjectProperty {
 
