@@ -1,7 +1,8 @@
 <?php
+
 namespace PSR2R\Tools\Traits;
 
-use PHP_CodeSniffer_File;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Common functionality around namespaces.
@@ -11,12 +12,12 @@ trait NamespaceTrait {
 	/**
 	 * Checks if this use statement is part of the namespace block.
 	 *
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPtr
 	 *
 	 * @return bool
 	 */
-	protected function shouldIgnoreUse(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
+	protected function shouldIgnoreUse(File $phpcsFile, int $stackPtr): bool {
 		$tokens = $phpcsFile->getTokens();
 
 		// Ignore USE keywords inside closures.

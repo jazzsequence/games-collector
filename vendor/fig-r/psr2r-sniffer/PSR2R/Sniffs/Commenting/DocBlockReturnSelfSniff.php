@@ -2,7 +2,7 @@
 
 namespace PSR2R\Sniffs\Commenting;
 
-use PHP_CodeSniffer_File;
+use PHP_CodeSniffer\Files\File;
 use PSR2R\Tools\AbstractSniff;
 
 /**
@@ -16,7 +16,7 @@ class DocBlockReturnSelfSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [
 			T_CLASS,
 			T_INTERFACE,
@@ -29,8 +29,15 @@ class DocBlockReturnSelfSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function process(PHP_CodeSniffer_File $phpCsFile, $stackPointer) {
+	public function process(File $phpCsFile, $stackPointer): void {
 		$tokens = $phpCsFile->getTokens();
+		if (($stackPointer > 1) && ($tokens[$stackPointer - 2]['code'] === T_STATIC)) {
+			return; // Skip static function declarations
+		}
+
+		if ($tokens[$stackPointer]['code'] === T_FUNCTION && $this->isNonChainable($tokens, $stackPointer)) {
+			return;
+		}
 
 		$docBlockEndIndex = $this->findRelatedDocBlock($phpCsFile, $stackPointer);
 
@@ -44,7 +51,7 @@ class DocBlockReturnSelfSniff extends AbstractSniff {
 			if ($tokens[$i]['type'] !== 'T_DOC_COMMENT_TAG') {
 				continue;
 			}
-			if (!in_array($tokens[$i]['content'], ['@return'])) {
+			if ($tokens[$i]['content'] !== '@return') {
 				continue;
 			}
 
@@ -67,20 +74,48 @@ class DocBlockReturnSelfSniff extends AbstractSniff {
 				continue;
 			}
 
+			if (strpos($content, '|') !== false) {
+				return;
+			}
+
 			$parts = explode('|', $content);
 			$this->fixParts($phpCsFile, $classNameIndex, $parts, $appendix);
 		}
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpCsFile
+	 * @param array<array<string, mixed>> $tokens
+	 * @param int $stackPointer
+	 *
+	 * @return bool
+	 */
+	protected function isNonChainable(array $tokens, int $stackPointer): bool {
+		if (empty($tokens[$stackPointer]['scope_opener'])) {
+			return false;
+		}
+
+		$startIndex = $tokens[$stackPointer]['scope_opener'];
+		$endIndex = $tokens[$stackPointer]['scope_closer'];
+		$i = $startIndex + 1;
+		while ($i < $endIndex) {
+			if ($tokens[$i]['code'] === T_NEW) {
+				return true;
+			}
+			$i++;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpCsFile
 	 * @param int $classNameIndex
-	 * @param array $parts
+	 * @param array<string> $parts
 	 * @param string $appendix
 	 *
 	 * @return void
 	 */
-	protected function fixParts(PHP_CodeSniffer_File $phpCsFile, $classNameIndex, array $parts, $appendix) {
+	protected function fixParts(File $phpCsFile, $classNameIndex, array $parts, $appendix) {
 		$result = [];
 		foreach ($parts as $key => $part) {
 			if ($part !== 'self') {
@@ -100,7 +135,7 @@ class DocBlockReturnSelfSniff extends AbstractSniff {
 			$message[] = $part . ' => ' . $useStatement;
 		}
 
-		$fix = $phpCsFile->addFixableError(implode(', ', $message), $classNameIndex);
+		$fix = $phpCsFile->addFixableError(implode(', ', $message), $classNameIndex, 'ReturnSelf');
 		if ($fix) {
 			$newContent = implode('|', $parts);
 			$phpCsFile->fixer->replaceToken($classNameIndex, $newContent . $appendix);

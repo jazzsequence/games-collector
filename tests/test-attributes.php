@@ -18,7 +18,7 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 *
 	 * @since 1.0.0
 	 */
-	function test_attributes_taxonomy_exists() {
+	public function test_attributes_taxonomy_exists() {
 		$this->assertTrue(
 			taxonomy_exists( 'gc_attribute' ),
 			'The Game Attributes taxonomy does not exist.'
@@ -30,7 +30,7 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 *
 	 * @since 1.0.0
 	 */
-	function test_base_terms_exist() {
+	public function test_base_terms_exist() {
 		$terms = [ 'Solo Play', 'Cooperative', 'Party Game', 'Easy-to-learn', 'Heavy Strategy', 'Expansion', 'City/Empire Building', 'Fast-paced', 'Card Game', 'Deck Building', 'Dice Game', 'Role-Playing Game', 'Sci-Fi', 'Horror', 'Fantasy', 'Based on a Film/TV Show', 'Mystery', 'Historical', 'Legacy' ];
 
 		// Create the attributes.
@@ -49,16 +49,18 @@ class GC_Test_Attributes extends WP_UnitTestCase {
 	 *
 	 * @since  1.0.0
 	 */
-	function test_attributes_list() {
+	public function test_attributes_list() {
 		// Create the attributes.
 		GC\GamesCollector\Attributes\create_default_attributes();
 
 		$post_id = $this->factory->post->create( [ 'post_title' => 'Wizard School' ] );
 		wp_set_object_terms( $post_id, [ 'Card Game', 'Fantasy', 'Cooperative' ], 'gc_attribute' );
+		$attribute_list = GC\GamesCollector\Attributes\get_the_attribute_list( $post_id );
+		$expected_output = '<span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-coop">Cooperative</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>';
 
 		$this->assertEquals(
-			$attribute_list = GC\GamesCollector\Attributes\get_the_attribute_list( $post_id ),
-			$expected_output = '<span class="gc-attribute attribute-card">Card Game</span>, <span class="gc-attribute attribute-coop">Cooperative</span>, <span class="gc-attribute attribute-fantasy">Fantasy</span>',
+			$attribute_list,
+			$expected_output,
 			sprintf( 'Attribute list did not match expected output. Expected %1$s saw %2$s', $expected_output, $attribute_list )
 		);
 	}

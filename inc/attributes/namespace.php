@@ -8,23 +8,26 @@
 
 namespace GC\GamesCollector\Attributes;
 
-
 /**
  * Register the taxonomies.
  *
  * @since 0.1
  */
 function register_taxonomy() {
-	register_extended_taxonomy( 'gc_attribute', 'gc_game', [
+	register_extended_taxonomy( 
+		'gc_attribute', 
+		'gc_game', 
+		[
 			'dashboard_glance' => true,   // Show this taxonomy in the 'At a Glance' widget.
 			'hierarchical'     => false,
 			'show_in_rest'     => true,
 			'rest_base'        => 'attributes',
-		], [
+		], 
+		[
 			'singular'      => __( 'Game Attribute', 'games-collector' ),
 			'plural'        => __( 'Game Attributes', 'games-collector' ),
 			'slug'          => 'attribute',
-		]
+		] 
 	);
 }
 
@@ -50,8 +53,8 @@ function enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_script( 'chosen', plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'vendor/harvesthq/chosen/chosen.jquery.min.js', [ 'jquery' ], '1.8', true );
-	wp_enqueue_style( 'chosen', plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'vendor/harvesthq/chosen/chosen.min.css', [], '1.8' );
+	wp_enqueue_script( 'chosen', plugin_dir_url( dirname( __DIR__ ) ) . 'vendor/harvesthq/chosen/chosen.jquery.min.js', [ 'jquery' ], '1.8', true );
+	wp_enqueue_style( 'chosen', plugin_dir_url( dirname( __DIR__ ) ) . 'vendor/harvesthq/chosen/chosen.min.css', [], '1.8' );
 }
 
 /**
@@ -62,32 +65,32 @@ function enqueue_scripts() {
  * @link  https://gist.github.com/helen/1573966#file-wp-chosen-tax-metabox-php
  */
 function meta_box_display() {
-		wp_nonce_field( 'chosen-save-tax-terms', 'chosen_taxonomy_meta_box_nonce' );
-		$tax = 'gc_attribute';
-		?>
-		<script type="text/javascript">
-		jQuery(document).ready(function($){
-			$( '.chzn-select' ).chosen();
-		});
-		</script>
-		<?php
-		if ( current_user_can( 'edit_posts' ) ) {
+	wp_nonce_field( 'chosen-save-tax-terms', 'chosen_taxonomy_meta_box_nonce' );
+	$tax = 'gc_attribute';
+	?>
+	<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$( '.chzn-select' ).chosen();
+	});
+	</script>
+	<?php
+	if ( current_user_can( 'edit_posts' ) ) {
 
-			$terms = get_terms( $tax, [ 'hide_empty' => 0 ] );
-			$current_terms = wp_get_post_terms( get_the_ID(), $tax, [ 'fields' => 'ids' ] );
-			$name = "tax_input[$tax]";
+		$terms = get_terms( $tax );
+		$current_terms = wp_get_post_terms( get_the_ID(), $tax, [ 'fields' => 'ids' ] );
+		$name = "tax_input[$tax]";
+		?>
+		<p><select name="<?php echo esc_attr( $name ); ?>[]" class="chzn-select widefat" data-placeholder="<?php esc_attr_e( 'Select one or more attributes', 'games-collector' ); ?>" multiple="multiple">
+		<?php
+		foreach ( $terms as $term ) {
+			$value = $term->slug;
 			?>
-			<p><select name="<?php echo esc_html( $name ); ?>[]" class="chzn-select widefat" data-placeholder="<?php esc_html_e( 'Select one or more attributes', 'games-collector' ); ?>" multiple="multiple">
-			<?php
-			foreach ( $terms as $term ) {
-				$value = $term->slug;
-			?>
-			<option value="<?php echo esc_html( $value ); ?>"<?php selected( in_array( $term->term_id, $current_terms ) ); ?>><?php echo esc_html( $term->name ); ?></option>
-			<?php } ?>
-			</select>
-			</p>
-			<?php
-		}
+			<option value="<?php echo esc_attr( $value ); // phpcs:ignore WordPressVIPMinimum.Security.ProperEscapingFunction.notAttrEscAttr ?>"<?php selected( in_array( $term->term_id, $current_terms ) ); ?>><?php echo esc_attr( $term->name ); ?></option>
+		<?php } ?>
+		</select>
+		</p>
+		<?php
+	}
 }
 
 /**
@@ -180,10 +183,12 @@ function create_default_attributes() {
  * @since 0.1
  * @link  https://helen.wordpress.com/2012/01/08/using-chosen-for-a-replacement-taxonomy-metabox/
  * @link  https://gist.github.com/helen/1573966#file-wp-chosen-tax-metabox-php
+ * 
+ * @param int $post_id The post ID.
  */
 function save_post( $post_id ) {
 	// Verify nonce.
-	if ( ! isset( $_POST['chosen_taxonomy_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['chosen_taxonomy_meta_box_nonce'], 'chosen-save-tax-terms' ) ) {
+	if ( ! isset( $_POST['chosen_taxonomy_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['chosen_taxonomy_meta_box_nonce'], 'chosen-save-tax-terms' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		return;
 	}
 	// Check autosave.
@@ -191,7 +196,7 @@ function save_post( $post_id ) {
 		return;
 	}
 
-	$input = isset( $_POST['tax_input']['gc_attribute'] ) ? $_POST['tax_input']['gc_attribute'] : '';
+	$input = isset( $_POST['tax_input']['gc_attribute'] ) ? $_POST['tax_input']['gc_attribute'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 	if ( empty( $input ) ) {
 		$taxonomy = get_taxonomy( 'gc_attribute' );

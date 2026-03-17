@@ -7,7 +7,7 @@
  */
 
 use GC\GamesCollector;
-use GC\GamesCollector\Attributes as Attributes;
+use GC\GamesCollector\Attributes;
 
 /**
  * Games Collector API unit test class.
@@ -17,13 +17,20 @@ use GC\GamesCollector\Attributes as Attributes;
 class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 
 	/**
+	 * The REST server.
+	 *
+	 * @var WP_Rest_Server
+	 */
+	protected $server;
+
+	/**
 	 * Kick off the rest api.
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		global $wp_rest_server;
-
-		$this->server = $wp_rest_server = new \WP_Rest_Server;
+		$wp_rest_server = new \WP_Rest_Server();
+		$this->server = $wp_rest_server;
 		do_action( 'rest_api_init' );
 	}
 
@@ -34,7 +41,13 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 * @return object WP_Post object for the game.
 	 */
 	private function get_game() {
-		$game = get_page_by_title( 'Chrononauts', OBJECT, 'gc_game' );
+		$games = get_posts( [
+			'title' => 'chrononauts',
+			'post_type' => 'gc_game',
+			'posts_per_page' => 1,
+		] );
+
+		$game = array_shift( $games ) ?: false;
 
 		if ( ! $game ) {
 			$post_id = $this->factory->post->create([
@@ -105,7 +118,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 					$this->assertArrayHasKey( 'callback', $endpoint );
 					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
 					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
-					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+					$this->assertTrue( is_callable( [ $endpoint['callback'][0], $endpoint['callback'][1] ] ) );
 				}
 			}
 		}
@@ -152,7 +165,7 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 					$this->assertArrayHasKey( 'callback', $endpoint );
 					$this->assertArrayHasKey( 0, $endpoint['callback'], get_class( $this ) );
 					$this->assertArrayHasKey( 1, $endpoint['callback'], get_class( $this ) );
-					$this->assertTrue( is_callable( array( $endpoint['callback'][0], $endpoint['callback'][1] ) ) );
+					$this->assertTrue( is_callable( [ $endpoint['callback'][0], $endpoint['callback'][1] ] ) );
 				}
 			}
 		}
@@ -176,7 +189,155 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 			$response->data['name'],
 			'Tried to get the attribute "Fantasy" via the API but was not able to retrieve attribute information from the API.'
 		);
+	}
 
+	/**
+	 * Test that the public gc/v1/games endpoint is registered.
+	 *
+	 * @since 1.4.0
+	 */
+	public function test_public_games_endpoint_is_registered() {
+		$routes   = $this->server->get_routes();
+		$my_route = '/gc/v1/games';
+
+		$this->assertArrayHasKey(
+			$my_route,
+			$routes,
+			'The /gc/v1/games route was not registered.'
+		);
+
+		$endpoint = $routes[ $my_route ];
+		$this->assertArrayHasKey( 'callback', $endpoint[0], 'Endpoint is missing a callback.' );
+		$this->assertTrue( is_callable( $endpoint[0]['callback'] ), 'Endpoint callback is not callable.' );
+	}
+
+	/**
+	 * Test that the public gc/v1/games endpoint returns 200 and game data.
+	 *
+	 * @since 1.4.0
+	 */
+	public function test_public_games_endpoint_returns_games() {
+		$this->get_game(); // Ensure at least one game exists.
+
+		$request  = new \WP_Rest_Request( 'GET', '/gc/v1/games' );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals(
+			200,
+			$response->get_status(),
+			'The /gc/v1/games endpoint did not return 200 OK.'
+		);
+
+		$data = $response->get_data();
+		$this->assertIsArray( $data, 'Response data should be an array of games.' );
+		$this->assertNotEmpty( $data, 'Response should contain at least one game.' );
+	}
+
+	/**
+	 * Test that the public gc/v1/games endpoint requires no authentication.
+	 *
+	 * @since 1.4.0
+	 */
+	public function test_public_games_endpoint_is_public() {
+		wp_set_current_user( 0 ); // Simulate unauthenticated request.
+
+		$request  = new \WP_Rest_Request( 'GET', '/gc/v1/games' );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals(
+			200,
+			$response->get_status(),
+			'The /gc/v1/games endpoint should be publicly accessible without authentication.'
+		);
+	}
+
+	/**
+	 * Test the response shape for a game returned by the public endpoint.
+	 *
+	 * @since 1.4.0
+	 */
+	public function test_public_games_endpoint_response_shape() {
+		$this->get_game(); // Ensure a game with known meta exists.
+
+		$request  = new \WP_Rest_Request( 'GET', '/gc/v1/games' );
+		$response = $this->server->dispatch( $request );
+		$games    = $response->get_data();
+		$game     = $games[0];
+
+		$required_keys = [ 'id', 'slug', 'date', 'title', 'min_players', 'max_players', 'time', 'age', 'difficulty', 'url', 'bgg_id', 'attributes', 'attribute_slugs', 'featured_image' ];
+		foreach ( $required_keys as $key ) {
+			$this->assertArrayHasKey(
+				$key,
+				$game,
+				"Game response is missing expected field: {$key}"
+			);
+		}
+
+		$this->assertArrayHasKey( 'rendered', $game['title'], 'title should have a rendered key.' );
+	}
+
+	/**
+	 * Test that post meta values are correctly returned by the public endpoint.
+	 *
+	 * @since 1.4.0
+	 */
+	public function test_public_games_endpoint_meta_values() {
+		$game_post = $this->get_game();
+
+		$request  = new \WP_Rest_Request( 'GET', '/gc/v1/games' );
+		$response = $this->server->dispatch( $request );
+		$games    = $response->get_data();
+
+		// Find our test game in the response.
+		$found = null;
+		foreach ( $games as $game ) {
+			if ( $game['id'] === $game_post->ID ) {
+				$found = $game;
+				break;
+			}
+		}
+
+		$this->assertNotNull( $found, 'Test game was not found in the /gc/v1/games response.' );
+		$this->assertSame( 1, $found['min_players'], 'min_players should be cast to integer.' );
+		$this->assertSame( 6, $found['max_players'], 'max_players should be cast to integer.' );
+		$this->assertSame( '20-45', $found['time'], 'time should match the stored meta value.' );
+		$this->assertSame( 11, $found['age'], 'age should be cast to integer.' );
+		$this->assertSame( 'easy', $found['difficulty'], 'difficulty should match the stored meta value.' );
+		$this->assertSame(
+			'https://boardgamegeek.com/boardgame/815/chrononauts',
+			$found['url'],
+			'url should match the stored meta value.'
+		);
+		$this->assertIsArray( $found['attributes'], 'attributes should be an array.' );
+		$this->assertIsArray( $found['attribute_slugs'], 'attribute_slugs should be an array.' );
+	}
+
+	/**
+	 * Test that gc/v1/games supports pagination parameters.
+	 *
+	 * @since 1.4.0
+	 */
+	public function test_public_games_endpoint_pagination() {
+		// Create a second game so we can paginate.
+		$this->factory->post->create(
+			[
+				'post_title' => 'Ticket to Ride',
+				'post_type'  => 'gc_game',
+			]
+		);
+		$this->get_game(); // Ensure Chrononauts exists.
+
+		$request = new \WP_Rest_Request( 'GET', '/gc/v1/games' );
+		$request->set_param( 'per_page', 1 );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals( 200, $response->get_status() );
+		$this->assertCount( 1, $response->get_data(), 'per_page=1 should return exactly one game.' );
+
+		$headers = $response->get_headers();
+		$this->assertArrayHasKey( 'X-WP-Total', $headers, 'Response should include X-WP-Total header.' );
+		$this->assertArrayHasKey( 'X-WP-TotalPages', $headers, 'Response should include X-WP-TotalPages header.' );
+		$this->assertGreaterThanOrEqual( 2, $headers['X-WP-Total'], 'X-WP-Total should reflect all published games.' );
 	}
 
 	/**

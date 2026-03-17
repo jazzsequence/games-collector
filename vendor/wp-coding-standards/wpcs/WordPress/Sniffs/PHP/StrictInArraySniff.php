@@ -3,130 +3,120 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
+
+namespace WordPressCS\WordPress\Sniffs\PHP;
+
+use PHPCSUtils\Utils\PassedParameters;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.
  *
- * @link    https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
- *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.9.0
- * @since   0.10.0 This sniff not only checks for `in_array()`, but also `array_search()` and `array_keys()`.
- *                 The sniff no longer needlessly extends the WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff
- *                 which it didn't use.
+ * @since 0.9.0
+ * @since 0.10.0 - This sniff not only checks for `in_array()`, but also `array_search()`
+ *                 and `array_keys()`.
+ *               - The sniff no longer needlessly extends the `ArrayAssignmentRestrictionsSniff`
+ *                 class which it didn't use.
+ * @since 0.11.0 Refactored to extend the new WordPressCS native `AbstractFunctionParameterSniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
+final class StrictInArraySniff extends AbstractFunctionParameterSniff {
+
+	/**
+	 * The group name for this group of functions.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string
+	 */
+	protected $group_name = 'strict';
 
 	/**
 	 * List of array functions to which a $strict parameter can be passed.
 	 *
-	 * The $strict parameter is the third and last parameter for each of these functions.
-	 *
 	 * The array_keys() function only requires the $strict parameter when the optional
-	 * second parameter $search has been set.
+	 * second parameter $filter_value has been set.
 	 *
-	 * @link http://php.net/in-array
-	 * @link http://php.net/array-search
-	 * @link http://php.net/array-keys
+	 * @link https://www.php.net/in-array
+	 * @link https://www.php.net/array-search
+	 * @link https://www.php.net/array-keys
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Renamed from $array_functions to $target_functions.
+	 * @since 3.0.0  The format of the array value has changed from boolean to array.
 	 *
-	 * @var array <string function_name> => <bool always needed ?>
+	 * @var array<string, array{param_position: int, param_name: string, always_needed: bool}> Key is the function name.
 	 */
-	protected $array_functions = array(
-		'in_array'     => true,
-		'array_search' => true,
-		'array_keys'   => false,
+	protected $target_functions = array(
+		'in_array'     => array(
+			'param_position' => 3,
+			'param_name'     => 'strict',
+			'always_needed'  => true,
+		),
+		'array_search' => array(
+			'param_position' => 3,
+			'param_name'     => 'strict',
+			'always_needed'  => true,
+		),
+		'array_keys'   => array(
+			'param_position' => 3,
+			'param_name'     => 'strict',
+			'always_needed'  => false,
+		),
 	);
 
 	/**
-	 * Returns an array of tokens this test wants to listen for.
+	 * Process the parameters of a matched function.
 	 *
-	 * @return array
-	 */
-	public function register() {
-		return array(
-			T_STRING
-		);
-	}
-
-	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * @since 0.11.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = strtolower( $tokens[ $stackPtr ]['content'] );
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
+		$param_info = $this->target_functions[ $matched_content ];
 
-		// Bail out if not one of the targetted functions.
-		if ( ! isset( $this->array_functions[ $token ] ) ) {
-			return;
-		}
-
-		if ( ! isset( $tokens[ ( $stackPtr - 1 ) ] ) ) {
-			return;
-		}
-
-		$prev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-
-		if ( false !== $prev ) {
-			// Skip sniffing if calling a same-named method, or on function definitions.
-			if ( in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true ) ) {
-				return;
-			}
-
-			// Skip namespaced functions, ie: \foo\bar() not \bar().
-			$pprev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
-			if ( false !== $pprev && T_NS_SEPARATOR === $tokens[ $prev ]['code'] && T_STRING === $tokens[ $pprev ]['code'] ) {
-				return;
-			}
-		}
-		unset( $prev, $pprev );
-
-		// Get the closing parenthesis.
-		$openParenthesis = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $stackPtr + 1 ) );
-		if ( false === $openParenthesis ) {
-			return;
-		}
-
-		// Gracefully handle syntax error.
-		if ( ! isset( $tokens[ $openParenthesis ]['parenthesis_closer'] ) ) {
-			$phpcsFile->addError( 'Missing closing parenthesis for in_array().', $openParenthesis, 'MissingClosingParenthesis' );
-			return;
-		}
-
-		// Get last token in the function call.
-		$closeParenthesis = $tokens[ $openParenthesis ]['parenthesis_closer'];
-		$lastToken        = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ), true );
-
-		// Check if the strict check is actually needed.
-		if ( false === $this->array_functions[ $token ] ) {
-			$hasComma = $phpcsFile->findPrevious( T_COMMA, ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ) );
-			if ( false === $hasComma || end( $tokens[ $hasComma ]['nested_parenthesis'] ) !== $closeParenthesis ) {
+		/*
+		 * Check if the strict check is actually needed.
+		 *
+		 * Important! This check only applies to array_keys() in the current form of the sniff
+		 * and has been written to be specific to that function.
+		 * If more functions would be added with 'always_needed' set to `false`,
+		 * this code will need to be adjusted to handle those.
+		 */
+		if ( false === $param_info['always_needed'] ) {
+			$has_filter_value = PassedParameters::getParameterFromStack( $parameters, 2, 'filter_value' );
+			if ( false === $has_filter_value ) {
 				return;
 			}
 		}
 
-		$errorData = array( $token );
+		$found_parameter = PassedParameters::getParameterFromStack( $parameters, $param_info['param_position'], $param_info['param_name'] );
+		if ( false === $found_parameter || 'true' !== strtolower( $found_parameter['clean'] ) ) {
+			$errorcode = 'MissingTrueStrict';
 
-		if ( false === $lastToken ) {
-			$phpcsFile->addError( 'Missing arguments to %s.', $openParenthesis, 'MissingArguments', $errorData );
-			return;
+			/*
+			 * Use a different error code when `false` is found to allow for excluding
+			 * the warning as this will be a conscious choice made by the dev.
+			 */
+			if ( is_array( $found_parameter ) && 'false' === strtolower( $found_parameter['clean'] ) ) {
+				$errorcode = 'FoundNonStrictFalse';
+			}
+
+			$this->phpcsFile->addWarning(
+				'Not using strict comparison for %s; supply true for $%s argument.',
+				( isset( $found_parameter['start'] ) ? $found_parameter['start'] : $stackPtr ),
+				$errorcode,
+				array( $matched_content, $param_info['param_name'] )
+			);
 		}
-
-		if ( T_TRUE !== $tokens[ $lastToken ]['code'] ) {
-			$phpcsFile->addWarning( 'Not using strict comparison for %s; supply true for third argument.', $lastToken, 'MissingTrueStrict', $errorData );
-			return;
-		}
-	} // end process()
-
-} // End class.
+	}
+}

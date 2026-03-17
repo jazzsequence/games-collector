@@ -1,14 +1,16 @@
 <?php
+
 namespace PSR2R\Sniffs\WhiteSpace;
 
-use PHP_CodeSniffer_File;
+use PHP_CodeSniffer\Files\File;
 use PSR2R\Tools\AbstractSniff;
 
+/**
+ * Removes multi newlines in favor of single newlines.
+ */
 class EmptyLinesSniff extends AbstractSniff {
 
 	/**
-	 * A list of tokenizers this sniff supports.
-	 *
 	 * @var array
 	 */
 	public $supportedTokenizers = [
@@ -20,27 +22,35 @@ class EmptyLinesSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [T_WHITESPACE];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
+	public function process(File $phpcsFile, $stackPtr) {
+		$this->assertMaximumOneEmptyLineBetweenContent($phpcsFile, $stackPtr);
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $stackPtr
+	 *
+	 * @return void
+	 */
+	protected function assertMaximumOneEmptyLineBetweenContent(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 		if ($tokens[$stackPtr]['content'] === $phpcsFile->eolChar
-			&& isset($tokens[($stackPtr + 1)]) === true
+			&& isset($tokens[($stackPtr + 1)])
 			&& $tokens[($stackPtr + 1)]['content'] === $phpcsFile->eolChar
-			&& isset($tokens[($stackPtr + 2)]) === true
+			&& isset($tokens[($stackPtr + 2)])
 			&& $tokens[($stackPtr + 2)]['content'] === $phpcsFile->eolChar
-			&& isset($tokens[($stackPtr + 3)]) === true
-			&& $tokens[($stackPtr + 3)]['content'] === $phpcsFile->eolChar
 		) {
-			$error = '2 empty lines and more are not allowed';
-			$fix = $phpcsFile->addFixableError($error, ($stackPtr + 3), 'EmptyLines');
+			$error = 'Found more than a single empty line between content';
+			$fix = $phpcsFile->addFixableError($error, ($stackPtr + 2), 'EmptyLines');
 			if ($fix) {
-				$phpcsFile->fixer->replaceToken($stackPtr + 3, '');
+				$phpcsFile->fixer->replaceToken($stackPtr + 2, '');
 			}
 		}
 	}

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="code-sniffer">
+    <config name="installed_paths" value="../../spryker/code-sniffer"/>
+    <config name="php_version" value="70300"/>
+
+    <arg name="tab-width" value="4"/>
+    <arg value="nps"/>
+
+    <file>Spryker/</file>
+    <file>SprykerStrict/</file>
+    <file>GlueStreamSpecific/</file>
+    <file>tests/Spryker/</file>
+    <file>tests/TestCase.php</file>
+    <file>docs/</file>
+    <file>bin/</file>
+
+    <rule ref="SprykerStrict"/>
+
+    <rule ref="Spryker.Namespaces.SprykerNamespace">
+        <properties>
+            <property name="namespace" value="Spryker"/>
+            <property name="rootDir" value="Spryker"/>
+            <property name="isRoot" value="true"/>
+        </properties>
+    </rule>
+
+    <exclude-pattern>/Spryker/tests/files/</exclude-pattern>
+
+</ruleset>

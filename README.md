@@ -1,13 +1,13 @@
 # Games Collector #
-[![Build Status](https://travis-ci.org/jazzsequence/games-collector.svg?branch=develop)](https://travis-ci.org/jazzsequence/games-collector) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jazzsequence/games-collector/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/jazzsequence/games-collector/?branch=develop) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![Lint & Test](https://github.com/jazzsequence/games-collector/actions/workflows/lint-test.yml/badge.svg?branch=develop)](https://github.com/jazzsequence/games-collector/actions/workflows/lint-test.yml) [![Code Coverage](https://scrutinizer-ci.com/g/jazzsequence/games-collector/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/jazzsequence/games-collector/?branch=develop) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 
 **Contributors:**      [jazzsequence](https://github.com/jazzsequence)  
 **Donate link:**       https://www.paypal.me/jazzsequence/  
 **Tags:**  
 **Requires at least:** 4.4  
-**Tested up to:**      4.9.8  
-**Stable tag:**        1.3.1  
+**Tested up to:**      6.9  
+**Stable tag:**        2.0.0  
 **License:**           GPLv3  
 **License URI:**       http://www.gnu.org/licenses/gpl-3.0.html  
 **Demo:**              https://jazzsequence.com/games/
@@ -40,6 +40,30 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ![Games Collector Gutenberg block](https://user-images.githubusercontent.com/991511/45578321-f6ec5780-b83d-11e8-949e-cb56907af0a5.png)
 
 ## Changelog ##
+
+### 2.0.0 ###
+* **Breaking change**: BoardGameGeek API now requires a registered Bearer token for all XML API requests. BGG search and import will not function without a token. Register your application at [boardgamegeek.com/applications](https://boardgamegeek.com/applications) and add your token under Games → Settings.
+* Added BGG API Token settings page under the Games admin menu.
+* Admin notice on all game screens when no BGG token is configured.
+* Token can also be defined as a constant in wp-config.php: `define( 'GC_BGG_API_TOKEN', 'your-token' );`
+* Added public REST endpoint `GET /wp-json/gc/v1/games` for headless frontend access.
+* Upgraded to PHP 8.3 as minimum tested version.
+* BGG API requests now use `boardgamegeek.com` (without www) per BGG documentation.
+
+### 1.3.6 ###
+* Added handling for when CMB2 (or Extended CPTs) is not loaded correctly. [[#73](https://github.com/jazzsequence/games-collector/pull/73)]
+
+### 1.3.5 ###
+* Added actual `composer.json` file so the plugin could be installed via Packagist. [[#71](https://github.com/jazzsequence/games-collector/pull/71)]
+
+### 1.3.4 ###
+* use the jQuery implementation of Isotope
+
+### 1.3.3 ###
+* require isotope as a dependency for our isotope loader
+
+### 1.3.2 ###
+* Update version for new Composer build
 
 ### 1.3.1 ###
 * Uses composer for dependencies and updates paths

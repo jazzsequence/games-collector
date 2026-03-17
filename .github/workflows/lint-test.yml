@@ -1,0 +1,51 @@
+name: Lint & Test
+on: [push]
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Lint
+        run: composer lint
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Setup PHP with coverage
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: pcov
+      - name: Setup WP-CLI
+        uses: godaddy-wordpress/setup-wp-cli@1
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Set up WordPress test suite
+        run: |
+          chmod +x bin/*.sh
+          composer test:setup
+      - name: Test with coverage
+        run: composer test:coverage
+      - name: Upload coverage to Scrutinizer
+        run: |
+          vendor/bin/ocular code-coverage:upload --format=php-clover --revision=${{ github.sha }} coverage.xml

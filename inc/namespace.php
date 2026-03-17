@@ -15,6 +15,8 @@ namespace GC\GamesCollector;
 function bootstrap() {
 	// Add all your plugin hooks here.
 	add_action( 'cmb2_admin_init', __NAMESPACE__ . '\\BGG\\fields' );
+	add_action( 'cmb2_admin_init', __NAMESPACE__ . '\\BGG\\register_settings_page' );
+	add_action( 'admin_notices', __NAMESPACE__ . '\\BGG\\maybe_show_api_token_notice' );
 	add_action( 'cmb2_init', __NAMESPACE__ . '\\Game\\fields' );
 	add_action( 'cmb2_render_bgg_search', __NAMESPACE__ . '\\BGG\\render_cmb2_bgg_search', 10, 5 );
 	add_action( 'cmb2_render_bgg_search_reset', __NAMESPACE__ . '\\BGG\\render_cmb2_bgg_search_reset', 10, 5 );
@@ -30,6 +32,7 @@ function bootstrap() {
 	add_action( 'admin_post_bgg_insert_game', __NAMESPACE__ . '\\BGG\\insert_game' );
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\Gutenberg\\enqueue_block_editor_assets' );
 	add_action( 'wp', __NAMESPACE__ . '\\Gutenberg\\register_blocks' );
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\Api\\register_routes' );
 	add_filter( 'rest_prepare_gc_game', __NAMESPACE__ . '\\Api\\filter_games_json', 10, 2 );
 	add_filter( 'gc_filter_players', __NAMESPACE__ . '\\numbers_of_players', 10, 3 );
 	add_filter( 'custom_menu_order', __NAMESPACE__ . '\\BGG\\submenu_order' );
@@ -43,7 +46,14 @@ function bootstrap() {
  * @since  1.1.0
  */
 function activate() {
-	if ( ! get_page_by_title( esc_html__( 'Games', 'games-collector' ) ) ) {
+	$existing_page = get_posts( [
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'title'          => esc_html__( 'Games', 'games-collector' ),
+	] );
+
+	if ( ! $existing_page ) {
 		wp_insert_post([
 			'post_type'    => 'page',
 			'post_title'   => esc_html__( 'Games', 'games-collector' ),

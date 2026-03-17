@@ -2,21 +2,17 @@
 /**
  * PSR2_Sniffs_WhiteSpace_ControlStructureSpacingSniff.
  *
- * PHP version 5
- *
- * @category  PHP
- *
- * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link http://pear.php.net/package/PHP_CodeSniffer
  */
 
 namespace PSR2R\Sniffs\ControlStructures;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * PSR2_Sniffs_WhiteSpace_ControlStructureSpacingSniff.
@@ -31,7 +27,7 @@ use PHP_CodeSniffer_Sniff;
  *
  * @link http://pear.php.net/package/PHP_CodeSniffer
  */
-class ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
+class ControlStructureSpacingSniff implements Sniff {
 
 	/**
 	 * How many spaces should follow the opening bracket.
@@ -39,6 +35,24 @@ class ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 	 * @var int
 	 */
 	public $requiredSpacesAfterOpen = 0;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function register(): array {
+		return [
+			T_IF,
+			T_WHILE,
+			T_FOREACH,
+			T_FOR,
+			T_SWITCH,
+			T_DO,
+			T_ELSE,
+			T_ELSEIF,
+			T_TRY,
+			T_CATCH,
+		];
+	}
 
 	/**
 	 * How many spaces should precede the closing bracket.
@@ -50,25 +64,7 @@ class ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
-		return [
-				T_IF,
-				T_WHILE,
-				T_FOREACH,
-				T_FOR,
-				T_SWITCH,
-				T_DO,
-				T_ELSE,
-				T_ELSEIF,
-				T_TRY,
-				T_CATCH,
-			   ];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
+	public function process(File $phpcsFile, $stackPtr) {
 		$this->requiredSpacesAfterOpen = (int)$this->requiredSpacesAfterOpen;
 		$this->requiredSpacesBeforeClose = (int)$this->requiredSpacesBeforeClose;
 		$tokens = $phpcsFile->getTokens();
@@ -82,58 +78,59 @@ class ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 		$parenOpener = $tokens[$stackPtr]['parenthesis_opener'];
 		$parenCloser = $tokens[$stackPtr]['parenthesis_closer'];
 		$spaceAfterOpen = 0;
-		if ($tokens[($parenOpener + 1)]['code'] === T_WHITESPACE) {
-			if (strpos($tokens[($parenOpener + 1)]['content'], $phpcsFile->eolChar) !== false) {
+		if ($tokens[$parenOpener + 1]['code'] === T_WHITESPACE) {
+			if (strpos($tokens[$parenOpener + 1]['content'], $phpcsFile->eolChar) !== false) {
 				$spaceAfterOpen = 'newline';
 			} else {
-				$spaceAfterOpen = strlen($tokens[($parenOpener + 1)]['content']);
+				$spaceAfterOpen = strlen($tokens[$parenOpener + 1]['content']);
 			}
 		}
 
 		$phpcsFile->recordMetric($stackPtr, 'Spaces after control structure open parenthesis', $spaceAfterOpen);
 
-		if ($tokens[$parenOpener]['line'] === $tokens[$parenCloser]['line']) {
-			if ($spaceAfterOpen !== $this->requiredSpacesAfterOpen) {
-				$error = 'Expected %s spaces after opening bracket; %s found';
-				$data = [
-						  $this->requiredSpacesAfterOpen,
-						  $spaceAfterOpen,
-						 ];
-				$fix = $phpcsFile->addFixableError($error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data);
-				if ($fix === true) {
-					$padding = str_repeat(' ', $this->requiredSpacesAfterOpen);
-					if ($spaceAfterOpen === 0) {
-						$phpcsFile->fixer->addContent($parenOpener, $padding);
-					} elseif ($spaceAfterOpen === 'newline') {
-						$phpcsFile->fixer->replaceToken(($parenOpener + 1), '');
-					} else {
-						$phpcsFile->fixer->replaceToken(($parenOpener + 1), $padding);
-					}
+		if (($spaceAfterOpen !== $this->requiredSpacesAfterOpen) &&
+			($tokens[$parenOpener]['line'] === $tokens[$parenCloser]['line'])
+		) {
+			$error = 'Expected %s spaces after opening bracket; %s found';
+			$data = [
+				$this->requiredSpacesAfterOpen,
+				$spaceAfterOpen,
+			];
+			$fix = $phpcsFile->addFixableError($error, $parenOpener + 1, 'SpacingAfterOpenBrace', $data);
+			if ($fix === true) {
+				$padding = str_repeat(' ', $this->requiredSpacesAfterOpen);
+				if ($spaceAfterOpen === 0) {
+					$phpcsFile->fixer->addContent($parenOpener, $padding);
+				} elseif ($spaceAfterOpen === 'newline') {
+					$phpcsFile->fixer->replaceToken($parenOpener + 1, '');
+				} else {
+					$phpcsFile->fixer->replaceToken($parenOpener + 1, $padding);
 				}
 			}
 		}
 
 		if ($tokens[$parenOpener]['line'] === $tokens[$parenCloser]['line']) {
 			$spaceBeforeClose = 0;
-			if ($tokens[($parenCloser - 1)]['code'] === T_WHITESPACE) {
-				$spaceBeforeClose = strlen(ltrim($tokens[($parenCloser - 1)]['content'], $phpcsFile->eolChar));
+			if ($tokens[$parenCloser - 1]['code'] === T_WHITESPACE) {
+				$spaceBeforeClose = strlen(ltrim($tokens[$parenCloser - 1]['content'], $phpcsFile->eolChar));
 			}
 
-			$phpcsFile->recordMetric($stackPtr, 'Spaces before control structure close parenthesis', $spaceBeforeClose);
+			$phpcsFile->recordMetric($stackPtr, 'Spaces before control structure close parenthesis', (string)$spaceBeforeClose);
+			$x = (bool)$phpcsFile;
 
 			if ($spaceBeforeClose !== $this->requiredSpacesBeforeClose) {
 				$error = 'Expected %s spaces before closing bracket; %s found';
 				$data = [
-						  $this->requiredSpacesBeforeClose,
-						  $spaceBeforeClose,
-						 ];
-				$fix = $phpcsFile->addFixableError($error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data);
+					$this->requiredSpacesBeforeClose,
+					$spaceBeforeClose,
+				];
+				$fix = $phpcsFile->addFixableError($error, $parenCloser - 1, 'SpaceBeforeCloseBrace', $data);
 				if ($fix === true) {
 					$padding = str_repeat(' ', $this->requiredSpacesBeforeClose);
 					if ($spaceBeforeClose === 0) {
 						$phpcsFile->fixer->addContentBefore($parenCloser, $padding);
 					} else {
-						$phpcsFile->fixer->replaceToken(($parenCloser - 1), $padding);
+						$phpcsFile->fixer->replaceToken($parenCloser - 1, $padding);
 					}
 				}
 			}

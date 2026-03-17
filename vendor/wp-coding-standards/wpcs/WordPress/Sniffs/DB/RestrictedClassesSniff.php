@@ -3,9 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
+
+namespace WordPressCS\WordPress\Sniffs\DB;
+
+use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
 
 /**
  * Verifies that no database related PHP classes are used.
@@ -15,23 +19,22 @@
  *  helps keep your code forward-compatible and, in cases where results are cached in memory,
  *  it can be many times faster."
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
+ * @since 0.10.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClassRestrictionsSniff {
+final class RestrictedClassesSniff extends AbstractClassRestrictionsSniff {
 
 	/**
 	 * Groups of classes to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Avoid direct calls to the database.',
-	 * 		'classes'   => array( 'PDO', '\Namespace\Classname' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'    => 'error' | 'warning',
+	 *      'message' => 'Avoid direct calls to the database.',
+	 *      'classes' => array( 'PDO', '\Namespace\Classname' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
@@ -40,8 +43,8 @@ class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClass
 		return array(
 
 			'mysql' => array(
-				'type'      => 'error',
-				'message'   => 'Accessing the database directly should be avoided. Please use the $wpdb object and associated functions instead. Found: %s.',
+				'type'    => 'error',
+				'message' => 'Accessing the database directly should be avoided. Please use the $wpdb object and associated functions instead. Found: %s.',
 				'classes' => array(
 					'mysqli',
 					'PDO',
@@ -51,5 +54,4 @@ class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClass
 
 		);
 	}
-
-} // End class.
+}

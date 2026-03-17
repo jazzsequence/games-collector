@@ -3,9 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
+
+namespace WordPressCS\WordPress\Sniffs\DB;
+
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Verifies that no database related PHP functions are used.
@@ -15,23 +19,22 @@
  *  helps keep your code forward-compatible and, in cases where results are cached in memory,
  *  it can be many times faster."
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
+ * @since 0.10.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_DB_RestrictedFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+final class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
@@ -51,12 +54,10 @@ class WordPress_Sniffs_DB_RestrictedFunctionsSniff extends WordPress_AbstractFun
 					'mysqlnd_memcache_*',
 					'maxdb_*',
 				),
-				'whitelist' => array(
+				'allow'     => array(
 					'mysql_to_rfc3339' => true,
 				),
 			),
-
 		);
 	}
-
-} // End class.
+}

@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    checkGenericClassInNonGenericObjectType: false
+    paths:
+        - Spryker/
+        - SprykerStrict/
+        - GlueStreamSpecific/
+    bootstrapFiles:
+        - '%rootDir%/../../../tests/bootstrap.php'

@@ -7,15 +7,15 @@
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://pear.php.net/package/PHP_CodeSniffer_CakePHP
- * @since         CakePHP CodeSniffer 1.0.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @copyright Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link http://pear.php.net/package/PHP_CodeSniffer_CakePHP
+ * @since CakePHP CodeSniffer 1.0.0
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace PSR2R\Sniffs\WhiteSpace;
 
-use PHP_CodeSniffer_File;
+use PHP_CodeSniffer\Files\File;
 use PSR2R\Tools\AbstractSniff;
 
 /**
@@ -29,26 +29,33 @@ class DocBlockAlignmentSniff extends AbstractSniff {
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [T_DOC_COMMENT_OPEN_TAG];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
+	public function process(File $phpcsFile, $stackPtr) {
+		// We skip for comments in the middle of code
+		if ($this->findFirstNonWhitespaceInLine($phpcsFile, $stackPtr)) {
+			return;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 		$leftWall = [
 			T_CLASS,
+			T_ENUM,
 			T_NAMESPACE,
 			T_INTERFACE,
 			T_TRAIT,
-			T_USE
+			T_USE,
 		];
 		$oneIndentation = [
+			T_ENUM_CASE,
 			T_FUNCTION,
 			T_VARIABLE,
-			T_CONST
+			T_CONST,
 		];
 		$allTokens = array_merge($leftWall, $oneIndentation);
 		$isNotFlatFile = $phpcsFile->findNext(T_NAMESPACE, 0);
@@ -69,13 +76,17 @@ class DocBlockAlignmentSniff extends AbstractSniff {
 		}
 
 		if ($nextIndex) {
-			$isNotWalled = (in_array($tokens[$nextIndex]['code'], $leftWall) && $tokens[$stackPtr]['column'] !== 1);
+			$isNotWalled =
+				(in_array($tokens[$nextIndex]['code'], $leftWall, false) && $tokens[$stackPtr]['column'] !== 1);
 			$isNotIndented = false;
 			if ($isNotFlatFile) {
-				$isNotIndented = (in_array($tokens[$nextIndex]['code'], $oneIndentation) && $tokens[$stackPtr]['column'] !== $expectedColumn && $tokens[$stackPtr]['column'] !== $expectedColumnAdjusted);
+				$isNotIndented = (in_array($tokens[$nextIndex]['code'], $oneIndentation, false) &&
+					$tokens[$stackPtr]['column'] !== $expectedColumn &&
+					$tokens[$stackPtr]['column'] !== $expectedColumnAdjusted);
 			}
 			if ($isNotWalled || $isNotIndented) {
-				$fix = $phpcsFile->addFixableError('Expected docblock to be aligned with code.', $stackPtr, 'NotAllowed');
+				$fix =
+					$phpcsFile->addFixableError('Expected docblock to be aligned with code.', $stackPtr, 'NotAllowed');
 				if ($fix) {
 					$docBlockEndIndex = $tokens[$stackPtr]['comment_closer'];
 
@@ -90,55 +101,59 @@ class DocBlockAlignmentSniff extends AbstractSniff {
 						$this->outdent($phpcsFile, $prevIndex);
 
 						for ($i = $stackPtr; $i <= $docBlockEndIndex; $i++) {
-							if (!$this->isGivenKind(T_DOC_COMMENT_WHITESPACE, $tokens[$i]) || $tokens[$i]['column'] !== 1) {
+							if (!$this->isGivenKind(T_DOC_COMMENT_WHITESPACE, $tokens[$i]) ||
+								$tokens[$i]['column'] !== 1
+							) {
 								continue;
 							}
 							$this->outdent($phpcsFile, $i);
 						}
 						$phpcsFile->fixer->endChangeset();
+
 						return;
 					}
 
-					if ($isNotIndented) {
-						// + means too much indentation (we need to outdend), - means not enough indentation (needs indenting)
-						if ($tokens[$stackPtr]['column'] < $expectedColumnAdjusted) {
-							$diff = $tokens[$stackPtr]['column'] - $expectedColumn;
-						} else {
-							$diff = ($tokens[$stackPtr]['column'] - $expectedColumnAdjusted) / 4;
-						}
-
-						$phpcsFile->fixer->beginChangeset();
-
-						$prevIndex = $stackPtr - 1;
-						if ($diff < 0 && $tokens[$prevIndex]['line'] !== $tokens[$stackPtr]['line']) {
-							$phpcsFile->fixer->addContentBefore($stackPtr, str_repeat("\t", -$diff));
-						} else {
-							$this->outdent($phpcsFile, $prevIndex);
-						}
-
-						for ($i = $stackPtr; $i <= $docBlockEndIndex; $i++) {
-							if (!$this->isGivenKind(T_DOC_COMMENT_WHITESPACE, $tokens[$i]) || $tokens[$i]['column'] !== 1) {
-								continue;
-							}
-							if ($diff < 0) {
-								$this->indent($phpcsFile, $i, -$diff);
-							} else {
-								$this->outdent($phpcsFile, $i, $diff);
-							}
-						}
-						$phpcsFile->fixer->endChangeset();
+					// + means too much indentation (we need to outdent), - means not enough indentation (needs indenting)
+					if ($tokens[$stackPtr]['column'] < $expectedColumnAdjusted) {
+						$diff = $tokens[$stackPtr]['column'] - $expectedColumn;
+					} else {
+						$diff = ($tokens[$stackPtr]['column'] - $expectedColumnAdjusted) / 4;
 					}
+
+					$phpcsFile->fixer->beginChangeset();
+
+					$prevIndex = $stackPtr - 1;
+					if ($diff < 0 && $tokens[$prevIndex]['line'] !== $tokens[$stackPtr]['line']) {
+						$phpcsFile->fixer->addContentBefore($stackPtr, str_repeat("\t", -$diff));
+					} else {
+						$this->outdent($phpcsFile, $prevIndex);
+					}
+
+					for ($i = $stackPtr; $i <= $docBlockEndIndex; $i++) {
+						if (!$this->isGivenKind(T_DOC_COMMENT_WHITESPACE, $tokens[$i]) ||
+							$tokens[$i]['column'] !== 1
+						) {
+							continue;
+						}
+						if ($diff < 0) {
+							$this->indent($phpcsFile, $i, -$diff);
+						} else {
+							$this->outdent($phpcsFile, $i, $diff);
+						}
+					}
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $index
+*
 	 * @return int|null
 	 */
-	protected function findFirstNonWhitespaceInLine(PHP_CodeSniffer_File $phpcsFile, $index) {
+	protected function findFirstNonWhitespaceInLine(File $phpcsFile, $index) {
 		$tokens = $phpcsFile->getTokens();
 
 		$firstIndex = $index;

@@ -11,13 +11,147 @@
 namespace GC\GamesCollector\BGG;
 
 /**
+ * Return the BGG API token.
+ *
+ * Reads from the GC_BGG_API_TOKEN constant (defined in wp-config.php) first,
+ * then falls back to the stored option.
+ *
+ * @since  2.0.0
+ * @return string The BGG API token, or empty string if not configured.
+ */
+function get_bgg_api_token(): string {
+	if ( defined( 'GC_BGG_API_TOKEN' ) && '' !== GC_BGG_API_TOKEN ) {
+		return (string) GC_BGG_API_TOKEN;
+	}
+
+	return (string) get_option( 'gc_bgg_api_token', '' );
+}
+
+/**
+ * Return the Authorization headers for BGG API requests.
+ *
+ * Returns an empty array if no API token is configured, which will cause BGG
+ * to return a 401 Unauthorized response.
+ *
+ * @since  2.0.0
+ * @return array Headers array for wp_remote_get/wp_remote_post.
+ */
+function get_bgg_auth_headers(): array {
+	$token = get_bgg_api_token();
+
+	if ( '' === $token ) {
+		return [];
+	}
+
+	return [
+		'Authorization' => 'Bearer ' . $token,
+	];
+}
+
+/**
+ * Register the BGG API Token settings page.
+ *
+ * @since 2.0.0
+ */
+function register_settings_page() {
+	if ( ! function_exists( 'new_cmb2_box' ) ) {
+		return;
+	}
+
+	$cmb = new_cmb2_box( [
+		'id'          => 'gc_bgg_settings',
+		'title'       => __( 'Games Collector Settings', 'games-collector' ),
+		'object_types' => [ 'options-page' ],
+		'option_key'  => 'gc_settings',
+		'parent_slug' => 'edit.php?post_type=gc_game',
+		'menu_title'  => __( 'Settings', 'games-collector' ),
+		'capability'  => 'manage_options',
+	] );
+
+	$cmb->add_field( [
+		'name'    => __( 'BGG API Token', 'games-collector' ),
+		'id'      => 'gc_bgg_api_token',
+		'type'    => 'text',
+		'desc'    => wp_kses(
+			sprintf(
+				/* translators: 1: opening anchor tag, 2: closing anchor tag */
+				__( 'Required for BGG game search and import. %1$sRegister your application%2$s on BoardGameGeek to obtain a token. The token can also be defined as a constant in wp-config.php: <code>define( \'GC_BGG_API_TOKEN\', \'your-token-here\' );</code>', 'games-collector' ),
+				'<a href="https://boardgamegeek.com/applications" target="_blank" rel="noopener noreferrer">',
+				'</a>'
+			),
+			[
+				'a'    => [
+					'href' => [],
+					'target' => [],
+					'rel' => [],
+				],
+				'code' => [],
+			]
+		),
+		'options' => [
+			'save_globally' => true,
+		],
+	] );
+}
+
+/**
+ * Show an admin notice when no BGG API token is configured.
+ *
+ * Shown on all gc_game admin screens until the token is set. Suppressed
+ * when the token is defined as a constant in wp-config.php.
+ *
+ * @since 2.0.0
+ */
+function maybe_show_api_token_notice() {
+	// Don't show if a constant is set — it's handled.
+	if ( defined( 'GC_BGG_API_TOKEN' ) && '' !== GC_BGG_API_TOKEN ) {
+		return;
+	}
+
+	// Don't show if a token is already saved.
+	if ( '' !== get_option( 'gc_bgg_api_token', '' ) ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+
+	// Only show on gc_game screens (list, edit, add, and our custom pages).
+	if ( ! $screen || ! in_array( $screen->post_type, [ 'gc_game' ], true ) ) {
+		return;
+	}
+
+	$settings_url = admin_url( 'edit.php?post_type=gc_game&page=gc_settings' );
+
+	printf(
+		'<div class="notice notice-warning"><p>%s</p></div>',
+		wp_kses(
+			sprintf(
+				/* translators: 1: opening anchor tag, 2: closing anchor tag, 3: opening anchor tag to BGG registration, 4: closing anchor tag */
+				__( 'Games Collector requires a BoardGameGeek API token for game search and import. %1$sAdd your token in Settings%2$s, or %3$sregister for a free API token%4$s on BoardGameGeek.', 'games-collector' ),
+				'<a href="' . esc_url( $settings_url ) . '">',
+				'</a>',
+				'<a href="https://boardgamegeek.com/applications" target="_blank" rel="noopener noreferrer">',
+				'</a>'
+			),
+			[
+				'a' => [
+					'href' => [],
+					'target' => [],
+					'rel' => [],
+				],
+			]
+		)
+	);
+}
+
+/**
  * Return the BGG v1 API endpoint.
  *
  * @since  1.2.0
  * @return string The BGG v1 endpoint.
  */
 function bgg_api() {
-	return esc_url( 'https://www.boardgamegeek.com/xmlapi/' );
+	return esc_url( 'https://boardgamegeek.com/xmlapi/' );
 }
 
 /**
@@ -27,7 +161,7 @@ function bgg_api() {
  * @return string The BGG v2 endpoint.
  */
 function bgg_api2() {
-	return esc_url( 'https://www.boardgamegeek.com/xmlapi2/' );
+	return esc_url( 'https://boardgamegeek.com/xmlapi2/' );
 }
 
 /**
@@ -69,7 +203,7 @@ function bgg_game( int $id ) {
  * @return array         An array of possible matches.
  */
 function get_bgg_search_results( $query ) {
-	$response = wp_remote_get( bgg_search( $query ) );
+	$response = wp_remote_get( bgg_search( $query ), [ 'headers' => get_bgg_auth_headers() ] );
 	$results  = [];
 
 	if ( isset( $response['response'] ) && 200 === $response['response']['code'] ) {
@@ -99,7 +233,7 @@ function get_bgg_search_results( $query ) {
  * @return array   An array of game information pulled from the entry on Board Game Geek.
  */
 function get_bgg_game( $id ) {
-	$response = wp_remote_get( bgg_game( $id ) );
+	$response = wp_remote_get( bgg_game( $id ), [ 'headers' => get_bgg_auth_headers() ] );
 	$data     = [];
 
 	if ( isset( $response['response'] ) && 200 === $response['response']['code'] ) {
@@ -296,7 +430,7 @@ function search_response() {
 		$results      = get_bgg_search_results( $search_query );
 		set_transient( 'gc_last_bgg_search', $results, HOUR_IN_SECONDS );
 		wp_safe_redirect( admin_url( 'edit.php?post_type=gc_game&page=add_from_bgg&step=2' ) );
-		return;
+		exit;
 	}
 
 	return wp_die( esc_html__( 'Security check failed. What were you doing?', 'games-collector' ), esc_html__( 'Nonce check failed', 'games-collector' ) );
@@ -378,7 +512,13 @@ function insert_game() {
 			$game = get_bgg_game( $game_id );
 
 			// Check if game already exists.
-			if ( get_page_by_title( $game['title'], OBJECT, 'gc_game' ) ) {
+			$existing_game = get_posts( [ 
+				'title' => $game['title'],
+				'post_type' => 'gc_game',
+				'numberposts' => 1,
+			] );
+
+			if ( count( $existing_game ) > 0 ) {
 				return wp_die(
 					esc_html__( 'A game with that title already exists. Please try again.', 'games-collector' ),
 					esc_html__( 'Duplicate game found', 'games-collector' ),
@@ -433,6 +573,7 @@ function insert_game() {
 		// Redirect to the edit page for this game.
 		if ( is_user_logged_in() ) {
 			wp_safe_redirect( esc_url_raw( $redirect_url ) );
+			exit;
 		}
 
 		return;

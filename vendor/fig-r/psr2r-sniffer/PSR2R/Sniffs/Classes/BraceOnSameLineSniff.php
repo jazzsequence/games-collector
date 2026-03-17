@@ -2,7 +2,8 @@
 
 namespace PSR2R\Sniffs\Classes;
 
-use PHP_CodeSniffer_File;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Makes sure opening braces are on the same line for class, interface and trait.
@@ -10,25 +11,24 @@ use PHP_CodeSniffer_File;
  * @author Mark Scherer
  * @license MIT
  */
-class BraceOnSameLineSniff implements \PHP_CodeSniffer_Sniff {
+class BraceOnSameLineSniff implements Sniff {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function register() {
+	public function register(): array {
 		return [
 			T_CLASS,
 			T_INTERFACE,
 			T_TRAIT,
-			T_FUNCTION
+			T_FUNCTION,
 		];
-
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
+	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 		$errorData = [strtolower($tokens[$stackPtr]['content'])];
 
@@ -37,7 +37,7 @@ class BraceOnSameLineSniff implements \PHP_CodeSniffer_Sniff {
 		}
 
 		$curlyBrace = $tokens[$stackPtr]['scope_opener'];
-		$lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true);
+		$lastContent = $phpcsFile->findPrevious(T_WHITESPACE, $curlyBrace - 1, $stackPtr, true);
 		$classLine = $tokens[$lastContent]['line'];
 		$braceLine = $tokens[$curlyBrace]['line'];
 		if ($braceLine !== $classLine) {
@@ -56,6 +56,16 @@ class BraceOnSameLineSniff implements \PHP_CodeSniffer_Sniff {
 			}
 
 			return;
+		}
+
+		if ($lastContent === $curlyBrace - 1) {
+			$error = 'Opening brace of a %s must have one whitespace after closing parentheses';
+			$fix = $phpcsFile->addFixableError($error, $curlyBrace, 'OpenBraceWhitespace', $errorData);
+			if ($fix === true) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($lastContent, ' ');
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 

@@ -3,18 +3,21 @@
  * Plugin Name: Games Collector
  * Plugin URI:  https://github.com/jazzsequence/games-collector
  * Description: Catalog all your tabletop (or other) games in your WordPress site and display a list of games in your collection.
- * Version:     1.3.1
+ * Version:     2.0.0
  * Author:      Chris Reynolds
  * Author URI:  https://jazzsequence.com
  * Donate link: https://paypal.me/jazzsequence
  * License:     GPLv3
  * Text Domain: games-collector
  * Domain Path: /languages
+ * Requires at least: 4.4
+ * Tested up to: 6.9
+ * Requires PHP: 7.4
  *
  * @link https://github.com/jazzsequence/games-collector
  *
  * @package GamesCollector
- * @version 1.3.1
+ * @version 2.0.0
  */
 
 /**
@@ -43,28 +46,80 @@ namespace GC\GamesCollector;
  * @since 1.1.0
  */
 function autoload_init() {
+	$cmb2_path = maybe_get_cmb2_path();
+
 	// Add in some specific includes and vendor libraries.
 	$files = [
-		dirname( __FILE__ ) . '/vendor/cmb2/cmb2/init.php',
-		dirname( __FILE__ ) . '/inc/namespace.php',
-		dirname( __FILE__ ) . '/inc/functions.php',
+		__DIR__ . '/inc/namespace.php',
+		__DIR__ . '/inc/functions.php',
 	];
+
+	// Only add CMB2 if we found it.
+	if ( $cmb2_path ) {
+		$files[] = $cmb2_path;
+	}
 
 	// Check for extended cpts, load it if it hasn't already been loaded.
 	if ( ! function_exists( 'register_extended_post_type' ) ) {
-		$files[] = dirname( __FILE__ ) . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		$plugin_vendor = __DIR__ . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		$root_vendor = ABSPATH . '/vendor/johnbillion/extended-cpts/extended-cpts.php';
+		
+		// Check if extended cpts exists. If not, deactivate the plugin.
+		$exists = file_exists( $plugin_vendor ) || file_exists( $root_vendor );
+		if ( $exists ) {
+			$files[] = $exists ? $plugin_vendor : $root_vendor;
+		} elseif ( function_exists( '\deactivate_plugins' ) ) {
+			/* Extended CPTs not found — deactivate if the admin function is available. */
+			\deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
 	}
 
 	// Autoload the namespaces.
-	$namespaces = array_filter( glob( dirname( __FILE__ ) . '/inc/*' ), 'is_dir' );
+	$namespaces = array_filter( glob( __DIR__ . '/inc/*' ), 'is_dir' );
 	foreach ( $namespaces as $namespace ) {
 		$files[] = $namespace . '/namespace.php';
 	}
 
 	// Loop through and load all the things!
 	foreach ( $files as $file ) {
-		require_once( $file );
+		require_once $file;
 	}
+}
+
+/**
+ * Try to get the path to the CMB2 library.
+ *
+ * @since 1.3.6
+ */
+function maybe_get_cmb2_path() {
+	// If the CMB2 library is already loaded (CMB2_LOADED is defined in its constructor), bail.
+	if ( defined( 'CMB2_LOADED' ) ) {
+		return '';
+	}
+
+	// Maybe load from the vendor directory (composer package: cmb2/cmb2).
+	if ( file_exists( __DIR__ . '/vendor/cmb2/cmb2/init.php' ) ) {
+		return __DIR__ . '/vendor/cmb2/cmb2/init.php';
+	}
+
+	// Maybe load from the root /vendor directory.
+	if ( file_exists( ABSPATH . '/vendor/cmb2/cmb2/init.php' ) ) {
+		return ABSPATH . '/vendor/cmb2/cmb2/init.php';
+	}
+
+	// Was it installed as a plugin?
+	if ( file_exists( WP_PLUGIN_DIR . '/cmb2/init.php' ) ) {
+		// Activate the plugin.
+		activate_plugin( 'cmb2' );
+	}
+
+	// Last chance, maybe it's in the mu-plugins directory. If it's here, it should already be activated.
+	if ( file_exists( WPMU_PLUGIN_DIR . '/cmb2/init.php' ) ) {
+		return WPMU_PLUGIN_DIR . '/cmb2/init.php';
+	}
+
+	// If we got here, we couldn't find CMB2.
+	return '';
 }
 
 /**
@@ -75,6 +130,18 @@ function autoload_init() {
 function init() {
 	// Load all the required files.
 	autoload_init();
+
+	// If CMB2 was not loaded, deactivate ourself.
+	if ( ! defined( 'CMB2_LOADED' ) ) {
+		/*
+		 * deactivate_plugins is in wp-admin/includes/plugin.php and may not be
+		 * loaded during test bootstraps or early in the WP loading sequence.
+		 */
+		if ( function_exists( '\deactivate_plugins' ) ) {
+			\deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
+		return;
+	}
 
 	// Register activation hook.
 	register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
