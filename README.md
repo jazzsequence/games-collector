@@ -42,7 +42,7 @@ You can checkout a live [demo](https://jazzsequence.com/games/) of the plugin (w
 ## Changelog ##
 
 ### 2.0.0 ###
-* **Breaking change**: BoardGameGeek API now requires a registered Bearer token for all XML API requests. BGG search and import will not function without a token. Register at [boardgamegeek.com/using_the_xml_api](https://boardgamegeek.com/using_the_xml_api) and add your token under Games → Settings.
+* **Breaking change**: BoardGameGeek API now requires a registered Bearer token for all XML API requests. BGG search and import will not function without a token. Register your application at [boardgamegeek.com/applications](https://boardgamegeek.com/applications) and add your token under Games → Settings.
 * Added BGG API Token settings page under the Games admin menu.
 * Admin notice on all game screens when no BGG token is configured.
 * Token can also be defined as a constant in wp-config.php: `define( 'GC_BGG_API_TOKEN', 'your-token' );`
