@@ -14,10 +14,11 @@ use GC\GamesCollector\Shortcode;
  * Enqueue the Gutenberg editor js and css.
  */
 function enqueue_block_editor_assets() {
-	$js_file = plugin_dir_url( dirname( __DIR__, 1 ) ) . 'assets/js/editor.js';
-	wp_enqueue_script( 'games-collector-gberg-editor', $js_file, [ 'wp-i18n', 'wp-blocks', 'wp-element' ], '1.3.4' );
-	wp_enqueue_style( 'games-collector-gberg-editor', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/css/editor.css', [ 'wp-blocks' ], '1.3.4' );
-	wp_enqueue_style( 'games-collector', dirname( plugin_dir_url( __FILE__ ), 2 ) . '/assets/css/main.css', [], '1.3.4' );
+	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$base   = dirname( plugin_dir_url( __FILE__ ), 2 );
+	wp_enqueue_script( 'games-collector-gberg-editor', $base . '/assets/js/editor' . $suffix . '.js', [ 'wp-i18n', 'wp-blocks', 'wp-element' ], GC_VERSION );
+	wp_enqueue_style( 'games-collector-gberg-editor', $base . '/assets/css/editor' . $suffix . '.css', [ 'wp-blocks' ], GC_VERSION );
+	wp_enqueue_style( 'games-collector', $base . '/assets/css/main' . $suffix . '.css', [], GC_VERSION );
 }
 
 /**

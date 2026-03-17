@@ -7,22 +7,27 @@
  */
 .games-filter-group {
   display: block;
-  padding: 0 0 2em; }
+  padding: 0 0 2em;
+}
 
 .game-title {
-  font-size: 1.2em; }
-
+  font-size: 1.2em;
+}
 .game-single {
-  margin: 0 0 1em; }
-
+  margin: 0 0 1em;
+}
 .game-info {
   font-size: 0.9em;
-  line-height: 1.1em; }
-  .game-info span.game-min-players, .game-info span.gc-attribute {
-    padding-right: 0em; }
+  line-height: 1.1em;
+}
+.game-info span.game-min-players, .game-info span.gc-attribute {
+  padding-right: 0em;
+}
 
 div.game-attributes {
-  display: block; }
+  display: block;
+}
 
 svg.gc-icon {
-  height: 1.1em; }
+  height: 1.1em;
+}
