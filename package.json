@@ -6,24 +6,25 @@
   "main": "assets/js/main.js",
   "scripts": {
     "dev": "cross-env BABEL_ENV=default webpack --watch",
-    "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack -p"
+    "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack --mode production"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
     "@wordpress/babel-preset-default": "^8.41.0",
-    "babel-core": "^6.26.3",
+    "autoprefixer": "^10.4.21",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^9.2.1",
     "classnames": "^2.2.5",
     "cross-env": "^10.1.0",
     "css-loader": "^7.1.4",
     "eslint": "^4.19.1",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "node-sass": "^9.0.0",
+    "mini-css-extract-plugin": "^2.9.2",
     "postcss-loader": "^8.2.1",
-    "raw-loader": "^4.0.2",
+    "sass": "^1.86.3",
     "sass-loader": "^16.0.7",
     "style-loader": "^4.0.0",
     "webpack": "^5.105.4",
+    "webpack-cli": "^5.1.4",
     "whatwg-fetch": "^3.0.0",
     "wpapi": "^1.1.2"
   },
