@@ -34,12 +34,23 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Set up PHP
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
       - name: Set up Node.js
         if: steps.tag_check.outputs.exists == 'false'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+
+      - name: Install PHP dependencies
+        if: steps.tag_check.outputs.exists == 'false'
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Build assets
         if: steps.tag_check.outputs.exists == 'false'
@@ -57,9 +68,7 @@ jobs:
             --exclude='.github' \
             --exclude='.gitignore' \
             --exclude='.scrutinizer.yml' \
-            --exclude='.travis.yml' \
             --exclude='node_modules' \
-            --exclude='vendor' \
             --exclude='tests' \
             --exclude='assets/sass' \
             --exclude='composer.json' \
