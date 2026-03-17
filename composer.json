@@ -31,7 +31,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "vendor/bin/phpcs --config-set installed_paths vendor/automattic/vipwpcs,vendor/fig-r/psr2r-sniffer,vendor/pantheon-systems/pantheon-wp-coding-standards,vendor/php-collective/code-sniffer,vendor/phpcompatibility/php-compatibility,vendor/phpcompatibility/phpcompatibility-paragonie,vendor/phpcompatibility/phpcompatibility-wp,vendor/phpcsstandards/phpcsextra,vendor/phpcsstandards/phpcsutils,vendor/sirbrillig/phpcs-variable-analysis,vendor/slevomat/coding-standard,vendor/wp-coding-standards/wpcs"
+            "vendor/bin/phpcs --config-set installed_paths ../../automattic/vipwpcs,../../fig-r/psr2r-sniffer,../../pantheon-systems,../../pantheon-systems/pantheon-wp-coding-standards,../../php-collective/code-sniffer,../../phpcompatibility/php-compatibility,../../phpcompatibility/phpcompatibility-paragonie,../../phpcompatibility/phpcompatibility-wp,../../phpcsstandards/phpcsextra,../../phpcsstandards/phpcsutils,../../sirbrillig/phpcs-variable-analysis,../../slevomat/coding-standard,../../wp-coding-standards/wpcs"
         ],
         "lint:php": [
             "php -l $(find . -name '*.php' | grep -v vendor | grep -v node_modules)"
