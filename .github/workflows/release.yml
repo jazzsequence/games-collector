@@ -23,7 +23,7 @@ jobs:
         run: |
           VERSION=$(grep -m1 "Version:" plugin.php | sed 's/.*Version:[[:space:]]*//' | tr -d '[:space:]')
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Check if tag already exists
         id: tag_check
