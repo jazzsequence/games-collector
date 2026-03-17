@@ -30,6 +30,9 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "vendor/bin/phpcs --config-set installed_paths vendor/automattic/vipwpcs,vendor/fig-r/psr2r-sniffer,vendor/pantheon-systems/pantheon-wp-coding-standards,vendor/php-collective/code-sniffer,vendor/phpcompatibility/php-compatibility,vendor/phpcompatibility/phpcompatibility-paragonie,vendor/phpcompatibility/phpcompatibility-wp,vendor/phpcsstandards/phpcsextra,vendor/phpcsstandards/phpcsutils,vendor/sirbrillig/phpcs-variable-analysis,vendor/slevomat/coding-standard,vendor/wp-coding-standards/wpcs"
+        ],
         "lint:php": [
             "php -l $(find . -name '*.php' | grep -v vendor | grep -v node_modules)"
         ],
