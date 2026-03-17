@@ -14,7 +14,7 @@
     "require": {
         "johnbillion/extended-cpts": "^5.0",
         "harvesthq/chosen": "^1.8",
-        "cmb2/cmb2": "~2.10.1"
+        "cmb2/cmb2": "~2.11.0"
     },
     "require-dev": {
         "pantheon-systems/pantheon-wp-coding-standards": "^3.0",
