@@ -30,14 +30,10 @@
         }
     },
     "scripts": {
-        "post-install-cmd": [
-            "vendor/bin/phpcs --config-set installed_paths ../../automattic/vipwpcs,../../fig-r/psr2r-sniffer,../../pantheon-systems,../../pantheon-systems/pantheon-wp-coding-standards,../../php-collective/code-sniffer,../../phpcompatibility/php-compatibility,../../phpcompatibility/phpcompatibility-paragonie,../../phpcompatibility/phpcompatibility-wp,../../phpcsstandards/phpcsextra,../../phpcsstandards/phpcsutils,../../sirbrillig/phpcs-variable-analysis,../../slevomat/coding-standard,../../wp-coding-standards/wpcs"
-        ],
         "lint:php": [
             "php -l $(find . -name '*.php' | grep -v vendor | grep -v node_modules)"
         ],
         "lint:phpcs": [
-            "vendor/bin/phpcs --config-set installed_paths ../../automattic/vipwpcs,../../fig-r/psr2r-sniffer,../../pantheon-systems,../../pantheon-systems/pantheon-wp-coding-standards,../../php-collective/code-sniffer,../../phpcompatibility/php-compatibility,../../phpcompatibility/phpcompatibility-paragonie,../../phpcompatibility/phpcompatibility-wp,../../phpcsstandards/phpcsextra,../../phpcsstandards/phpcsutils,../../sirbrillig/phpcs-variable-analysis,../../slevomat/coding-standard,../../wp-coding-standards/wpcs",
             "vendor/bin/phpcs -s ."
         ],
         "lint:phpcbf": [
@@ -49,7 +45,8 @@
         ],
         "phpunit": "vendor/bin/phpunit --do-not-cache-result",
         "test": "@phpunit",
+        "test:setup": "bash bin/install-wp-tests.sh --dbpass=root",
         "test:install": "bin/install-local-tests.sh --skip-db=true",
-        "test:install:withdb": "bin/install-local-tests.sh"        
+        "test:install:withdb": "bin/install-local-tests.sh"
     }
 }

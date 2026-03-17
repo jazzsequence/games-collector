@@ -12,13 +12,6 @@
   <exclude-pattern>vendor/</exclude-pattern>
   <exclude-pattern>node_modules/</exclude-pattern>
 
-  <!--
-  Explicit installed_paths ensures PHPCS finds standards in CI environments
-  where dealerdirect/phpcodesniffer-composer-installer may not set them.
-  Paths are relative to this phpcs.xml file (project root).
-  -->
-  <config name="installed_paths" value="vendor/automattic/vipwpcs,vendor/fig-r/psr2r-sniffer,vendor/pantheon-systems/pantheon-wp-coding-standards,vendor/php-collective/code-sniffer,vendor/phpcompatibility/php-compatibility,vendor/phpcompatibility/phpcompatibility-paragonie,vendor/phpcompatibility/phpcompatibility-wp,vendor/phpcsstandards/phpcsextra,vendor/phpcsstandards/phpcsutils,vendor/sirbrillig/phpcs-variable-analysis,vendor/slevomat/coding-standard,vendor/wp-coding-standards/wpcs" />
-
   <!-- Ignore sniffs against things that we explicitly want for Pantheon upstreams. -->
   <rule ref="Pantheon-WP">
 	<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited"/>
