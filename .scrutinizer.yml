@@ -1,7 +1,12 @@
-tools:
-    php_sim: true
-    php_pdepend: false
-    php_analyzer: true
+build:
+    environment:
+        php: '8.3'
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+
 
 filter:
     excluded_paths:
