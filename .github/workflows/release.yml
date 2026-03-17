@@ -46,7 +46,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Install PHP dependencies
         if: steps.tag_check.outputs.exists == 'false'
@@ -55,7 +54,7 @@ jobs:
       - name: Build assets
         if: steps.tag_check.outputs.exists == 'false'
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Create plugin zip
