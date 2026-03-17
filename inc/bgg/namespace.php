@@ -151,7 +151,7 @@ function maybe_show_api_token_notice() {
  * @return string The BGG v1 endpoint.
  */
 function bgg_api() {
-	return esc_url( 'https://www.boardgamegeek.com/xmlapi/' );
+	return esc_url( 'https://boardgamegeek.com/xmlapi/' );
 }
 
 /**
@@ -161,7 +161,7 @@ function bgg_api() {
  * @return string The BGG v2 endpoint.
  */
 function bgg_api2() {
-	return esc_url( 'https://www.boardgamegeek.com/xmlapi2/' );
+	return esc_url( 'https://boardgamegeek.com/xmlapi2/' );
 }
 
 /**
