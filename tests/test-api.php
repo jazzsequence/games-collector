@@ -319,7 +319,12 @@ class GC_Test_Game_Collector_API extends WP_UnitTestCase {
 	 */
 	public function test_public_games_endpoint_pagination() {
 		// Create a second game so we can paginate.
-		$this->factory->post->create( [ 'post_title' => 'Ticket to Ride', 'post_type' => 'gc_game' ] );
+		$this->factory->post->create(
+			[
+				'post_title' => 'Ticket to Ride',
+				'post_type'  => 'gc_game',
+			]
+		);
 		$this->get_game(); // Ensure Chrononauts exists.
 
 		$request = new \WP_Rest_Request( 'GET', '/gc/v1/games' );
