@@ -11,10 +11,10 @@
   "devDependencies": {
     "@wordpress/babel-preset-default": "^1.2.0",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^7.1.4",
     "classnames": "^2.2.5",
-    "cross-env": "^5.1.5",
+    "cross-env": "^10.1.0",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "extract-text-webpack-plugin": "^3.0.2",
