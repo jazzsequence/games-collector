@@ -9,7 +9,7 @@
     "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack -p"
   },
   "devDependencies": {
-    "@wordpress/babel-preset-default": "^1.2.0",
+    "@wordpress/babel-preset-default": "^8.41.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^7.1.4",
