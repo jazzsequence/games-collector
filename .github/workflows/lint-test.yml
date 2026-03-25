@@ -45,6 +45,8 @@ jobs:
           chmod +x bin/*.sh
           composer test:setup
       - name: Test with coverage
+        env:
+          GC_BGG_API_TOKEN: ${{ secrets.GC_BGG_API_TOKEN }}
         run: composer test:coverage
       - name: Upload coverage to Scrutinizer
         run: |
