@@ -13,7 +13,7 @@
     "@wordpress/babel-preset-default": "^8.41.0",
     "autoprefixer": "^10.4.21",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^9.2.1",
+    "babel-loader": "^10.1.1",
     "classnames": "^2.2.5",
     "cross-env": "^10.1.0",
     "css-loader": "^7.1.4",
