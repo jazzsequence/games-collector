@@ -216,6 +216,22 @@ class GC_Test_BGG extends WP_UnitTestCase {
 		return $game;
 	}
 	/**
+	 * Confirm which test mode is active so CI logs show whether the real BGG API was used.
+	 *
+	 * In mock mode (no GC_BGG_API_TOKEN): marked skipped — mock data is in use.
+	 * In integration mode (token defined): passes — confirms the live API is exercised.
+	 *
+	 * @since 2.1.0
+	 */
+	public function test_bgg_integration_mode(): void {
+		if ( ! defined( 'GC_BGG_API_TOKEN' ) || '' === GC_BGG_API_TOKEN ) {
+			$this->markTestSkipped( 'BGG integration mode inactive — GC_BGG_API_TOKEN not defined. Tests are using mock HTTP fixtures.' );
+		}
+
+		$this->assertNotEmpty( GC_BGG_API_TOKEN, 'GC_BGG_API_TOKEN is defined and non-empty; BGG tests are running against the live API.' );
+	}
+
+	/**
 	 * Test the API endpoint helpers.
 	 *
 	 * @since  1.2.0
