@@ -39,11 +39,18 @@ class GC_Test_BGG extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Register the BGG HTTP mock before each test.
+	 * Register the BGG HTTP mock before each test — unless a real token is available.
+	 *
+	 * When GC_BGG_API_TOKEN is defined (e.g. CI with a repository secret), the mock
+	 * is skipped so tests run against the live BGG API (integration mode).
+	 * Without a token, the mock fires and tests remain fast and deterministic.
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		add_filter( 'pre_http_request', [ __CLASS__, 'mock_bgg_http' ], 10, 3 );
+
+		if ( ! defined( 'GC_BGG_API_TOKEN' ) || '' === GC_BGG_API_TOKEN ) {
+			add_filter( 'pre_http_request', [ __CLASS__, 'mock_bgg_http' ], 10, 3 );
+		}
 	}
 
 	/**
