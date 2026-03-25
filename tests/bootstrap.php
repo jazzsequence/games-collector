@@ -22,8 +22,7 @@ function _manually_load_plugin() {
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
-// If a BGG API token is available in the environment (e.g. injected by CI),
-// define it as a constant so the test suite can skip mocks and use the live API.
+/* If a BGG API token is available in the environment (e.g. injected by CI), define it as a constant so the test suite can skip mocks and use the live API. */
 if ( getenv( 'GC_BGG_API_TOKEN' ) ) {
 	define( 'GC_BGG_API_TOKEN', getenv( 'GC_BGG_API_TOKEN' ) );
 }
