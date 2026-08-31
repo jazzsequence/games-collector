@@ -1482,23 +1482,23 @@
         },
         {
             "name": "pantheon-systems/pantheon-wp-coding-standards",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pantheon-systems/Pantheon-WP-Coding-Standards.git",
-                "reference": "40a97fc4da4611f5f63f460211ff1e7d59b71f72"
+                "reference": "5622da81ffd27b9125bd1b9c1d3a4f3de193248f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pantheon-systems/Pantheon-WP-Coding-Standards/zipball/40a97fc4da4611f5f63f460211ff1e7d59b71f72",
-                "reference": "40a97fc4da4611f5f63f460211ff1e7d59b71f72",
+                "url": "https://api.github.com/repos/pantheon-systems/Pantheon-WP-Coding-Standards/zipball/5622da81ffd27b9125bd1b9c1d3a4f3de193248f",
+                "reference": "5622da81ffd27b9125bd1b9c1d3a4f3de193248f",
                 "shasum": ""
             },
             "require": {
                 "automattic/vipwpcs": "^3.0",
                 "fig-r/psr2r-sniffer": "^2.2",
                 "phpcompatibility/phpcompatibility-wp": "^2.1",
-                "wp-coding-standards/wpcs": "^3.0"
+                "wp-coding-standards/wpcs": "^3.4.1"
             },
             "require-dev": {
                 "squizlabs/php_codesniffer": "^3.13",
@@ -1524,9 +1524,9 @@
             "description": "PHPCS Rulesets for WordPress projects on Pantheon.",
             "support": {
                 "issues": "https://github.com/pantheon-systems/Pantheon-WP-Coding-Standards/issues",
-                "source": "https://github.com/pantheon-systems/Pantheon-WP-Coding-Standards/tree/3.0.1"
+                "source": "https://github.com/pantheon-systems/Pantheon-WP-Coding-Standards/tree/3.0.2"
             },
-            "time": "2025-07-21T20:47:08+00:00"
+            "time": "2026-07-28T16:59:09+00:00"
         },
         {
             "name": "pantheon-systems/wpunit-helpers",
@@ -2220,16 +2220,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a"
+                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a004701b11273a26cd7955a61d67a7f1e525a45a",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
+                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
                 "shasum": ""
             },
             "require": {
@@ -2261,9 +2261,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.2"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.3"
             },
-            "time": "2026-01-25T14:56:51+00:00"
+            "time": "2026-07-08T07:01:06+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
